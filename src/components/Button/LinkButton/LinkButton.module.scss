@@ -1,0 +1,65 @@
+@import 'assets/styles/mixins';
+
+%disabled {
+  &[disabled], &[disabled]:hover, &[disabled]:active, &[disabled]:active:hover {
+    background: #091e420a;
+    color: #a5adba;
+    text-decoration: none;
+    cursor: not-allowed;
+  }
+}
+
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  -webkit-box-align: baseline;
+  align-items: baseline;
+  -webkit-box-pack: center;
+  justify-content: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: auto;
+  border-width: 0;
+  border-radius: 3px;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  font-style: normal;
+  font-size: inherit;
+  font-family: $font-family;
+  cursor: pointer;
+  transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    transition-duration: 0s, 0s;
+  }
+
+  &.block {
+    width: 100%;
+  }
+
+  &.primary {
+    color: #0052cc;
+
+@extend %disabled;
+
+    &:not([disabled]) {
+      &:hover {
+        color: #0065ff;
+      }
+
+      &:active {
+        color: #0747a6;
+      }
+    }
+  }
+}

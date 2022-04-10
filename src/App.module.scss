@@ -1,0 +1,72 @@
+//@import-normalize;
+
+:global {
+  html, body {
+    height: 100%;
+  }
+
+  html {
+    ::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      background-color: #c4c4c4;
+    }
+
+    ::-webkit-scrollbar-track {
+      border-radius: 4px;
+      background-color: #c4c4c4;
+    }
+  }
+
+  body {
+    margin: 0;
+    background-color: #fff;
+    background-color: #f2f7ff;
+    color: #45536c;
+    color: #607080;
+    font-style: normal;
+    font-size: 14px;
+    font-family: 'Microsoft JhengHei', 'Microsoft YaHei', sans-serif;
+    line-height: 1.42857;
+
+    text-decoration-skip-ink: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    > div {
+      color: #45536c;
+    }
+  }
+
+  #root {
+    display: flex;
+    height: 100%;
+  }
+
+  a {
+    color: #0052cc;
+    transition-duration: 0s, 0.15s;
+
+    &:hover {
+      color: #0065ff;
+    }
+  }
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 1200px;
+}
+
+main {
+  margin-left: 300px;
+  padding: 2rem;
+}

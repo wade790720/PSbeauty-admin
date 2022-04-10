@@ -1,0 +1,12 @@
+.fade-in-switch-enter {
+  opacity: 0.5;
+}
+
+.fade-in-switch-enter.fade-in-switch-enter-active {
+  opacity: 1;
+  transition: all 150ms ease-in;
+}
+
+.fade-in-switch-exit {
+  display: none;
+}
