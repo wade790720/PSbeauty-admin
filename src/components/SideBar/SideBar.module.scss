@@ -21,22 +21,40 @@
         list-style: none;
 
         a {
-          display: block;
           display: flex;
           align-items: center;
           padding: 0.7rem 1rem;
           border-radius: 0.5rem;
-          color: #25396f;
+          color: #253858;
           text-decoration: none;
           font-size: 1rem;
           transition: all 0.5s;
+
+          svg {
+            width: 1rem;
+            height: 1rem;
+
+            path {
+              fill: #253858;
+            }
+          }
+
+          span {
+            margin-left: 1rem;
+          }
 
           &:hover {
             background-color: #f0f1f5;
           }
 
-          &:active {
+          &:global(.active) {
             background-color: #253858;
+
+            svg {
+              path {
+                fill: #fff;
+              }
+            }
           }
         }
       }

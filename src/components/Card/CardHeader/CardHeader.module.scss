@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 66px;
+  color: #45536c;
+
+  .title {
+    padding-right: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+  }
+}

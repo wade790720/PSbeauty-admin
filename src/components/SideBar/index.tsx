@@ -1,5 +1,9 @@
 import styled from "./SideBar.module.scss"
-import { Link } from "react-router-dom"
+import ActiveLink from "./ActiveLink"
+import { ReactComponent as Home } from "./Home.svg"
+import { ReactComponent as Clinic } from "./Clinic.svg"
+import { ReactComponent as Case } from "./Case.svg"
+import { ReactComponent as Settings } from "./Settings.svg"
 
 export default function SideBar() {
 
@@ -8,16 +12,28 @@ export default function SideBar() {
       <div className={styled.menu}>
         <ul className={styled.outer}>
           <li className={styled.item}>
-            <Link to="/cms">Home</Link>
+            <ActiveLink to="/cms">
+              <Home />
+              <span>首頁</span>
+            </ActiveLink>
           </li>
           <li className={styled.item}>
-            <Link to="/cms/cosmetic-clinic">CosmeticClinic</Link>
+            <ActiveLink to="/cms/cosmetic-clinic">
+              <Clinic />
+              <span>診所</span>
+            </ActiveLink>
           </li>
           <li className={styled.item}>
-            <Link to="/cms/cosmetic-case">CosmeticCase</Link>
+            <ActiveLink to="/cms/cosmetic-case">
+              <Case />
+              <span>症例</span>
+            </ActiveLink>
           </li>
           <li className={styled.item}>
-            <Link to="/cms/system-settings">SystemSettings</Link>
+            <ActiveLink to="/cms/system-settings">
+              <Settings />
+              <span>系統</span>
+            </ActiveLink>
           </li>
         </ul>
       </div>

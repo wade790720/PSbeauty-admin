@@ -25,9 +25,7 @@ function App() {
               <SideBar />
               <main>
                 <Routes>
-                  <Route path="/" element={<Cms />}>
-
-                  </Route>
+                  <Route path="/" element={<Cms />} />
                   <Route path="/cms" element={<Home />} />
                   <Route path="/cms/cosmetic-clinic" element={<CosmeticClinic />} />
                   <Route path="/cms/cosmetic-case" element={<CosmeticCase />} />

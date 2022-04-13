@@ -1,0 +1,46 @@
+.wrapper {
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 0;
+  border-radius: 0.7rem;
+  background-color: #fff;
+  background-clip: border-box;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  word-wrap: break-word;
+
+  &.secondary {
+    position: relative;
+
+    > header {
+      padding-top: 24px;
+      height: 24px;
+      border-bottom: none;
+      color: #0052cc;
+
+      h3 {
+        margin: 0;
+        line-height: 24px;
+      }
+    }
+
+    > div {
+      justify-content: start;
+      padding: 12px 24px 24px;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      border-radius: 3px 0 0 3px;
+      background-color: #0052cc;
+      content: '';
+    }
+  }
+}
+
+.full {
+  height: 100%;
+}

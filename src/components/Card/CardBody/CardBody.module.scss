@@ -1,0 +1,10 @@
+.wrapper {
+  padding: 16px 24px 32px;
+  font-size: 14px;
+  line-height: 1;
+  box-sizing: border-box;
+
+  &.query-status {
+    padding: 0 !important;
+  }
+}
