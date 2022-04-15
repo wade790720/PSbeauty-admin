@@ -1,14 +1,16 @@
 .wrapper {
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  height: 66px;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 1.25rem 2.25rem 0 2.25rem;
+  min-height: 70px;
   color: #45536c;
 
   .title {
-    padding-right: 8px;
-    font-weight: 700;
-    font-size: 18px;
+    margin: 0 0.75rem 0 0;
+    font-weight: 600;
+    font-size: 1.35rem;
     line-height: 1;
   }
 }

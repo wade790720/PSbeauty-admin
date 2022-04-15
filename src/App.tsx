@@ -1,7 +1,6 @@
 import { Suspense } from "react"
 import { HashRouter as Router, Routes, Route } from "react-router-dom"
 import { Container, Row } from "react-grid-system"
-import { RouteWithSubRoutes } from "components/Router"
 import styled from "./App.module.scss"
 import QueryStatus from "components/QueryStatus"
 import { lazy } from "react"

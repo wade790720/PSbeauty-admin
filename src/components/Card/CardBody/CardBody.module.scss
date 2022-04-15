@@ -1,8 +1,7 @@
 .wrapper {
-  padding: 16px 24px 32px;
-  font-size: 14px;
-  line-height: 1;
   box-sizing: border-box;
+  padding: 0.75rem  2.25rem 2rem 2.25rem;
+  font-size: 14px;
 
   &.query-status {
     padding: 0 !important;
