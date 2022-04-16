@@ -1,0 +1,13 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 22px 24px 24px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+
+  :global(button) {
+    margin-left: 8px;
+  }
+}
