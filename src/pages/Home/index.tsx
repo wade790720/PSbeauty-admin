@@ -2,6 +2,7 @@ import Card from "components/Card"
 import CarouselPreview from "components/CarouselPreview"
 import Form from "components/Form"
 import Button from "components/Button"
+import NoticeTable from "./NoticeTable"
 
 const Home = () => {
   return (
@@ -21,6 +22,7 @@ const Home = () => {
             <Button style={{ marginRight: "10px" }}>發送</Button>
             <Button variant="secondary">清空</Button>
           </Form>
+          <NoticeTable />
         </Card.Body>
       </Card>
       <Card>
