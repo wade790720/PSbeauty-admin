@@ -2,6 +2,11 @@ import Button from "components/Button"
 import Card from "components/Card"
 import CarouselPreview from "components/CarouselPreview"
 import { ReactComponent as EllipsisVertical } from "./EllipsisVertical.svg"
+import Form from "components/Form"
+import Info from "./Info"
+import ClinicTable from "./ClinicTable"
+import MedicalTeamTable from "./MedicalTeamTable"
+import CaseTable from "./CaseTable"
 
 const CosmeticClinic = () => {
   return (
@@ -18,46 +23,60 @@ const CosmeticClinic = () => {
           <Button variant="secondary">新增診所</Button>
         </Card.Header>
         <Card.Body>
-          <table>
-            <thead>
-              <tr>
-                <th className="p-0 w-50px"></th>
-                <th className="p-0 min-w-150px"></th>
-                <th className="p-0 min-w-120px"></th>
-                <th className="p-0 min-w-70px"></th>
-                <th className="p-0 min-w-70px"></th>
-                <th className="p-0 min-w-50px"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="px-0 py-3">
-                  <div className="symbol symbol-55px mt-1 me-5">
-                    <div className="symbol-label bg-light-primary">星</div>
-                  </div>
-                </td>
-                <td className="px-0">
-                  <a href="#a" className="text-gray-800 fw-bold d-block fs-6">星采醫學美容診所</a>
-                  <span className="text-muted fw-bold mt-1 d-block fs-7">100台北市中正區羅斯福路一段32號2樓</span>
-                </td>
-                <td></td>
-                <td className="text-end">
-                  <span className="text-gray-800 fw-bold d-block fs-6">100</span>
-                  <span className="text-muted fw-bold mt-1 d-block fs-7">症例數</span>
-                </td>
-                <td className="text-end">
-                  <span className="text-gray-800 fw-bold d-block fs-6">100</span>
-                  <span className="text-muted fw-bold mt-1 d-block fs-7">回覆數</span>
-                </td>
-
-                <td className="text-end">
-                  <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-                    <EllipsisVertical />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <ClinicTable />
+        </Card.Body>
+      </Card>
+      <Card>
+        <Card.Header title="星采醫學美容診所" />
+        <Card.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label required>診所名稱</Form.Label>
+              <Form.Input type="text" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>大小分類</Form.Label>
+              <Form.Checkbox>小分類1</Form.Checkbox>
+              <Form.Checkbox>小分類2</Form.Checkbox>
+              <Form.Checkbox>小分類3</Form.Checkbox>
+              <Form.Checkbox>小分類4</Form.Checkbox>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>診所介紹</Form.Label>
+              <Form.Textarea style={{ height: "100px" }} />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>完整地址</Form.Label>
+              <Form.Input type="text" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>診所網址</Form.Label>
+              <Form.Input type="text" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>診所電話</Form.Label>
+              <Form.Input type="text" />
+            </Form.Group>
+            <Button style={{ marginRight: "10px" }}>儲存修改</Button>
+            <Button variant="secondary">取消</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+      <Card>
+        <Card.Header title="醫療團隊" >
+          <Button variant="secondary">新增</Button>
+        </Card.Header>
+        <Card.Body>
+          <MedicalTeamTable />
+        </Card.Body>
+      </Card>
+      <Card>
+        <Card.Header title="案例列表">
+          <Button variant="secondary">新增</Button>
+        </Card.Header>
+        <Card.Body>
+          <Info />
+          <CaseTable />
         </Card.Body>
       </Card>
     </>

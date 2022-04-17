@@ -142,6 +142,10 @@
     display: block !important;
   }
 
+  .text-start {
+    text-align: left !important;
+  }
+
   .text-end {
     text-align: right !important;
   }
@@ -168,6 +172,10 @@
 
   .mt-1 {
     margin-top: 0.25rem !important;
+  }
+
+  .me-3 {
+    margin-right: 0.75rem !important;
   }
 
   .me-5 {
