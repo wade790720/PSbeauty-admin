@@ -24,12 +24,6 @@ export default function SideBar() {
             </ActiveLink>
           </li>
           <li className={styled.item}>
-            <ActiveLink to="/cms/cosmetic-case">
-              <Case />
-              <span>症例</span>
-            </ActiveLink>
-          </li>
-          <li className={styled.item}>
             <ActiveLink to="/cms/system-settings">
               <Settings />
               <span>系統</span>

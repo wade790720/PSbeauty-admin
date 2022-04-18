@@ -1,6 +1,5 @@
 import cx from "classnames"
 import styled from "./NoticeTable.module.scss"
-import { ReactComponent as Edit } from "./Edit.svg"
 import { ReactComponent as Remove } from "./Remove.svg"
 
 const NoticeTable = () => {

@@ -31,12 +31,10 @@ function App() {
   const NotFound = lazy(() => import("pages/NotFound"))
   const Login = lazy(() => import("pages/Login"))
   const Home = lazy(() => import("pages/Home"))
-  const CosmeticCase = lazy(() => import("pages/CosmeticCase"))
   const CosmeticClinic = lazy(() => import("pages/CosmeticClinic"))
   const CosmeticClinicDetail = lazy(() => import("pages/CosmeticClinicDetail"))
   const CosmeticClinicDetailCase = lazy(() => import("pages/CosmeticClinicDetailCase"))
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
-
 
   return (
     <div>
@@ -52,7 +50,6 @@ function App() {
               <Route path="cosmetic-clinic" element={<CosmeticClinic />} />
               <Route path="cosmetic-clinic/:id" element={<CosmeticClinicDetail />} />
               <Route path="cosmetic-clinic/:id/:caseId" element={<CosmeticClinicDetailCase />} />
-              <Route path="cosmetic-case" element={<CosmeticCase />} />
               <Route path="system-settings" element={<SystemSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

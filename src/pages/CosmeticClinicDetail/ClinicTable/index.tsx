@@ -1,4 +1,3 @@
-import styled from "./ClinicTable.module.scss"
 import { ReactComponent as ArrowRight } from "./ArrowRight.svg"
 import { useGo } from "components/Router"
 
@@ -9,12 +8,12 @@ const ClinicTable = () => {
     <table className="table">
       <thead>
         <tr>
-          <th className="p-0 w-50px"></th>
-          <th className="p-0 min-w-150px"></th>
-          <th className="p-0 min-w-120px"></th>
-          <th className="p-0 min-w-70px"></th>
-          <th className="p-0 min-w-70px"></th>
-          <th className="p-0 min-w-50px"></th>
+          <th className="p-0" style={{ width: "50px" }}></th>
+          <th className="p-0" style={{ minWidth: "150px" }}></th>
+          <th className="p-0" style={{ minWidth: "120px" }}></th>
+          <th className="p-0" style={{ minWidth: "70px" }}></th>
+          <th className="p-0" style={{ minWidth: "70px" }}></th>
+          <th className="p-0" style={{ minWidth: "50px" }}></th>
         </tr>
       </thead>
       <tbody>
@@ -40,7 +39,9 @@ const ClinicTable = () => {
 
           <td className="text-end">
             <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm" onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}>
-              <ArrowRight />
+              <span className="svg-icon">
+                <ArrowRight />
+              </span>
             </div>
           </td>
         </tr>

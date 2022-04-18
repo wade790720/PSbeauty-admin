@@ -1,16 +1,15 @@
-import styled from "./ClinicTable.module.scss"
 import { ReactComponent as ArrowRight } from "./ArrowRight.svg"
 
 const MedicalTeamTable = () => {
   return (
-    <table>
+    <table className="table">
       <thead>
         <tr>
-          <th className="p-0 w-50px"></th>
-          <th className="p-0 min-w-150px text-start text-gray-800 fw-bold">姓名</th>
-          <th className="p-0 min-w-70px text-start text-gray-800 fw-bold">專長</th>
-          <th className="p-0 min-w-70px"></th>
-          <th className="p-0 min-w-50px text-start text-gray-800 fw-bold">動作</th>
+          <th className="p-0 w-50px" style={{ width: "50px" }}></th>
+          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "150px" }}>姓名</th>
+          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "70px" }}>專長</th>
+          <th className="p-0" style={{ minWidth: "70px" }}></th>
+          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "50px" }}>動作</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +29,9 @@ const MedicalTeamTable = () => {
           <td></td>
           <td>
             <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-              <ArrowRight />
+              <span className="svg-icon">
+                <ArrowRight />
+              </span>
             </div>
           </td>
         </tr>
