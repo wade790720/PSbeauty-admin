@@ -1,7 +1,6 @@
 import Button from "components/Button"
 import Card from "components/Card"
 import CarouselPreview from "components/CarouselPreview"
-import { ReactComponent as EllipsisVertical } from "./EllipsisVertical.svg"
 import Form from "components/Form"
 import Info from "./Info"
 import ClinicTable from "./ClinicTable"

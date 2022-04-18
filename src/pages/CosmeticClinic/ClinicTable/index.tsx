@@ -1,7 +1,10 @@
 import styled from "./ClinicTable.module.scss"
 import { ReactComponent as ArrowRight } from "./ArrowRight.svg"
+import { useGo } from "components/Router"
 
 const ClinicTable = () => {
+  const go = useGo()
+
   return (
     <table>
       <thead>
@@ -36,7 +39,7 @@ const ClinicTable = () => {
           </td>
 
           <td className="text-end">
-            <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
+            <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm" onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}>
               <ArrowRight />
             </div>
           </td>
