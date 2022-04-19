@@ -2,8 +2,22 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Button from "components/Button"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
+import Select from "components/Select"
 
 const CosmeticClinicDetailCase = () => {
+  const options = [
+    { value: "整形手術", eventKey: "vanilla" },
+    { value: "皮膚治療", eventKey: "strawberry" },
+    { value: "毛髮改善", eventKey: "chocolate" },
+    { value: "審美牙科", eventKey: "mango" },
+    { value: "微整注射", eventKey: "micro injection" },
+    { value: "雷射光療", eventKey: "hazelnut" },
+    { value: "身體雕塑", eventKey: "body sculpture" },
+    { value: "埋線拉提", eventKey: "lati" },
+    { value: "中醫美容", eventKey: "chinese medicine" },
+    { value: "其他項目", eventKey: "other" },
+  ]
+
   return (
     <Card>
       <Card.Header title="案例詳情" />
@@ -17,7 +31,13 @@ const CosmeticClinicDetailCase = () => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>大分類</Form.Label>
-            <select name="" id=""></select>
+            <Select defaultValue={options[0]} placeholder="Select..">
+              {options.map(option => (
+                <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
+                  {option.value}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>小分類</Form.Label>
