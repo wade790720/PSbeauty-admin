@@ -12,7 +12,8 @@ type ActiveLinkProps = {
 
 const ActiveLink = ({ children, to, ...props }: ActiveLinkProps) => {
   let resolved = useResolvedPath(to);
-  let match = useMatch({ path: resolved.pathname, end: true });
+  let match = useMatch({ path: resolved.pathname, end: false });
+
   return (
     <Link
       className={cx({ active: match })}

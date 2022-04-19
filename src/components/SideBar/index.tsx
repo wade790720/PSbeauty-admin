@@ -12,7 +12,7 @@ export default function SideBar() {
       <div className={styled.menu}>
         <ul className={styled.outer}>
           <li className={styled.item}>
-            <ActiveLink to="/cms">
+            <ActiveLink to="/cms/home">
               <Home />
               <span>首頁</span>
             </ActiveLink>

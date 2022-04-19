@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { HashRouter as Router, Routes, Route, Outlet } from "react-router-dom"
+import { HashRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom"
 import { Container, Row } from "react-grid-system"
 import styled from "./App.module.scss"
 import "boxicons/css/boxicons.min.css"
@@ -41,12 +41,20 @@ function App() {
       <Router>
         <Suspense fallback={<QueryStatus.Loading />}>
           <Routes>
-            <Route path="/" element={<Cms />} />
+            {/* <Route path="/" element={<Cms />} /> */}
+            <Route
+              path="/"
+              element={<Navigate to="/login" />}
+            />
             <Route path="login" element={<BasicLayout />}>
               <Route index element={<Login />} />  
             </Route>
             <Route path="cms" element={<CmsLayout />}>
-              <Route index element={<Home />} />
+              <Route
+                index
+                element={<Navigate to="/cms/home" />}
+              />
+              <Route path="home" element={<Home />} />
               <Route path="cosmetic-clinic" element={<CosmeticClinic />} />
               <Route path="cosmetic-clinic/:id" element={<CosmeticClinicDetail />} />
               <Route path="cosmetic-clinic/:id/:caseId" element={<CosmeticClinicDetailCase />} />
