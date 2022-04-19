@@ -23,10 +23,14 @@ const MemberTable = () => {
             </td>
             <td className="text-end">
               <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm me-3">
-                <Edit />
+                <span className="svg-icon">
+                  <Edit />
+                </span>
               </div>
               <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-                <Remove />
+                <span className="svg-icon">
+                  <Remove />
+                </span>
               </div>
             </td>
           </tr>

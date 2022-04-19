@@ -27,7 +27,9 @@ const NoticeTable = () => {
             </td>
             <td className="text-end">
               <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-                <Remove />
+                <span className="svg-icon">
+                  <Remove />
+                </span>
               </div>
             </td>
           </tr>

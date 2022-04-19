@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import Button from "components/Button"
 import Card from "components/Card"
 import Info from "./Info"
 import CaseTable from "./CaseTable"
 import MedicalTeamTable from "./MedicalTeamTable"
 import Form from "components/Form"
+import Modal from "components/Modal"
 
 const CosmeticClinicDetail = () => {
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -47,7 +50,33 @@ const CosmeticClinicDetail = () => {
       </Card>
       <Card>
         <Card.Header title="醫療團隊" >
-          <Button variant="secondary">新增</Button>
+          <Button variant="secondary" onClick={() => setOpen(true)}>新增</Button>
+          <Modal
+            title="新增診所"
+            open={open}
+            confirmText="建立"
+            cancelText="取消"
+            onClose={() => setOpen(false)}
+          >
+            <img src="http://kenshin.hk/blog/archive/iryu/iryu-03.jpg" alt="" />
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label required>姓名</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>專長</Form.Label>
+                <Form.Checkbox>小分類1</Form.Checkbox>
+                <Form.Checkbox>小分類2</Form.Checkbox>
+                <Form.Checkbox>小分類3</Form.Checkbox>
+                <Form.Checkbox>小分類4</Form.Checkbox>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>經歷</Form.Label>
+                <Form.Textarea style={{ height: "100px" }} />
+              </Form.Group>
+            </Form>
+          </Modal>
         </Card.Header>
         <Card.Body>
           <MedicalTeamTable />
