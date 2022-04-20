@@ -1,0 +1,39 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 1.71429em;
+  line-height: 1.71429em;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  max-width: 100%;
+  color: #45536C;
+  font-size: 18px;
+  font-weight: 400;
+
+  a {
+    text-decoration: none;
+  }
+
+  .text {
+    font-size: inherit;
+    font-style: normal;
+    font-family: inherit;
+    cursor: pointer;
+    line-height: inherit;
+    font-weight: 700;
+    color: #8B919C;
+  }
+
+  .text:hover {
+    background: none;
+    transition-duration: 0s, 0.15s;
+    color: #0065FF;
+  }
+
+  .active {
+    text-decoration: none;
+    pointer-events: none;
+    color: #45536c;
+  }
+}

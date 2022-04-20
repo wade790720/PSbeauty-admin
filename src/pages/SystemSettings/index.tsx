@@ -2,6 +2,7 @@ import Button from "components/Button"
 import Card from "components/Card"
 import MemberTable from "./MemberTable"
 import Select from "components/Select"
+import Layout from "components/Layout"
 
 const SystemSettings = () => {
   const options = [
@@ -15,6 +16,9 @@ const SystemSettings = () => {
   ]
   return (
     <>
+      <Layout.Breadcrumbs>
+        <Layout.Breadcrumbs.Item>系統</Layout.Breadcrumbs.Item>
+      </Layout.Breadcrumbs>
       <Card>
         <Card.Header title="設定分類" />
         <Card.Body>

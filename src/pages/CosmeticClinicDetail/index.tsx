@@ -6,12 +6,17 @@ import CaseTable from "./CaseTable"
 import MedicalTeamTable from "./MedicalTeamTable"
 import Form from "components/Form"
 import Modal from "components/Modal"
+import Layout from "components/Layout"
 
 const CosmeticClinicDetail = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
+      <Layout.Breadcrumbs>
+        <Layout.Breadcrumbs.Item href="#/cms/cosmetic-clinic">診所</Layout.Breadcrumbs.Item>
+        <Layout.Breadcrumbs.Item>診所資訊</Layout.Breadcrumbs.Item>
+      </Layout.Breadcrumbs>
       <Card>
         <Card.Header title="星采醫學美容診所" />
         <Card.Body>

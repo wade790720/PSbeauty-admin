@@ -3,6 +3,8 @@ import Form from "components/Form"
 import Button from "components/Button"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
 import Select from "components/Select"
+import Layout from "components/Layout"
+import { useParams } from "react-router-dom"
 
 const CosmeticClinicDetailCase = () => {
   const options = [
@@ -17,44 +19,52 @@ const CosmeticClinicDetailCase = () => {
     { value: "中醫美容", eventKey: "chinese medicine" },
     { value: "其他項目", eventKey: "other" },
   ]
+  const { id } = useParams()
 
   return (
-    <Card>
-      <Card.Header title="案例詳情" />
-      <Card.Body>
-        <DefaultPhoto style={{ width: '50px', height: '50px', margin: '5px' }} />
-        <DefaultPhoto style={{ width: '50px', height: '50px', margin: '5px' }} />
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label required>案例標題</Form.Label>
-            <Form.Input type="text" />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>大分類</Form.Label>
-            <Select defaultValue={options[0]} placeholder="Select..">
-              {options.map(option => (
-                <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                  {option.value}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>小分類</Form.Label>
-            <Form.Checkbox>小分類1</Form.Checkbox>
-            <Form.Checkbox>小分類2</Form.Checkbox>
-            <Form.Checkbox>小分類3</Form.Checkbox>
-            <Form.Checkbox>小分類4</Form.Checkbox>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>案例內容</Form.Label>
-            <Form.Textarea style={{ height: "100px" }} />
-          </Form.Group>
-          <Button style={{ marginRight: "10px" }}>儲存修改</Button>
-          <Button variant="secondary">取消</Button>
-        </Form>
-      </Card.Body>
-    </Card>
+    <>
+      <Layout.Breadcrumbs>
+        <Layout.Breadcrumbs.Item href="#/cms/cosmetic-clinic">診所</Layout.Breadcrumbs.Item>
+        <Layout.Breadcrumbs.Item href={`#/cms/cosmetic-clinic/${id}`}>診所資訊</Layout.Breadcrumbs.Item>
+        <Layout.Breadcrumbs.Item>案例詳情</Layout.Breadcrumbs.Item>
+      </Layout.Breadcrumbs>
+      <Card>
+        <Card.Header title="案例詳情" />
+        <Card.Body>
+          <DefaultPhoto style={{ width: '50px', height: '50px', margin: '5px' }} />
+          <DefaultPhoto style={{ width: '50px', height: '50px', margin: '5px' }} />
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label required>案例標題</Form.Label>
+              <Form.Input type="text" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>大分類</Form.Label>
+              <Select defaultValue={options[0]} placeholder="Select..">
+                {options.map(option => (
+                  <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
+                    {option.value}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>小分類</Form.Label>
+              <Form.Checkbox>小分類1</Form.Checkbox>
+              <Form.Checkbox>小分類2</Form.Checkbox>
+              <Form.Checkbox>小分類3</Form.Checkbox>
+              <Form.Checkbox>小分類4</Form.Checkbox>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>案例內容</Form.Label>
+              <Form.Textarea style={{ height: "100px" }} />
+            </Form.Group>
+            <Button style={{ marginRight: "10px" }}>儲存修改</Button>
+            <Button variant="secondary">取消</Button>
+          </Form>
+        </Card.Body>
+      </Card>
+    </>
   )
 }
 

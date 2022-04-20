@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+}
+
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+
+  .icon {
+    > svg {
+      > path {
+        fill: #C9CBCE;
+      }
+    }
+  }
+}
+
+.items > li:last-child::after {
+  content: '';
+}

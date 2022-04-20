@@ -1,4 +1,5 @@
 import Card from "components/Card"
+import Layout from "components/Layout"
 import CarouselPreview from "components/CarouselPreview"
 import Form from "components/Form"
 import Button from "components/Button"
@@ -7,6 +8,9 @@ import NoticeTable from "./NoticeTable"
 const Home = () => {
   return (
     <>
+      <Layout.Breadcrumbs>
+        <Layout.Breadcrumbs.Item>首頁</Layout.Breadcrumbs.Item>
+      </Layout.Breadcrumbs>
       <Card>
         <Card.Header title="公告" />
         <Card.Body>

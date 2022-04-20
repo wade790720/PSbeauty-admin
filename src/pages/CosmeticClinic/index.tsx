@@ -5,12 +5,16 @@ import CarouselPreview from "components/CarouselPreview"
 import ClinicTable from "./ClinicTable"
 import Modal from "components/Modal"
 import Form from "components/Form"
+import Layout from "components/Layout"
 
 const CosmeticClinic = () => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
+      <Layout.Breadcrumbs>
+        <Layout.Breadcrumbs.Item>診所</Layout.Breadcrumbs.Item>
+      </Layout.Breadcrumbs>
       <Card>
         <Card.Header title="輪播" />
         <Card.Body>
