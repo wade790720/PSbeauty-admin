@@ -7788,6 +7788,11 @@ react-grid-system@7.2.0:
   dependencies:
     prop-types "^15.7.2"
 
+react-images-uploading@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/react-images-uploading/-/react-images-uploading-3.1.6.tgz#0e8c6b5f651f13bf456e194e69f401cf285d5125"
+  integrity sha512-CHaTZh2CN7Plip11D02muxcRGnFXfqsJ1c+2hoUcVbbHQLjTOafkX3iIo0aipu6r+c4EFRwikycOCnOw3NeiPw==
+
 react-interactive@^0.8.1:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/react-interactive/-/react-interactive-0.8.3.tgz#c3c6c3f99b2e5efc20a9ccc54504cf2c03984d5b"
