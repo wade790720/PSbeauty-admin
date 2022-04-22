@@ -38,27 +38,33 @@ const CosmeticClinic = () => {
                 <Form.Input type="text" />
               </Form.Group>
               <Form.Group layout="vertical">
-                <Form.Label required>大小分類</Form.Label>
-                <Form.Checkbox>小分類1</Form.Checkbox>
-                <Form.Checkbox>小分類2</Form.Checkbox>
-                <Form.Checkbox>小分類3</Form.Checkbox>
-                <Form.Checkbox>小分類4</Form.Checkbox>
+                <Form.Label required>大分類</Form.Label>
+                <Form.Checkbox>大分類1</Form.Checkbox>
+                <Form.Checkbox>大分類2</Form.Checkbox>
+                <Form.Checkbox>大分類3</Form.Checkbox>
+                <Form.Checkbox>大分類4</Form.Checkbox>
               </Form.Group>
               <Form.Group layout="vertical">
-                <Form.Label required>診所介紹</Form.Label>
+                <Form.Label required>電子信箱</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>完整地址</Form.Label>
+                <Form.Input type="text" placeholder='縣市'/>
+                <Form.Input type="text" placeholder='地區'/>
+                <Form.Input type="text" placeholder='地址'/>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所網址</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所電話</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所介紹</Form.Label>
                 <Form.Textarea style={{ height: "100px" }} />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>完整地址</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>診所網址</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>診所電話</Form.Label>
-                <Form.Input type="text" />
               </Form.Group>
             </Form>
           </Modal>

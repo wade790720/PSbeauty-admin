@@ -38,7 +38,9 @@ const CosmeticClinicDetail = () => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>完整地址</Form.Label>
-              <Form.Input type="text" />
+              <Form.Input type="text" placeholder='縣市' />
+              <Form.Input type="text" placeholder='地區' />
+              <Form.Input type="text" placeholder='地址' />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>診所網址</Form.Label>
