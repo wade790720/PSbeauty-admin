@@ -6,9 +6,16 @@ import ClinicTable from "./ClinicTable"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import Layout from "components/Layout"
+import ImageUploading from "react-images-uploading"
+import { ImageListType } from "react-images-uploading/dist/typings"
+import styled from "./CosmeticClinic.module.scss"
+import Icon from 'components/Icon'
+
+const MAX_NUMBER = 5
 
 const CosmeticClinic = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [images, setImages] = useState<ImageListType>([])
 
   return (
     <>
@@ -19,9 +26,65 @@ const CosmeticClinic = () => {
         <Card.Header title="輪播" />
         <Card.Body>
           <CarouselPreview />
-          {/* <FileUploader name="test" putEP="test"/> */}
         </Card.Body>
       </Card>
+      <div>
+        <ImageUploading
+          multiple
+          value={images}
+          onChange={(imageList: ImageListType) => setImages(imageList)}
+          maxNumber={MAX_NUMBER}
+          dataURLKey="data_url"
+        >
+          {({
+            imageList,
+            onImageUpload,
+            onImageUpdate,
+            onImageRemove,
+            dragProps,
+          }) => (
+            <div
+              className={styled["filepond-wrapper"]}
+              onClick={onImageUpload}
+              {...dragProps}
+            >
+              <div className={styled["drag-area"]}>
+                Drag / Drop your files or Browser
+              </div>
+              {imageList.length > 0 && (<div className={styled["items-wrapper"]}>
+                {imageList.map((image, index) => (
+                  <div
+                    key={index}
+                    className={styled["image-item"]}
+                    onClick={e => {
+                      e.stopPropagation()
+                      onImageUpdate(index)
+                    }}
+                  >
+                    <img src={image["data_url"]} alt="" />
+                    <button
+                      className={styled.remove}
+                      onClick={e => {
+                        e.stopPropagation()
+                        onImageRemove(index)
+                      }}>
+                      <Icon name="cross" />
+                    </button>
+                    <div
+                      className={styled.upload}
+                      onClick={e => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      Upload
+                    </div>
+                  </div>
+                ))}
+              </div>)}
+            </div>
+          )}
+        </ImageUploading>
+      </div>
       <Card>
         <Card.Header title="診所" >
           <Button variant="secondary" onClick={() => setOpen(true)}>新增診所</Button>
