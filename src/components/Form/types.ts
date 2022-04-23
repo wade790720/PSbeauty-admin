@@ -2,5 +2,5 @@ export interface FormControlProps {
   /**
    * Specify the status of value
    */
-  variant?: "invalid"
+  variant?: "invalid" | "solid"
 }

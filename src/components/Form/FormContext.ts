@@ -21,7 +21,7 @@ export type FormGroupAttributes = Partial<{
   entered: boolean
   disabled: boolean
   readOnly: boolean
-  variant: "invalid"
+  variant: "invalid" | "solid"
 }>
 
 export type FormGroupContextProps = {

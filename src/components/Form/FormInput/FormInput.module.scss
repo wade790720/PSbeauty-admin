@@ -4,11 +4,10 @@
 .wrapper {
   -webkit-box-align: center;
   align-items: center;
-  background-color: #fafbfc;
-  border-color: #dfe1e6;
+  border-color: #e4e6ef;
   color: #45536c;
   cursor: text;
-  border-radius: 3px;
+  border-radius: 7.8px;
   border-width: 1px;
   border-style: solid;
   box-sizing: border-box;
@@ -26,15 +25,31 @@
   pointer-events: auto;
 
   &:not(.disabled) {
-    &:hover {
-      background-color: #ebecf0;
-    }
     &:focus-within {
+      color: #181c32;
       background-color: #fff;
-      border-color: #2d62c4;
+      border-color: #b5b5c3;
+      outline: 0;
     }
+
     &.invalid {
       border: 1px solid #DE350B;
+    }
+
+    &.solid {
+      background-color: #f5f8fa;
+      border-color: #f5f8fa;
+      color: #5e6278;
+      transition: color .2s ease, background-color .2s ease;
+
+      input {
+        background-color: #f5f8fa;
+
+        &:focus {
+          background-color: #eef3f7;
+          color: #5e6278;;
+        }
+      }
     }
   }
 
@@ -50,7 +65,9 @@
   input.control {
     padding: 0 8px;
     height: 30px;
-    background: #0000;
+    background-clip: padding-box;
+    appearance: none;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     border: 0;
     box-sizing: border-box;
     color: currentColor;
