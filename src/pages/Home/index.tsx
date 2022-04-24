@@ -5,7 +5,27 @@ import Form from "components/Form"
 import Button from "components/Button"
 import NoticeTable from "./NoticeTable"
 
+// TODO: need to remove.
+import React, { useEffect } from "react"
+import { useGetUserIdLazyQuery } from "./Testing.graphql.generated"
+import { Vendor } from "types/schema"
+
+
 const Home = () => {
+  // TODO: need to remove.
+  const [loadQuery, query] = useGetUserIdLazyQuery()
+  const userList = query?.data?.userList || []
+  console.log(userList)
+
+  useEffect(() => {
+    loadQuery({
+      variables: {
+        account: "abc",
+        vendor: Vendor.Dmo,
+      },
+    })
+  }, [])
+
   return (
     <>
       <Layout.Breadcrumbs>
