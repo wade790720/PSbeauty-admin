@@ -29,7 +29,7 @@ const Home = () => {
 
   return (
     <>
-      {/* <Layout.Breadcrumbs>
+      <Layout.Breadcrumbs>
         <Layout.Breadcrumbs.Item>首頁</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <Card>
@@ -55,7 +55,7 @@ const Home = () => {
         <Card.Body>
           <CarouselPreview />
         </Card.Body>
-      </Card> */}
+      </Card>
       <Card>
         <Card.Header title="廣告卡列表" />
         <Card.Body>
