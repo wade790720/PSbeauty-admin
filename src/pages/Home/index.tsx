@@ -4,6 +4,7 @@ import CarouselPreview from "components/CarouselPreview"
 import Form from "components/Form"
 import Button from "components/Button"
 import NoticeTable from "./NoticeTable"
+import AdvertisementTable from "./AdvertisementTable"
 
 // TODO: need to remove.
 import React, { useEffect } from "react"
@@ -28,7 +29,7 @@ const Home = () => {
 
   return (
     <>
-      <Layout.Breadcrumbs>
+      {/* <Layout.Breadcrumbs>
         <Layout.Breadcrumbs.Item>首頁</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <Card>
@@ -53,7 +54,12 @@ const Home = () => {
         <Card.Header title="輪播" />
         <Card.Body>
           <CarouselPreview />
-          {/* <FileUploader name="test" putEP="test"/> */}
+        </Card.Body>
+      </Card> */}
+      <Card>
+        <Card.Header title="廣告卡列表" />
+        <Card.Body>
+          <AdvertisementTable />
         </Card.Body>
       </Card>
     </>
