@@ -2,7 +2,6 @@ import styled from "./SideBar.module.scss"
 import ActiveLink from "./ActiveLink"
 import { ReactComponent as Home } from "./Home.svg"
 import { ReactComponent as Clinic } from "./Clinic.svg"
-import { ReactComponent as Case } from "./Case.svg"
 import { ReactComponent as Settings } from "./Settings.svg"
 
 export default function SideBar() {

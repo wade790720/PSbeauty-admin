@@ -7,13 +7,13 @@ import styled from "./AdvertisementTable.module.scss"
 import { ReactComponent as Remove } from "./Remove.svg"
 import { ReactComponent as Edit } from "./Edit.svg"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
-import { Editor } from "@tinymce/tinymce-react"
-import { Editor as TinyMCEEditor } from "tinymce"
+
 import Modal from "components/Modal"
+import Editor from "components/Editor"
 
 const AdvertisementTable = () => {
   const [open, setOpen] = useState(false)
-  const editorRef = useRef<TinyMCEEditor | null>(null)
+  const editorRef = useRef(null)
   const [images, setImages] = useState<ImageListType>([])
   const [formPhoto, setFormPhoto] = useState('')
   const [formTitle, setFormTitle] = useState('全新臉部拉提計畫')
@@ -71,7 +71,7 @@ const AdvertisementTable = () => {
         onConfirm={() => {
           if (editorRef.current) {
             setFormPhoto(images[0]?.data_url);
-            setFormContent(editorRef.current.getContent());
+            // setFormContent(editorRef.current.getContent());
           }
         }}
         onClose={() => setOpen(false)}
@@ -129,28 +129,7 @@ const AdvertisementTable = () => {
               </div>
             )}
           </ImageUploading>
-          <Editor
-            onInit={(_, editor) => {
-              editorRef.current = editor
-            }}
-            tinymceScriptSrc="/js/tinymce/tinymce.min.js"
-            initialValue="<p>This is the initial content of the editor.</p>"
-            init={{
-              height: 250,
-              menubar: false,
-              plugins: [
-                "advlist", "autolink", "lists", "link", "image", "charmap", "preview", "anchor",
-                "searchreplace", "visualblocks", "code", "fullscreen",
-                "media", "table", "code", "wordcount"
-              ],
-              toolbar: "undo redo | formatselect | " +
-                "forecolor bold italic fontsize | alignleft aligncenter " +
-                "alignright alignjustify | bullist numlist outdent indent | " +
-                "removeformat",
-              toolbar_mode: 'sliding',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-            }}
-          />
+          <Editor/>
         </Modal.Body>
       </Modal>
     </div>

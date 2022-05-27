@@ -3,50 +3,44 @@ import * as Types from '../../types/schema';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type GetUserIdQueryVariables = Types.Exact<{
-  account: Types.Scalars['String'];
-  vendor: Types.Vendor;
-}>;
+export type GetClinicsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIdQuery = { userList: Array<{ __typename: 'User', id: string | null, account: string | null, vendor: string | null } | null> | null };
+export type GetClinicsQuery = { clinic: { __typename: 'Clinic', id: string | null, name: string | null } | null };
 
 
-export const GetUserIdDocument = gql`
-    query getUserId($account: String!, $vendor: Vendor!) {
-  userList(account: $account, vendor: $vendor) {
+export const GetClinicsDocument = gql`
+    query getClinics {
+  clinic {
     id
-    account
-    vendor
+    name
   }
 }
     `;
 
 /**
- * __useGetUserIdQuery__
+ * __useGetClinicsQuery__
  *
- * To run a query within a React component, call `useGetUserIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetClinicsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClinicsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUserIdQuery({
+ * const { data, loading, error } = useGetClinicsQuery({
  *   variables: {
- *      account: // value for 'account'
- *      vendor: // value for 'vendor'
  *   },
  * });
  */
-export function useGetUserIdQuery(baseOptions: Apollo.QueryHookOptions<GetUserIdQuery, GetUserIdQueryVariables>) {
+export function useGetClinicsQuery(baseOptions?: Apollo.QueryHookOptions<GetClinicsQuery, GetClinicsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetUserIdQuery, GetUserIdQueryVariables>(GetUserIdDocument, options);
+        return Apollo.useQuery<GetClinicsQuery, GetClinicsQueryVariables>(GetClinicsDocument, options);
       }
-export function useGetUserIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUserIdQuery, GetUserIdQueryVariables>) {
+export function useGetClinicsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetClinicsQuery, GetClinicsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetUserIdQuery, GetUserIdQueryVariables>(GetUserIdDocument, options);
+          return Apollo.useLazyQuery<GetClinicsQuery, GetClinicsQueryVariables>(GetClinicsDocument, options);
         }
-export type GetUserIdQueryHookResult = ReturnType<typeof useGetUserIdQuery>;
-export type GetUserIdLazyQueryHookResult = ReturnType<typeof useGetUserIdLazyQuery>;
-export type GetUserIdQueryResult = Apollo.QueryResult<GetUserIdQuery, GetUserIdQueryVariables>;
+export type GetClinicsQueryHookResult = ReturnType<typeof useGetClinicsQuery>;
+export type GetClinicsLazyQueryHookResult = ReturnType<typeof useGetClinicsLazyQuery>;
+export type GetClinicsQueryResult = Apollo.QueryResult<GetClinicsQuery, GetClinicsQueryVariables>;

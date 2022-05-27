@@ -1,7 +1,7 @@
 import cx from "classnames"
 import styled from "./LinkButton.module.scss"
 
-export type LinkButtonProps = ReactProps.WithClassName & ReactProps.WithChildren
+export type LinkButtonProps = ReactProps.WithClassName & ReactProps.WithChildren & JSX.IntrinsicElements["a"]
 
 export const LinkButton = ({
   className,

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Card from "components/Card"
 import Layout from "components/Layout"
 import CarouselPreview from "components/CarouselPreview"
@@ -5,27 +6,28 @@ import Form from "components/Form"
 import Button from "components/Button"
 import NoticeTable from "./NoticeTable"
 import AdvertisementTable from "./AdvertisementTable"
+import Editor from "components/Editor"
+import { Uploader } from 'rsuite';
+import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
 
-// TODO: need to remove.
-import React, { useEffect } from "react"
-import { useGetUserIdLazyQuery } from "./Testing.graphql.generated"
-import { Vendor } from "types/schema"
+interface FileType {
+  /** File Name */
+  name?: string;
+  /** File unique identifier */
+  fileKey?: number | string;
 
+  /** File upload status */
+  status?: 'inited' | 'uploading' | 'error' | 'finished';
+
+  /** File upload status */
+  progress?: number;
+
+  /** The url of the file can be previewed. */
+  url?: string;
+}
 
 const Home = () => {
-  // TODO: need to remove.
-  const [loadQuery, query] = useGetUserIdLazyQuery()
-  const userList = query?.data?.userList || []
-  console.log(userList)
-
-  useEffect(() => {
-    loadQuery({
-      variables: {
-        account: "abc",
-        vendor: Vendor.Dmo,
-      },
-    })
-  }, [])
+  const [fileList, setFileList] = useState<FileType[]>([]);
 
   return (
     <>
@@ -34,15 +36,30 @@ const Home = () => {
       </Layout.Breadcrumbs>
       <Card>
         <Card.Header title="公告" />
+
         <Card.Body>
           <Form>
+            <Form.Group layout="vertical">
+              <Form.Label required>預覽圖</Form.Label>
+              <Uploader
+                listType="picture"
+                action="//jsonplaceholder.typicode.com/posts/"
+                disabled={fileList.length > 0}
+                onChange={(fileList: FileType[]) => {
+                  setFileList(fileList)
+                }}>
+                <button>
+                  <CameraRetro />
+                </button>
+              </Uploader>
+            </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>標題</Form.Label>
               <Form.Input type="text" />
             </Form.Group>
-            <Form.Group layout="vertical">
+            <Form.Group layout="vertical" style={{ height: '200px' }}>
               <Form.Label required>內容</Form.Label>
-              <Form.Textarea style={{ height: "100px" }} />
+              <Editor />
             </Form.Group>
             <Button style={{ marginRight: "10px" }}>發送</Button>
             <Button variant="secondary">清空</Button>

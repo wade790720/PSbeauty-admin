@@ -6,6 +6,8 @@ import "boxicons/css/boxicons.min.css"
 import QueryStatus from "components/QueryStatus"
 import { lazy } from "react"
 import SideBar from "components/SideBar"
+import "./App.css"
+import 'rsuite/dist/rsuite.min.css'; 
 
 const BasicLayout = () => (
   <Container fluid className={styled["container-basic"]}>
@@ -27,7 +29,6 @@ const CmsLayout = () => (
 )
 
 function App() {
-  const Cms = lazy(() => import("pages/Cms"))
   const NotFound = lazy(() => import("pages/NotFound"))
   const Login = lazy(() => import("pages/Login"))
   const Home = lazy(() => import("pages/Home"))
@@ -37,11 +38,10 @@ function App() {
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
 
   return (
-    <div>
+    <>
       <Router>
         <Suspense fallback={<QueryStatus.Loading />}>
           <Routes>
-            {/* <Route path="/" element={<Cms />} /> */}
             <Route
               path="/"
               element={<Navigate to="/login" />}
@@ -64,7 +64,7 @@ function App() {
           </Routes>
         </Suspense>
       </Router>
-    </div>
+    </>
   );
 }
 

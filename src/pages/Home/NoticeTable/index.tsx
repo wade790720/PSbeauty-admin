@@ -1,40 +1,66 @@
-import cx from "classnames"
 import styled from "./NoticeTable.module.scss"
-import { ReactComponent as Remove } from "./Remove.svg"
+import { Table } from 'rsuite';
+import { LinkButton } from "components/Button"
+
+
+const fakeData = [
+  {
+    "id": 1,
+    "title": "New Amieshire",
+    "content": "Ratke Port",
+    "createTime": "2022-04-18",
+  },
+]
+
 
 const NoticeTable = () => {
+  const { Column, HeaderCell, Cell } = Table
+
   return (
     <div className={styled.wrapper}>
-      <table>
-        <thead>
-          <tr>
-            <th>標題</th>
-            <th>內容</th>
-            <th>創建時間</th>
-            <th className="text-end">動作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span className="text-gray-800 fw-bold mt-1 d-block fs-7">歡迎使用</span>
-            </td>
-            <td>
-              <span className={cx("text-gray-800 fw-bold d-block fs-6", styled.ellipsis)}>使用說明說明書，或稱作使用手冊，是產品製造者介紹產品的內容、指導用戶使用它的產品而編寫的，又或是向讀者、用戶、觀眾介紹某種讀物、或戲曲、電影的事故情節，演員陣容等的文字材料。</span>
-            </td>
-            <td>
-              <span className="text-gray-800 fw-bold d-block fs-6">2022-04-18</span>
-            </td>
-            <td className="text-end">
-              <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-                <span className="svg-icon">
-                  <Remove />
+      <Table
+        height={400}
+        data={fakeData}
+        onRowClick={data => {
+          console.log(data);
+        }}
+      >
+        <Column width={70} align="center" fixed>
+          <HeaderCell>序號</HeaderCell>
+          <Cell dataKey="id" />
+        </Column>
+
+        <Column width={200} fixed>
+          <HeaderCell>標題</HeaderCell>
+          <Cell dataKey="title" />
+        </Column>
+
+        <Column width={200} flexGrow={1}>
+          <HeaderCell>內容</HeaderCell>
+          <Cell dataKey="content" />
+        </Column>
+
+        <Column width={200}>
+          <HeaderCell>創建時間</HeaderCell>
+          <Cell dataKey="createTime" />
+        </Column>
+        <Column width={120} fixed="right">
+          <HeaderCell>動作</HeaderCell>
+
+          <Cell>
+            {rowData => {
+              function handleAction() {
+                alert(`id:${rowData.id}`);
+              }
+              return (
+                <span>
+                  <LinkButton onClick={handleAction}> Edit </LinkButton> | <LinkButton onClick={handleAction}> Remove </LinkButton>
                 </span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              );
+            }}
+          </Cell>
+        </Column>
+      </Table>
     </div>
   )
 }

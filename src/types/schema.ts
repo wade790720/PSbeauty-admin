@@ -10,1234 +10,2303 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  JSONStringUTF8: string;
+  /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any;
 };
 
-/** Condition Base for filtering audience. */
-export type Condition = {
-  __typename: 'Condition';
-  /** data type of value */
-  fieldType: Maybe<DataType>;
-  /** data value */
-  fieldValue: Maybe<Scalars['String']>;
-  /** Label's Id */
+/** A connection to a list of items. */
+export type ActivitiesConnection = {
+  __typename: 'ActivitiesConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<ActivitiesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<ClinicActivity>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type ActivitiesEdge = {
+  __typename: 'ActivitiesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<ClinicActivity>;
+};
+
+/** 廠商廣告卡 */
+export type AdCard = {
+  __typename: 'AdCard';
+  /** 廣告卡內容 */
+  content: Maybe<Scalars['String']>;
+  /** 物件識別碼 */
   id: Maybe<Scalars['String']>;
-  /** Label's Name */
-  name: Maybe<Scalars['String']>;
-  /** The logic used for condition */
-  operator: Maybe<Operator>;
-  sourceType: Maybe<SourceType>;
+  /** 廣告圖片網址 */
+  image: Maybe<Scalars['String']>;
+  /** 廣告卡標題 */
+  title: Maybe<Scalars['String']>;
 };
 
-/**
- * This ConditionContainer carries list of ConditionCrate.
- *
- */
-export type ConditionContainer = {
-  __typename: 'ConditionContainer';
-  /** List of ConditionContainer */
-  conditionCrates: Maybe<Array<Maybe<ConditionCrate>>>;
-  /** Logic for connection each ConditionCrate in List: conditionCrates */
-  logicType: Maybe<Scalars['String']>;
+/** 廠商廣告卡 */
+export type AdCardFilterInput = {
+  and: InputMaybe<Array<AdCardFilterInput>>;
+  /** 廣告卡內容 */
+  content: InputMaybe<StringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<AdCardFilterInput>>;
+  /** 廣告卡標題 */
+  title: InputMaybe<StringOperationFilterInput>;
 };
 
-/**
- * This ConditionContainer carries list of ConditionCrate.
- *
- */
-export type ConditionContainerInput = {
-  /** List of ConditionContainer */
-  conditionCrates: Array<InputMaybe<ConditionCrateInput>>;
-  /** Logic for connection each ConditionCrate in List: conditionCrates */
-  logicType: LogicType;
+/** 廠商廣告卡 */
+export type AdCardSortInput = {
+  /** 廣告卡內容 */
+  content: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<SortEnumType>;
+  /** 廣告卡標題 */
+  title: InputMaybe<SortEnumType>;
 };
 
-/**
- * This ConditionCrate carries list of Conditions.
- * The logic used for connecting each Conditions in ConditionCrate will be
- * always "AND".
- */
-export type ConditionCrate = {
-  __typename: 'ConditionCrate';
-  /** List of Condition */
-  conditions: Maybe<Array<Maybe<Condition>>>;
-  /** currency info */
-  currency: Maybe<Scalars['String']>;
-  /** Theme's ID */
+/** A connection to a list of items. */
+export type AdCardsConnection = {
+  __typename: 'AdCardsConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<AdCardsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<AdCard>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type AdCardsEdge = {
+  __typename: 'AdCardsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<AdCard>;
+};
+
+/** 廣告圖片，包含首頁輪播/症例輪播二種類型 */
+export type AdImage = {
+  __typename: 'AdImage';
+  /** 物件識別碼 */
   id: Maybe<Scalars['String']>;
-  /** Theme's Name */
-  name: Maybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: Maybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: Maybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: Maybe<Scalars['String']>;
+  /** 廣告圖片用途，如：首頁輪播/診所輪播/症例輪播 */
+  usageType: Maybe<Scalars['String']>;
 };
 
-/**
- * This ConditionCrate carries list of Conditions.
- * The logic used for connecting each Conditions in ConditionCrate will be
- * always "AND".
- */
-export type ConditionCrateInput = {
-  /** List of Condition */
-  conditions: Array<InputMaybe<ConditionInput>>;
-  /** currency info */
-  currency: InputMaybe<Scalars['String']>;
-  /** Theme's ID */
-  id: Scalars['String'];
+/** 廣告圖片，包含首頁輪播/症例輪播二種類型 */
+export type AdImageFilterInput = {
+  and: InputMaybe<Array<AdImageFilterInput>>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<AdImageFilterInput>>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<StringOperationFilterInput>;
+  /** 排序 */
+  sort: InputMaybe<ComparableInt32OperationFilterInput>;
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<StringOperationFilterInput>;
+  /** 廣告圖片用途，如：首頁輪播/診所輪播/症例輪播 */
+  usageType: InputMaybe<StringOperationFilterInput>;
 };
 
-/**
- * This ConditionHatch carries list of ConditionContainer.
- *
- */
-export type ConditionHatch = {
-  __typename: 'ConditionHatch';
-  /** List of ConditionContainer */
-  conditionContainers: Maybe<Array<Maybe<ConditionContainer>>>;
-  /** Logic for connection each ConditionContainer in List: conditionContainers */
-  logicType: Maybe<LogicType>;
+/** 廣告圖片，包含首頁輪播/症例輪播二種類型 */
+export type AdImageSortInput = {
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<SortEnumType>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<SortEnumType>;
+  /** 排序 */
+  sort: InputMaybe<SortEnumType>;
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<SortEnumType>;
+  /** 廣告圖片用途，如：首頁輪播/診所輪播/症例輪播 */
+  usageType: InputMaybe<SortEnumType>;
 };
 
-/**
- * This ConditionHatch carries list of ConditionContainer.
- *
- */
-export type ConditionHatchInput = {
-  /** List of ConditionContainer */
-  conditionContainers: Array<InputMaybe<ConditionContainerInput>>;
-  /** Logic for connection each ConditionContainer in List: conditionContainers */
-  logicType: LogicType;
+/** A connection to a list of items. */
+export type AdImagesConnection = {
+  __typename: 'AdImagesConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<AdImagesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<AdImage>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
-/** Condition for filtering audience. */
-export type ConditionInput = {
-  /** data type of value */
-  fieldType: DataType;
-  fieldValue: InputMaybe<Scalars['String']>;
-  /** Label's Id */
-  id: Scalars['String'];
-  /** The logic used for condition */
-  operator: Operator;
-  sourceType: SourceType;
+/** An edge in a connection. */
+export type AdImagesEdge = {
+  __typename: 'AdImagesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<AdImage>;
 };
 
-export type ConditionOption = {
-  __typename: 'ConditionOption';
-  themes: Maybe<Array<Maybe<LabelTheme>>>;
+/** 新增診所活動頁 */
+export type AddActivityInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 活動內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 活動圖片 */
+  image: InputMaybe<Scalars['String']>;
+  /** 活動主題 */
+  subject: InputMaybe<Scalars['String']>;
 };
 
-/**
- * This ConditionShip, which is for filtering audience, carries two
- * ConditionHatch. One is for "include", another one is for "exclude".
- */
-export type ConditionShip = {
-  __typename: 'ConditionShip';
-  /** conditions for 'exclude' */
-  exclude: Maybe<ConditionHatch>;
-  /** conditions for 'include' */
-  include: Maybe<ConditionHatch>;
-};
-
-/**
- * This ConditionShip, which is for filtering audience, carries two
- * ConditionHatch. One is for "include", another one is for "exclude".
- */
-export type ConditionShipInput = {
-  /** conditions for 'exclude' */
-  exclude: InputMaybe<ConditionHatchInput>;
-  /** conditions for 'include' */
-  include: InputMaybe<ConditionHatchInput>;
-};
-
-/** Creates a new custom group */
-export type CreateCustomGroup = {
-  __typename: 'CreateCustomGroup';
-  /** The id of new group */
-  groupId: Maybe<Scalars['Int']>;
-  /** This Value will be True when new group was created successfully.  */
-  isCreated: Maybe<Scalars['Boolean']>;
-};
-
-/** Provides details info of Custom Group by args of groupId */
-export type CustomGroup = {
-  __typename: 'CustomGroup';
-  /** Carries Conditions for filtering users */
-  conditionShip: Maybe<ConditionShip>;
-  /** Timestamp of custom group created */
-  createdDate: Maybe<Scalars['Int']>;
-  /** the id who created the custom group */
-  creatorId: Scalars['String'];
-  /** Group's description */
-  description: Maybe<Scalars['String']>;
-  /** Group's Id */
-  id: Maybe<Scalars['Int']>;
-  /** Last timestamp of custom group edited */
-  lastEditedDate: Maybe<Scalars['Int']>;
-  /** Group's name */
-  name: Scalars['String'];
-  statistics: Maybe<CustomGroupStatistic>;
-  /** Data within trackingDates will be provided */
-  trackingDates: Maybe<DateRangeEndDateNotRequired>;
-  /** group created by server(type_code: 0) or user(type_code: 1). */
-  typeCode: Maybe<Scalars['Int']>;
-  /** Total User Count of latest data date.Note that a 'null' indicates totalUserCount is still being calculated or calculating job went wrong. In addition, if startDate is a future date, totalUserCount will be 'null' until startDate arrives */
-  userCount: Maybe<Scalars['Int']>;
-  /** Vendor's ID */
-  vendor: Maybe<Scalars['String']>;
-  /** Total User Count of Vendor on latest data date */
-  vendorUserCount: Maybe<Scalars['Int']>;
-};
-
-
-/** Provides details info of Custom Group by args of groupId */
-export type CustomGroupConditionShipArgs = {
-  lang: Language;
-};
-
-
-/** Provides details info of Custom Group by args of groupId */
-export type CustomGroupStatisticsArgs = {
-  lang: Language;
-};
-
-/** Provides details info of Custom Group by args of groupId */
-export type CustomGroupPeriodDataQuery = {
-  __typename: 'CustomGroupPeriodDataQuery';
-  /** (Input data) 多幣別 */
-  currency: Maybe<Scalars['String']>;
-  /** (Input data) The unit of analysis data. */
-  dataUnit: Maybe<Scalars['String']>;
-  /** (Input data) Custom group's Id. */
-  id: Scalars['Int'];
-  /** (Input data) interval dates of Statistics. */
-  interval: Maybe<Scalars['String']>;
-  /** (Input data) Details of Custom Group */
-  lang: Maybe<Scalars['String']>;
-  statisticData: Array<Maybe<CustomGroupUserPeriodData>>;
-  /** (Input data) Statistic data id */
-  statisticIds: Maybe<Array<Maybe<Scalars['String']>>>;
-  /** (Input data) Owner's name */
-  vendor: Maybe<Scalars['String']>;
-};
-
-export type CustomGroupStatistic = {
-  __typename: 'CustomGroupStatistic';
-  /** List of Item's statistic data */
-  drillDownLabels: Maybe<Array<Maybe<CustomGroupStatisticList>>>;
-  /** Latest timestamp of data of custom group calculated */
-  lastUpdateDate: Maybe<Scalars['Int']>;
-  linearLabels: Maybe<CustomGroupPeriodDataQuery>;
-  /** Data date */
-  statisticsDate: Maybe<Scalars['Int']>;
-  /** Total User Count of latest data date */
-  userCount: Maybe<Scalars['Int']>;
-  /** Carries Conditions for filtering users */
-  userCountList: Maybe<Array<Maybe<CustomGroupUserCount>>>;
-};
-
-
-export type CustomGroupStatisticDrillDownLabelsArgs = {
-  currency: Scalars['String'];
-  interval: Interval;
-  numsOfItemsForEachStatistic?: InputMaybe<Scalars['Int']>;
-  statisticIds: Array<Scalars['String']>;
-};
-
-
-export type CustomGroupStatisticLinearLabelsArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  dataUnit?: InputMaybe<DataUnit>;
-  interval: Interval;
-  statisticIds: Array<Scalars['String']>;
-};
-
-
-export type CustomGroupStatisticUserCountListArgs = {
-  statisticIds: Array<Scalars['String']>;
-};
-
-/**
- * This item is for Label. For example,
- * '66-70歲' is an item of label: AgeUserCount
- */
-export type CustomGroupStatisticItem = {
-  __typename: 'CustomGroupStatisticItem';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  /** Drill-down statistic data of item. */
-  moreLabels: Maybe<CustomGroupStatisticList>;
-  /** label當中佔比例 */
-  percent: Maybe<Scalars['Float']>;
-  periodOnPeriod: Maybe<PeriodOnPeriod>;
-  /** Count for the Item */
-  value: Scalars['Int'];
-};
-
-/**
- * Statistic of Label. For example: VIPLevelUserCount.
- *
- */
-export type CustomGroupStatisticList = {
-  __typename: 'CustomGroupStatisticList';
-  /** Label's description */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  labelId: Maybe<Scalars['String']>;
-  /** List of Item's statistic data */
-  labelValues: Maybe<Array<Maybe<CustomGroupStatisticItem>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-};
-
-/**
- * This item is for Label. For example,
- * '66-70歲' is an item of label: AgeUserCount
- */
-export type CustomGroupStatisticPeriodItem = {
-  __typename: 'CustomGroupStatisticPeriodItem';
-  /** Drill-down statistic data of item. */
-  details: Maybe<CustomGroupStatisticSubItem>;
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  /** label當中佔比例 */
-  percent: Maybe<Scalars['Float']>;
-  periodOnPeriod: Maybe<PeriodOnPeriod>;
-  /** Count for the Item */
-  value: Scalars['Int'];
-};
-
-export type CustomGroupStatisticSubItem = {
-  __typename: 'CustomGroupStatisticSubItem';
-  /** Label's Id */
-  labelId: Maybe<Scalars['String']>;
-  labelValue: Maybe<Array<Maybe<LabelItemPercent>>>;
-};
-
-export type CustomGroupUserCount = {
-  __typename: 'CustomGroupUserCount';
-  /** Label's description */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  labelId: Maybe<Scalars['String']>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-  /** user count of label */
-  value: Maybe<Scalars['Int']>;
-};
-
-export type CustomGroupUserDateValue = {
-  __typename: 'CustomGroupUserDateValue';
-  /** Timestamp of Analysis date */
-  date: Maybe<Scalars['Int']>;
-  /** List of Item's statistic data */
-  items: Maybe<Array<Maybe<CustomGroupStatisticPeriodItem>>>;
-  /** Count unique user */
-  totalValue: Maybe<Scalars['Float']>;
-};
-
-export type CustomGroupUserPeriodAverageDateValue = {
-  __typename: 'CustomGroupUserPeriodAverageDateValue';
-  /** value's description */
-  description: Maybe<Scalars['String']>;
-  /** Display name */
-  name: Maybe<Scalars['String']>;
-  /** average value */
-  value: Maybe<Scalars['Float']>;
-};
-
-export type CustomGroupUserPeriodData = {
-  __typename: 'CustomGroupUserPeriodData';
-  average: Maybe<CustomGroupUserPeriodAverageDateValue>;
-  /** List of label's statistic data */
-  data: Maybe<Array<Maybe<CustomGroupUserDateValue>>>;
-  /** Label's description */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  labelId: Maybe<Scalars['String']>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-};
-
-/** Data Types */
-export enum DataType {
-  Date = 'DATE',
-  Decimal = 'DECIMAL',
-  Float = 'FLOAT',
-  Integer = 'INTEGER',
-  Null = 'NULL',
-  String = 'STRING',
-  Timestamp = 'TIMESTAMP'
-}
-
-/** An enumeration. */
-export enum DataUnit {
-  Daily = 'DAILY',
-  Monthly = 'MONTHLY',
-  Weekly = 'WEEKLY'
-}
-
-/** Time interval for which statistic of Labels are calculated */
-export type DateRangeEndDateNotRequired = {
-  __typename: 'DateRangeEndDateNotRequired';
-  /** End Day of time period */
-  endDate: Maybe<Scalars['String']>;
-  /** Start Day of time period */
-  startDate: Scalars['String'];
-};
-
-/** Delete a custom audience group */
-export type DeleteCustomGroup = {
-  __typename: 'DeleteCustomGroup';
-  /** This Value will be True when the group was deleted successfully. */
-  isDeleted: Maybe<Scalars['Boolean']>;
-};
-
-export type DrillDownLabel = {
-  __typename: 'DrillDownLabel';
-  /** Label's definition */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
+export type AddActivityPayload = {
+  __typename: 'AddActivityPayload';
   id: Maybe<Scalars['String']>;
-  labelValues: Maybe<Array<Maybe<DrillDownStatistics>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
 };
 
-export type DrillDownStatistics = {
-  __typename: 'DrillDownStatistics';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  moreLabels: Maybe<Array<Maybe<DrillDownLabel>>>;
-  /** label當中佔比例 */
-  percent: Maybe<Scalars['Float']>;
-  /** Count for the Item */
-  value: Scalars['Float'];
+/** 新增廠商廣告卡參數 */
+export type AddAdCardInput = {
+  /** 廣告內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 廣告標題 */
+  title: InputMaybe<Scalars['String']>;
 };
 
-/** UserEvent gameDetail */
-export type GameDetail = {
-  __typename: 'GameDetail';
-  bet: Maybe<GameDetailBaseData>;
-  gameItem: Maybe<GameDetailBaseData>;
-  inPlay: Maybe<GameDetailBaseData>;
+export type AddAdCardPayload = {
+  __typename: 'AddAdCardPayload';
+  id: Maybe<Scalars['String']>;
 };
 
-/** UserEvent gameDetail's base data */
-export type GameDetailBaseData = {
-  __typename: 'GameDetailBaseData';
-  displayTitle: Maybe<Scalars['String']>;
-  info: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
+/** 新增廣告圖片參數 */
+export type AddAdImageInput = {
+  /** 廣告圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<Scalars['String']>;
+  /** 廣告圖片用途，如：首頁輪播/診所輪播/症例輪播 */
+  usageType: InputMaybe<Scalars['String']>;
 };
 
-export type GroupUser = Node & {
-  __typename: 'GroupUser';
-  account: Maybe<Scalars['String']>;
-  detail: Maybe<Scalars['JSONStringUTF8']>;
-  /** The ID of the object */
-  id: Scalars['ID'];
+export type AddAdImagePayload = {
+  __typename: 'AddAdImagePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 問卷回覆 */
+export type AddAnswerInput = {
+  /** 答覆 */
+  answers: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 問卷識別碼 */
+  questionId: InputMaybe<Scalars['String']>;
+  /** 回答者識別碼 */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 問卷回覆結果 */
+export type AddAnswerPayload = {
+  __typename: 'AddAnswerPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type AddCaseInput = {
+  /** 術後照 */
+  afterImage: InputMaybe<Scalars['String']>;
+  /** 術後照關鍵字 */
+  afterImageText: InputMaybe<Scalars['String']>;
+  /** 術前照 */
+  beforeImage: InputMaybe<Scalars['String']>;
+  /** 術前照關鍵字 */
+  beforeImageText: InputMaybe<Scalars['String']>;
+  /** 案例分類 */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 案例描述 */
+  description: InputMaybe<Scalars['String']>;
+  /** 是否被設為熱門案例 */
+  hot: Scalars['Boolean'];
+  /** 病例標題 */
+  title: InputMaybe<Scalars['String']>;
+};
+
+export type AddCasePayload = {
+  __typename: 'AddCasePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 新增小分類 */
+export type AddCategoryInput = {
+  /** 小分類名稱 */
+  name: InputMaybe<Scalars['String']>;
+  /** 所屬中分類 */
+  parent: InputMaybe<Scalars['String']>;
+  /** 所屬大分類 */
+  topParent: InputMaybe<Scalars['String']>;
+};
+
+/** 新增小分類結果 */
+export type AddCategoryPayload = {
+  __typename: 'AddCategoryPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 使用者裝置輸入資訊 */
+export type AddClientTokenInput = {
+  /** 使用者裝置識別碼 */
+  clientToken: InputMaybe<Scalars['String']>;
+  /** 使用者識別碼 */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 使用者新增裝置輸出資訊 */
+export type AddClientTokenPayload = {
+  __typename: 'AddClientTokenPayload';
+  /** 使用者識別碼 */
   userId: Maybe<Scalars['String']>;
 };
 
-export type GroupUserCollection = Node & {
-  __typename: 'GroupUserCollection';
-  /** The ID of the object */
-  id: Scalars['ID'];
-  users: Maybe<GroupUserConnection>;
+/** 新增診所圖片參數 */
+export type AddClinicImageInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 診所圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<Scalars['String']>;
 };
 
-
-export type GroupUserCollectionUsersArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
+/** 新增診所圖片結果 */
+export type AddClinicImagePayload = {
+  __typename: 'AddClinicImagePayload';
+  id: Maybe<Scalars['String']>;
 };
 
-export type GroupUserConnection = {
-  __typename: 'GroupUserConnection';
-  /** Contains the nodes in this connection. */
-  edges: Array<Maybe<GroupUserEdge>>;
-  /** Pagination data for this connection. */
+export type AddClinicInput = {
+  /** 診所地址 */
+  address: InputMaybe<Scalars['String']>;
+  /** 診所小分類 */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 聯絡人信箱 */
+  contactEmail: InputMaybe<Scalars['String']>;
+  /** 聯絡人姓名 */
+  contactName: InputMaybe<Scalars['String']>;
+  /** 聯絡人電話 */
+  contactPhone: InputMaybe<Scalars['String']>;
+  /** 診所縣市 */
+  county: InputMaybe<Scalars['String']>;
+  /** 診所䢗述 */
+  description: InputMaybe<Scalars['String']>;
+  /** 最後付費時間 */
+  latestPayAt: Scalars['Long'];
+  /** 診所名稱 */
+  name: InputMaybe<Scalars['String']>;
+  /** 診所管理人電子郵件信箱 */
+  ownerEmail: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 是否已付費 */
+  paid: Scalars['Boolean'];
+  /** 付費組數 */
+  paySets: Scalars['Int'];
+  /** 診所電話 */
+  phone: InputMaybe<Scalars['String']>;
+  /** 診所鄉鎮市區 */
+  town: InputMaybe<Scalars['String']>;
+  /** 診所網站網址 */
+  web: InputMaybe<Scalars['String']>;
+};
+
+export type AddClinicPayload = {
+  __typename: 'AddClinicPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 新增諮詢輸入資料 */
+export type AddConsultInput = {
+  /**
+   * 諮詢小分類
+   * ///
+   */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 諮詢內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 諮詢天數 */
+  days: Scalars['Int'];
+  /** 諮詢圖片 */
+  images: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 諮詢標題 */
+  subject: InputMaybe<Scalars['String']>;
+  /** 諮詢者識別碼，對應 User.Id */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 新增諮詢完成回覆 */
+export type AddConsultPayload = {
+  __typename: 'AddConsultPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 診所回覆，會先產生一個 topic */
+export type AddConsultTopicInput = {
+  /** 診所識別碼，對應 Clinic.Id */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 諮詢識別碼，對應 Consult.Id */
+  consultId: InputMaybe<Scalars['String']>;
+};
+
+export type AddConsultTopicPayload = {
+  __typename: 'AddConsultTopicPayload';
+  /** 新建立的 Topic.Id */
+  id: Maybe<Scalars['String']>;
+};
+
+export type AddDoctorInput = {
+  /** 所屬診所 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 醫師專長，自填 */
+  expertise: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 姓名 */
+  name: InputMaybe<Scalars['String']>;
+  /** 照片 */
+  photo: InputMaybe<Scalars['String']>;
+  /** 學經歷 */
+  resumes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 頭銜 */
+  title: InputMaybe<Scalars['String']>;
+};
+
+export type AddDoctorPayload = {
+  __typename: 'AddDoctorPayload';
+  /** 診所識別碼 */
+  clinicId: Maybe<Scalars['String']>;
+  /** 醫師識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 醫師姓名 */
+  name: Maybe<Scalars['String']>;
+};
+
+/** 新增貼文內容 */
+export type AddPostInput = {
+  /** 發文內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 標題 */
+  subject: InputMaybe<Scalars['String']>;
+};
+
+/** 新增貼文回覆 */
+export type AddPostPayload = {
+  __typename: 'AddPostPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type AddQuestionInput = {
+  /** 問卷題目 */
+  items: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type AddQuestionPayload = {
+  __typename: 'AddQuestionPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type AddUserInput = {
+  /** 使用者所使用的裝識識別碼，用於接收 firebase 訊息用 */
+  clientToken: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 使用者姓名 */
+  name: InputMaybe<Scalars['String']>;
+  /** 使用者電話 */
+  phone: InputMaybe<Scalars['String']>;
+};
+
+export type AddUserPayload = {
+  __typename: 'AddUserPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 問卷回覆 */
+export type Answer = {
+  __typename: 'Answer';
+  /** 答覆 */
+  answers: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  parentField: Maybe<Scalars['String']>;
+  parentId: Maybe<Scalars['String']>;
+  /** 取得問題 */
+  question: Maybe<Question>;
+  /** 問卷識別碼 */
+  questionId: Maybe<Scalars['String']>;
+  /** 取得回覆者 */
+  responder: Maybe<User>;
+  /** 回答者識別碼 */
+  userId: Maybe<Scalars['String']>;
+};
+
+/** 問卷回覆 */
+export type AnswerFilterInput = {
+  and: InputMaybe<Array<AnswerFilterInput>>;
+  /** 答覆 */
+  answers: InputMaybe<ListStringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<AnswerFilterInput>>;
+  parentField: InputMaybe<StringOperationFilterInput>;
+  parentId: InputMaybe<StringOperationFilterInput>;
+  /** 問卷識別碼 */
+  questionId: InputMaybe<StringOperationFilterInput>;
+  /** 回答者識別碼 */
+  userId: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 問卷回覆 */
+export type AnswerSortInput = {
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  parentField: InputMaybe<SortEnumType>;
+  parentId: InputMaybe<SortEnumType>;
+  /** 問卷識別碼 */
+  questionId: InputMaybe<SortEnumType>;
+  /** 回答者識別碼 */
+  userId: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type AnswersByQuestionIdConnection = {
+  __typename: 'AnswersByQuestionIdConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<AnswersByQuestionIdEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<Answer>>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
-/** A Relay edge containing a `GroupUser` and its cursor. */
-export type GroupUserEdge = {
-  __typename: 'GroupUserEdge';
-  /** A cursor for use in pagination */
+/** An edge in a connection. */
+export type AnswersByQuestionIdEdge = {
+  __typename: 'AnswersByQuestionIdEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String'];
-  /** The item at the end of the edge */
-  node: Maybe<GroupUser>;
+  /** The item at the end of the edge. */
+  node: Maybe<Answer>;
 };
 
-/** An enumeration. */
-export enum Interval {
-  /** Statistic of Labels are calculated in past interval_custom_duration by Group day(s). */
-  CustomDuration = 'CUSTOM_DURATION',
-  /** Statistic of Labels are calculated in past 1 day(s). */
-  Interval_1D = 'INTERVAL_1D',
-  /** Statistic of Labels are calculated in past 7 day(s). */
-  Interval_7D = 'INTERVAL_7D',
-  /** Statistic of Labels are calculated in past 30 day(s). */
-  Interval_30D = 'INTERVAL_30D',
-  /** Statistic of Labels are calculated in past 60 day(s). */
-  Interval_60D = 'INTERVAL_60D',
-  /** Statistic of Labels are calculated in past 90 day(s). */
-  Interval_90D = 'INTERVAL_90D',
-  /** Statistic of Labels are calculated in past 180 day(s). */
-  Interval_180D = 'INTERVAL_180D',
-  /** Statistic of Labels are calculated in past interval_lifetime by User day(s). */
-  Lifetime = 'LIFETIME'
+export enum ApplyPolicy {
+  AfterResolver = 'AFTER_RESOLVER',
+  BeforeResolver = 'BEFORE_RESOLVER'
 }
 
-/** Label schema */
-export type Label = {
-  __typename: 'Label';
-  /** Label's definition */
+export type BooleanOperationFilterInput = {
+  eq: InputMaybe<Scalars['Boolean']>;
+  neq: InputMaybe<Scalars['Boolean']>;
+};
+
+/** A connection to a list of items. */
+export type CasesConnection = {
+  __typename: 'CasesConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<CasesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<ClinicCase>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type CasesEdge = {
+  __typename: 'CasesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<ClinicCase>;
+};
+
+/** 小分類 */
+export type Category = {
+  __typename: 'Category';
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 小分類名稱 */
+  name: Maybe<Scalars['String']>;
+  /** 所屬中分類 */
+  parent: Maybe<Scalars['String']>;
+  /** 大分類 */
+  topParent: Maybe<Scalars['String']>;
+};
+
+/** 診所資訊 */
+export type Clinic = {
+  __typename: 'Clinic';
+  /** 取得診所活動頁 */
+  activities: Maybe<Array<Maybe<ClinicActivity>>>;
+  /** 診所地址 （路巷號樓） */
+  address: Maybe<Scalars['String']>;
+  /** 取得診所案例數 */
+  caseCount: Scalars['Long'];
+  /** 取得診所案例 */
+  cases: Maybe<Array<Maybe<ClinicCase>>>;
+  /** 取得診所小分類 */
+  categories: Maybe<Array<Maybe<Category>>>;
+  /** 取得診所回覆諮詢數 */
+  consultReplyCount: Scalars['Long'];
+  /** 聯絡人信箱 */
+  contactEmail: Maybe<Scalars['String']>;
+  /** 聯絡人姓名 */
+  contactName: Maybe<Scalars['String']>;
+  /** 聯絡人電話 */
+  contactPhone: Maybe<Scalars['String']>;
+  /** 地址（縣/市） */
+  county: Maybe<Scalars['String']>;
+  /** 診所說明 */
   description: Maybe<Scalars['String']>;
-  /** Label's Id */
+  /** 取得診所醫生群 */
+  doctors: Maybe<Array<Maybe<ClinicDoctor>>>;
+  /** 物件識別碼 */
   id: Maybe<Scalars['String']>;
-  labelValue: Maybe<LabelValue>;
-  /** Label's name */
+  /** 取得診所圖片 */
+  images: Maybe<Array<Maybe<ClinicImage>>>;
+  /** 最後付費時間 */
+  latestPayAt: Scalars['Long'];
+  /** 診所名稱 */
   name: Maybe<Scalars['String']>;
-  themeId: Maybe<Scalars['String']>;
-  themeName: Maybe<Scalars['String']>;
+  /** 診所管理員 */
+  owners: Maybe<Array<Maybe<User>>>;
+  /** 是否已付費 */
+  paid: Scalars['Boolean'];
+  /** 付費組數 */
+  paySets: Scalars['Int'];
+  /** 診所電話 */
+  phone: Maybe<Scalars['String']>;
+  /** 地址（鄉縣市區） */
+  town: Maybe<Scalars['String']>;
+  /** 診所主網頁 */
+  web: Maybe<Scalars['String']>;
 };
 
-/** Label schema */
-export type LabelBase = {
-  __typename: 'LabelBase';
-  /** Label's definition */
+
+/** 診所資訊 */
+export type ClinicDoctorsArgs = {
+  where: InputMaybe<ClinicDoctorFilterInput>;
+};
+
+/** 診所活動頁 */
+export type ClinicActivity = {
+  __typename: 'ClinicActivity';
+  /** 取得診所資訊 */
+  clinic: Maybe<Clinic>;
+  /** 活動內容 */
+  content: Maybe<Scalars['String']>;
+  /** 取得活動建立時間，以 epoch 格式取至秒 */
+  createdAt: Scalars['Long'];
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 活動圖片 */
+  image: Maybe<Scalars['String']>;
+  /** 活動主題 */
+  subject: Maybe<Scalars['String']>;
+};
+
+/** 診所活動頁 */
+export type ClinicActivityFilterInput = {
+  and: InputMaybe<Array<ClinicActivityFilterInput>>;
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<StringOperationFilterInput>;
+  /** 活動內容 */
+  content: InputMaybe<StringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 活動圖片 */
+  image: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<ClinicActivityFilterInput>>;
+  parentField: InputMaybe<StringOperationFilterInput>;
+  parentId: InputMaybe<StringOperationFilterInput>;
+  /** 活動主題 */
+  subject: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 診所活動頁 */
+export type ClinicActivitySortInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<SortEnumType>;
+  /** 活動內容 */
+  content: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 活動圖片 */
+  image: InputMaybe<SortEnumType>;
+  parentField: InputMaybe<SortEnumType>;
+  parentId: InputMaybe<SortEnumType>;
+  /** 活動主題 */
+  subject: InputMaybe<SortEnumType>;
+};
+
+/** 診所病例 */
+export type ClinicCase = {
+  __typename: 'ClinicCase';
+  /** 術後照 */
+  afterImage: Maybe<Scalars['String']>;
+  /** 術後照關鍵字 */
+  afterImageText: Maybe<Scalars['String']>;
+  /** 術前照 */
+  beforeImage: Maybe<Scalars['String']>;
+  /** 術前照關鍵字 */
+  beforeImageText: Maybe<Scalars['String']>;
+  /** 相關小分類 */
+  categories: Maybe<Array<Maybe<Category>>>;
+  /** 取得診所資訊 */
+  clinic: Maybe<Clinic>;
+  /** 取得被蒐藏數 */
+  collectedCount: Scalars['Long'];
+  /** 案例描述 */
   description: Maybe<Scalars['String']>;
-  /** Label's Id */
+  /** 是否被設為熱門案例 */
+  hot: Scalars['Boolean'];
+  /** 物件識別碼 */
   id: Maybe<Scalars['String']>;
-  /** Label's name */
+  /** 病例標題 */
+  title: Maybe<Scalars['String']>;
+};
+
+/** 診所病例 */
+export type ClinicCaseFilterInput = {
+  /** 術後照 */
+  afterImage: InputMaybe<StringOperationFilterInput>;
+  /** 術後照關鍵字 */
+  afterImageText: InputMaybe<StringOperationFilterInput>;
+  and: InputMaybe<Array<ClinicCaseFilterInput>>;
+  /** 術前照 */
+  beforeImage: InputMaybe<StringOperationFilterInput>;
+  /** 術前照關鍵字 */
+  beforeImageText: InputMaybe<StringOperationFilterInput>;
+  /** 案例分類 */
+  categories: InputMaybe<ListStringOperationFilterInput>;
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<StringOperationFilterInput>;
+  /** 案例描述 */
+  description: InputMaybe<StringOperationFilterInput>;
+  /** 是否被設為熱門案例 */
+  hot: InputMaybe<BooleanOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<ClinicCaseFilterInput>>;
+  parentField: InputMaybe<StringOperationFilterInput>;
+  parentId: InputMaybe<StringOperationFilterInput>;
+  /** 病例標題 */
+  title: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 診所病例 */
+export type ClinicCaseSortInput = {
+  /** 術後照 */
+  afterImage: InputMaybe<SortEnumType>;
+  /** 術後照關鍵字 */
+  afterImageText: InputMaybe<SortEnumType>;
+  /** 術前照 */
+  beforeImage: InputMaybe<SortEnumType>;
+  /** 術前照關鍵字 */
+  beforeImageText: InputMaybe<SortEnumType>;
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<SortEnumType>;
+  /** 案例描述 */
+  description: InputMaybe<SortEnumType>;
+  /** 是否被設為熱門案例 */
+  hot: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  parentField: InputMaybe<SortEnumType>;
+  parentId: InputMaybe<SortEnumType>;
+  /** 病例標題 */
+  title: InputMaybe<SortEnumType>;
+};
+
+/** 診所諮詢討論串。一間診所可以針對一個諮詢問題建立一個討論串 */
+export type ClinicConsultTopic = {
+  __typename: 'ClinicConsultTopic';
+  clinic: Maybe<Clinic>;
+  /** 取得父項諮詢 */
+  consult: Maybe<Consult>;
+  /** 諮詢識別碼，對應 Consult.Id */
+  consultId: Maybe<Scalars['String']>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  replies: Maybe<Array<Maybe<ConsultTopicReply>>>;
+};
+
+/** 診所諮詢討論串。一間診所可以針對一個諮詢問題建立一個討論串 */
+export type ClinicConsultTopicFilterInput = {
+  and: InputMaybe<Array<ClinicConsultTopicFilterInput>>;
+  /** 診所識別碼，對應 Clinic.Id */
+  clinicId: InputMaybe<StringOperationFilterInput>;
+  /** 諮詢識別碼，對應 Consult.Id */
+  consultId: InputMaybe<StringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<ClinicConsultTopicFilterInput>>;
+  parentField: InputMaybe<StringOperationFilterInput>;
+  parentId: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 診所諮詢討論串。一間診所可以針對一個諮詢問題建立一個討論串 */
+export type ClinicConsultTopicSortInput = {
+  /** 診所識別碼，對應 Clinic.Id */
+  clinicId: InputMaybe<SortEnumType>;
+  /** 諮詢識別碼，對應 Consult.Id */
+  consultId: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  parentField: InputMaybe<SortEnumType>;
+  parentId: InputMaybe<SortEnumType>;
+};
+
+/** 駐院醫師 */
+export type ClinicDoctor = {
+  __typename: 'ClinicDoctor';
+  /** 醫生所屬診所 */
+  clinic: Maybe<Clinic>;
+  /** 醫師專長，自填 */
+  expertise: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 姓名 */
+  name: Maybe<Scalars['String']>;
+  /** 玉照 */
+  photo: Maybe<Scalars['String']>;
+  /** 經歷 */
+  resumes: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 醫師頭銜 */
+  title: Maybe<Scalars['String']>;
+};
+
+/** 駐院醫師 */
+export type ClinicDoctorFilterInput = {
+  and: InputMaybe<Array<ClinicDoctorFilterInput>>;
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<StringOperationFilterInput>;
+  /** 醫師專長，自填 */
+  expertise: InputMaybe<ListStringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 姓名 */
+  name: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<ClinicDoctorFilterInput>>;
+  parentField: InputMaybe<StringOperationFilterInput>;
+  parentId: InputMaybe<StringOperationFilterInput>;
+  /** 玉照 */
+  photo: InputMaybe<StringOperationFilterInput>;
+  /** 經歷 */
+  resumes: InputMaybe<ListStringOperationFilterInput>;
+  /** 醫師頭銜 */
+  title: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 駐院醫師 */
+export type ClinicDoctorSortInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 姓名 */
+  name: InputMaybe<SortEnumType>;
+  parentField: InputMaybe<SortEnumType>;
+  parentId: InputMaybe<SortEnumType>;
+  /** 玉照 */
+  photo: InputMaybe<SortEnumType>;
+  /** 醫師頭銜 */
+  title: InputMaybe<SortEnumType>;
+};
+
+/** 診所資訊 */
+export type ClinicFilterInput = {
+  /** 診所地址 （路巷號樓） */
+  address: InputMaybe<StringOperationFilterInput>;
+  and: InputMaybe<Array<ClinicFilterInput>>;
+  /** 診所案例數 */
+  caseCount: InputMaybe<ComparableInt32OperationFilterInput>;
+  /** 診所小分類 */
+  categories: InputMaybe<ListStringOperationFilterInput>;
+  /** 諮詢回覆數 */
+  consultReplyCount: InputMaybe<ComparableInt32OperationFilterInput>;
+  /** 聯絡人信箱 */
+  contactEmail: InputMaybe<StringOperationFilterInput>;
+  /** 聯絡人姓名 */
+  contactName: InputMaybe<StringOperationFilterInput>;
+  /** 聯絡人電話 */
+  contactPhone: InputMaybe<StringOperationFilterInput>;
+  /** 地址（縣/市） */
+  county: InputMaybe<StringOperationFilterInput>;
+  /** 診所說明 */
+  description: InputMaybe<StringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 最後付費時間 */
+  latestPayAt: InputMaybe<ComparableInt64OperationFilterInput>;
+  /** 診所名稱 */
+  name: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<ClinicFilterInput>>;
+  /** 管理者電子郵件，必須使用此郵件登入之帳號才視為該診所之管理者 */
+  ownerEmail: InputMaybe<ListStringOperationFilterInput>;
+  /** 是否已付費 */
+  paid: InputMaybe<BooleanOperationFilterInput>;
+  /** 付費組數 */
+  paySets: InputMaybe<ComparableInt32OperationFilterInput>;
+  /** 診所電話 */
+  phone: InputMaybe<StringOperationFilterInput>;
+  /** 地址（鄉縣市區） */
+  town: InputMaybe<StringOperationFilterInput>;
+  /** 診所主網頁 */
+  web: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 診所圖片 */
+export type ClinicImage = {
+  __typename: 'ClinicImage';
+  /** 取診所資訊 */
+  clinic: Maybe<Clinic>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: Maybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: Maybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: Maybe<Scalars['String']>;
+};
+
+/** 診所資訊 */
+export type ClinicSortInput = {
+  /** 診所地址 （路巷號樓） */
+  address: InputMaybe<SortEnumType>;
+  /** 診所案例數 */
+  caseCount: InputMaybe<SortEnumType>;
+  /** 諮詢回覆數 */
+  consultReplyCount: InputMaybe<SortEnumType>;
+  /** 聯絡人信箱 */
+  contactEmail: InputMaybe<SortEnumType>;
+  /** 聯絡人姓名 */
+  contactName: InputMaybe<SortEnumType>;
+  /** 聯絡人電話 */
+  contactPhone: InputMaybe<SortEnumType>;
+  /** 地址（縣/市） */
+  county: InputMaybe<SortEnumType>;
+  /** 診所說明 */
+  description: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 最後付費時間 */
+  latestPayAt: InputMaybe<SortEnumType>;
+  /** 診所名稱 */
+  name: InputMaybe<SortEnumType>;
+  /** 是否已付費 */
+  paid: InputMaybe<SortEnumType>;
+  /** 付費組數 */
+  paySets: InputMaybe<SortEnumType>;
+  /** 診所電話 */
+  phone: InputMaybe<SortEnumType>;
+  /** 地址（鄉縣市區） */
+  town: InputMaybe<SortEnumType>;
+  /** 診所主網頁 */
+  web: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type ClinicsConnection = {
+  __typename: 'ClinicsConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<ClinicsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<Clinic>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type ClinicsEdge = {
+  __typename: 'ClinicsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<Clinic>;
+};
+
+/** 使用者蒐集案例輸入內容 */
+export type CollectCaseInput = {
+  /** 蒐集案例識別碼 */
+  caseId: InputMaybe<Scalars['String']>;
+  /** 蒐集者識別碼，對應 User.Id */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 使用者蒐集案例回覆 */
+export type CollectCasePayload = {
+  __typename: 'CollectCasePayload';
+  /** 使用者識別碼 */
+  userId: Maybe<Scalars['String']>;
+};
+
+export type ComparableInt32OperationFilterInput = {
+  eq: InputMaybe<Scalars['Int']>;
+  gt: InputMaybe<Scalars['Int']>;
+  gte: InputMaybe<Scalars['Int']>;
+  in: InputMaybe<Array<Scalars['Int']>>;
+  lt: InputMaybe<Scalars['Int']>;
+  lte: InputMaybe<Scalars['Int']>;
+  neq: InputMaybe<Scalars['Int']>;
+  ngt: InputMaybe<Scalars['Int']>;
+  ngte: InputMaybe<Scalars['Int']>;
+  nin: InputMaybe<Array<Scalars['Int']>>;
+  nlt: InputMaybe<Scalars['Int']>;
+  nlte: InputMaybe<Scalars['Int']>;
+};
+
+export type ComparableInt64OperationFilterInput = {
+  eq: InputMaybe<Scalars['Long']>;
+  gt: InputMaybe<Scalars['Long']>;
+  gte: InputMaybe<Scalars['Long']>;
+  in: InputMaybe<Array<Scalars['Long']>>;
+  lt: InputMaybe<Scalars['Long']>;
+  lte: InputMaybe<Scalars['Long']>;
+  neq: InputMaybe<Scalars['Long']>;
+  ngt: InputMaybe<Scalars['Long']>;
+  ngte: InputMaybe<Scalars['Long']>;
+  nin: InputMaybe<Array<Scalars['Long']>>;
+  nlt: InputMaybe<Scalars['Long']>;
+  nlte: InputMaybe<Scalars['Long']>;
+};
+
+/** 會員諮詢 */
+export type Consult = {
+  __typename: 'Consult';
+  /** 諮詢小分類 */
+  categories: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 取得諮詢時間 */
+  consultAt: Scalars['Long'];
+  /** 諮詢內容 */
+  content: Maybe<Scalars['String']>;
+  /** 諮詢天數 */
+  days: Scalars['Int'];
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 諮詢圖片 */
+  images: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 取得發文者 */
+  poster: Maybe<User>;
+  /** 諮詢標題 */
+  subject: Maybe<Scalars['String']>;
+  /** 取得診所諮詢討論 */
+  topics: Maybe<Array<Maybe<ClinicConsultTopic>>>;
+};
+
+export type ConsultClinicInput = {
+  /**
+   * 諮詢小分類
+   * ///
+   */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 諮詢內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 諮詢天數 */
+  days: Scalars['Int'];
+  /** 諮詢圖片 */
+  images: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 諮詢標題 */
+  subject: InputMaybe<Scalars['String']>;
+  /** 諮詢者識別碼，對應 User.Id */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+export type ConsultClinicPayload = {
+  __typename: 'ConsultClinicPayload';
+  id: Maybe<Scalars['String']>;
+  /** 診所話題識別碼，對應 ClinicConsultTopic.Id */
+  topicId: Maybe<Scalars['String']>;
+};
+
+/** 討論串回覆 */
+export type ConsultTopicReply = {
+  __typename: 'ConsultTopicReply';
+  /** 回覆內容 */
+  content: Maybe<Scalars['String']>;
+  /** 回覆內容類型，可為 image 或 text */
+  contentType: Maybe<Scalars['String']>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 訊息已讀時間 */
+  readAt: Scalars['Long'];
+  /** 取得回覆者 */
+  replier: Maybe<User>;
+  /** 討論串識別碼，對應 ClinicConsultTopic.Id */
+  topicId: Maybe<Scalars['String']>;
+  /** 回覆者識別碼 */
+  userId: Maybe<Scalars['String']>;
+};
+
+/** 客製化 token 內容 */
+export type CustomTokenPayload = {
+  __typename: 'CustomTokenPayload';
+  /** 客製完成 token 字串 */
+  customToken: Maybe<Scalars['String']>;
+  /** Firebase uid */
+  uid: Maybe<Scalars['String']>;
+};
+
+/** 刪除診所活動頁 */
+export type DeleteActivityInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteActivityPayload = {
+  __typename: 'DeleteActivityPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 刪除廠商廣告卡參數 */
+export type DeleteAdCardInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteAdCardPayload = {
+  __typename: 'DeleteAdCardPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 刪除廣告圖片參數 */
+export type DeleteAdImageInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteAdImagePayload = {
+  __typename: 'DeleteAdImagePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type DeleteCaseInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteCasePayload = {
+  __typename: 'DeleteCasePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 刪除小分類輸入 */
+export type DeleteCategoryInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+/** 刪除小分類結果 */
+export type DeleteCategoryPayload = {
+  __typename: 'DeleteCategoryPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 移除使用者裝置輸入資訊 */
+export type DeleteClientTokenInput = {
+  /** 使用者裝置識別碼 */
+  clientToken: InputMaybe<Scalars['String']>;
+  /** 使用者識別碼 */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 移除使用者裝置輸出資訊 */
+export type DeleteClientTokenPayload = {
+  __typename: 'DeleteClientTokenPayload';
+  /** 使用者識別碼 */
+  userId: Maybe<Scalars['String']>;
+};
+
+/** 刪除診所圖片參數 */
+export type DeleteClinicImageInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteClinicImagePayload = {
+  __typename: 'DeleteClinicImagePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type DeleteClinicInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteClinicPayload = {
+  __typename: 'DeleteClinicPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type DeleteConsultInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteConsultPayload = {
+  __typename: 'DeleteConsultPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type DeleteDoctorInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteDoctorPayload = {
+  __typename: 'DeleteDoctorPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 刪除貼文內容 */
+export type DeletePostInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+/** 刪除貼文回覆 */
+export type DeletePostPayload = {
+  __typename: 'DeletePostPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type DeleteUserInput = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+export type DeleteUserPayload = {
+  __typename: 'DeleteUserPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** A connection to a list of items. */
+export type DoctorsConnection = {
+  __typename: 'DoctorsConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<DoctorsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<ClinicDoctor>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type DoctorsEdge = {
+  __typename: 'DoctorsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<ClinicDoctor>;
+};
+
+export type ListStringOperationFilterInput = {
+  all: InputMaybe<StringOperationFilterInput>;
+  any: InputMaybe<Scalars['Boolean']>;
+  none: InputMaybe<StringOperationFilterInput>;
+  some: InputMaybe<StringOperationFilterInput>;
+};
+
+export type MiddleCategory = {
+  __typename: 'MiddleCategory';
+  /** 其下小分類 */
+  categories: Maybe<Array<Maybe<Category>>>;
+  /** 中分類名稱 */
   name: Maybe<Scalars['String']>;
 };
-
-/** LabelCategory schema */
-export type LabelCategory = {
-  __typename: 'LabelCategory';
-  /** LabelCategory count */
-  count: Maybe<Scalars['Int']>;
-  /** Label's definition */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  id: Maybe<Scalars['String']>;
-  /** List of label detail */
-  labels: Maybe<Array<Maybe<LabelBase>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-};
-
-export type LabelCombine = {
-  __typename: 'LabelCombine';
-  /** Label's definition */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  id: Maybe<Scalars['String']>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-  statistic: Array<Maybe<StatisticLabelsDetailList>>;
-};
-
-/** Label for Feature id */
-export type LabelForFeature = {
-  __typename: 'LabelForFeature';
-  /** Label's definition */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  id: Maybe<Scalars['String']>;
-  /** Is this label relate to currency */
-  isCurrency: Maybe<Scalars['Boolean']>;
-  /** List of Item's data */
-  items: Maybe<Array<Maybe<LabelItemBase>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-  /** Theme's Id */
-  themeId: Maybe<Scalars['String']>;
-  /** Theme's name */
-  themeName: Maybe<Scalars['String']>;
-};
-
-export type LabelItemBase = {
-  __typename: 'LabelItemBase';
-  /** Item's info key */
-  info: Maybe<Scalars['String']>;
-  /** Description of Item */
-  infoDescription: Maybe<Scalars['String']>;
-  /** Item's name */
-  infoName: Maybe<Scalars['String']>;
-};
-
-export type LabelItemPercent = {
-  __typename: 'LabelItemPercent';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  /** label當中佔比例 */
-  percent: Maybe<Scalars['Float']>;
-  periodOnPeriod: Maybe<PeriodOnPeriod>;
-  /** Count for the Item */
-  value: Scalars['Int'];
-};
-
-export type LabelOption = {
-  __typename: 'LabelOption';
-  /** Label's ID */
-  id: Maybe<Scalars['String']>;
-  infoFieldType: Maybe<DataType>;
-  /** List of Label item */
-  infoItems: Maybe<Array<LabelOptionInfoItem>>;
-  /** Operators for infoItem */
-  infoOperators: Maybe<Array<Operator>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-  rawFieldType: Maybe<DataType>;
-  /** Operators for raw value */
-  rawOperators: Maybe<Array<Operator>>;
-  sourceTypes: Maybe<Array<SourceType>>;
-};
-
-export type LabelOptionInfoItem = {
-  __typename: 'LabelOptionInfoItem';
-  /** Label item's info id */
-  info: Maybe<Scalars['String']>;
-  /** Label item's name */
-  name: Maybe<Scalars['String']>;
-};
-
-export type LabelSummaryDetail = {
-  __typename: 'LabelSummaryDetail';
-  allLabelValueInfo: Maybe<Array<Maybe<LabelItemBase>>>;
-  /** Label's description */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  id: Maybe<Scalars['String']>;
-  /** Timestamp of last data updated time */
-  lastUpdateDate: Maybe<Scalars['Int']>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-  /** Themes Category */
-  statistics: Maybe<Array<Maybe<StatisticLabelsDetailList>>>;
-  /** Timestamp of data date */
-  statisticsDate: Maybe<Scalars['Int']>;
-  /** Array of suggestion_menu */
-  suggestionMenu: Maybe<Array<Maybe<LabelBase>>>;
-  /** Unique user count */
-  userCount: Maybe<Scalars['Int']>;
-};
-
-
-export type LabelSummaryDetailStatisticsArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  interval?: InputMaybe<Interval>;
-};
-
-export type LabelTheme = {
-  __typename: 'LabelTheme';
-  /** Label's theme ID */
-  id: Maybe<Scalars['String']>;
-  /** indicate whether themeId is currency type or not */
-  isCurrency: Maybe<Scalars['Boolean']>;
-  labels: Maybe<Array<Maybe<LabelOption>>>;
-  /** Label's theme name */
-  themeName: Maybe<Scalars['String']>;
-};
-
-export type LabelValue = {
-  __typename: 'LabelValue';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  value: Maybe<Scalars['String']>;
-  valueType: Maybe<ValueType>;
-};
-
-/** An enumeration. */
-export enum Language {
-  /** Simplified Chinese. 简体中文 */
-  ZhCn = 'ZH_CN',
-  /** Traditional Chinese. 繁體中文 */
-  ZhTw = 'ZH_TW'
-}
-
-export type LinearLabel = {
-  __typename: 'LinearLabel';
-  /** Label's definition */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  id: Maybe<Scalars['String']>;
-  /** list of LinearStatistics */
-  labelValues: Maybe<Array<Maybe<LinearStatistics>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-};
-
-export type LinearStatistics = {
-  __typename: 'LinearStatistics';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  /** list of LinearStatisticsValue */
-  values: Maybe<Array<Maybe<LinearStatisticsValue>>>;
-};
-
-export type LinearStatisticsValue = {
-  __typename: 'LinearStatisticsValue';
-  /** timestamp of date of value. */
-  date: Maybe<Scalars['Int']>;
-  /** value of data */
-  value: Maybe<Scalars['Float']>;
-};
-
-/** An enumeration. */
-export enum LogicType {
-  And = 'AND',
-  Or = 'OR'
-}
 
 export type Mutation = {
   __typename: 'Mutation';
-  /** Creates a new custom group */
-  createCustomGroup: Maybe<CreateCustomGroup>;
-  /** Delete a custom audience group */
-  deleteCustomGroup: Maybe<DeleteCustomGroup>;
-  /** Update custom grouping basic information */
-  updateCustomGroup: Maybe<UpdateCustomGroup>;
+  /** 新增診所活動 */
+  addActivity: Maybe<AddActivityPayload>;
+  /** 新增廠商廣告卡 */
+  addAdCard: Maybe<AddAdCardPayload>;
+  /** 新增 Banner 廣告圖 */
+  addAdImage: Maybe<AddAdImagePayload>;
+  /** 問卷回覆 */
+  addAnswer: Maybe<AddAnswerPayload>;
+  /** 新增案例 */
+  addCase: Maybe<AddCasePayload>;
+  /** 建立小分類 */
+  addCategory: Maybe<AddCategoryPayload>;
+  /** 使用者加入裝置識別碼 */
+  addClientToken: Maybe<AddClientTokenPayload>;
+  /** 新增診所 */
+  addClinic: Maybe<AddClinicPayload>;
+  /** 新增診所圖片 */
+  addClinicImage: Maybe<AddClinicImagePayload>;
+  /** 使用者諮詢 */
+  addConsult: Maybe<AddConsultPayload>;
+  /** 診所第一次諮詢回覆。會先針對該諮詢建立一個診所與該諮詢的話題（topic），日後的來回問答皆會在此話題之中。 */
+  addConsultTopic: Maybe<AddConsultTopicPayload>;
+  /** 新增診所醫生 */
+  addDoctor: Maybe<AddDoctorPayload>;
+  /** 新增發文 */
+  addPost: Maybe<AddPostPayload>;
+  /** 新增問卷 */
+  addQuestion: Maybe<AddQuestionPayload>;
+  /** 新增使用者，在 firebase 新增完後呼叫此 API 新增 */
+  addUser: Maybe<AddUserPayload>;
+  /** 使用者將指定病例加入蒐藏 */
+  collectCase: Maybe<CollectCasePayload>;
+  /** 一對一諮詢，由使用者直接諮詢診所 */
+  consultClinic: Maybe<ConsultClinicPayload>;
+  /** 刪除診所活動頁 */
+  deleteActivity: Maybe<DeleteActivityPayload>;
+  /** 刪除廠商廣告卡 */
+  deleteAdCard: Maybe<DeleteAdCardPayload>;
+  /** 刪除 Banner 廣告圖 */
+  deleteAdImage: Maybe<DeleteAdImagePayload>;
+  /** 刪除案例 */
+  deleteCase: Maybe<DeleteCasePayload>;
+  /** 刪除小分類 */
+  deleteCategory: Maybe<DeleteCategoryPayload>;
+  /** 使用者移除裝置識別碼 */
+  deleteClientToken: Maybe<DeleteClientTokenPayload>;
+  /** 刪除診所 */
+  deleteClinic: Maybe<DeleteClinicPayload>;
+  /** 刪除診所圖片 */
+  deleteClinicImage: Maybe<DeleteClinicImagePayload>;
+  /** 刪除諮詢 */
+  deleteConsult: Maybe<DeleteConsultPayload>;
+  /** 刪除診所醫生 */
+  deleteDoctor: Maybe<DeleteDoctorPayload>;
+  /** 刪除貼文 */
+  deletePost: Maybe<DeletePostPayload>;
+  /** 刪除使用者 */
+  deleteUser: Maybe<DeleteUserPayload>;
+  /** 讀取諮詢回覆 */
+  readReply: Maybe<ReadReplyPayload>;
+  /** 移除已蒐集病例 */
+  removeCollectedCase: Maybe<RemoveCollectedCasePayload>;
+  /** 回覆話題 */
+  replyTopic: Maybe<ReplyTopicPayload>;
+  /** 設定熱門關鍵字 */
+  setPopularKeywords: Maybe<SetPopularKeywordsPayload>;
+  /** 更新診所活動頁 */
+  updateActivity: Maybe<UpdateActivityPayload>;
+  /** 更新廠商廣告卡 */
+  updateAdCard: Maybe<UpdateAdCardPayload>;
+  /** 修改 Banner 廣告圖 */
+  updateAdImage: Maybe<UpdateAdImagePayload>;
+  /** 更新案例 */
+  updateCase: Maybe<UpdateCasePayload>;
+  /** 修改小分類 */
+  updateCategory: Maybe<UpdateCategoryPayload>;
+  /** 修改診所資訊 */
+  updateClinic: Maybe<UpdateClinicPayload>;
+  /** 修改診所圖片 */
+  updateClinicImage: Maybe<UpdateClinicImagePayload>;
+  /** 更新診所醫生 */
+  updateDoctor: Maybe<UpdateDoctorPayload>;
+  /** 修改貼文內容 */
+  updatePost: Maybe<UpdatePostPayload>;
+  /** 更新使用者資料 */
+  updateUser: Maybe<UpdateUserPayload>;
 };
 
 
-export type MutationCreateCustomGroupArgs = {
-  conditionShip: ConditionShipInput;
-  creatorId: Scalars['String'];
-  description?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
-  trackingDates: TrackingDates;
-  vendor: Vendor;
+export type MutationAddActivityArgs = {
+  input: InputMaybe<AddActivityInput>;
 };
 
 
-export type MutationDeleteCustomGroupArgs = {
-  groupId: Scalars['Int'];
-  vendor: Vendor;
+export type MutationAddAdCardArgs = {
+  input: InputMaybe<AddAdCardInput>;
 };
 
 
-export type MutationUpdateCustomGroupArgs = {
-  description?: InputMaybe<Scalars['String']>;
-  groupId: Scalars['Int'];
-  name: Scalars['String'];
-  vendor: Vendor;
+export type MutationAddAdImageArgs = {
+  input: InputMaybe<AddAdImageInput>;
 };
 
-/** An object with an ID */
-export type Node = {
-  /** The ID of the object */
-  id: Scalars['ID'];
+
+export type MutationAddAnswerArgs = {
+  input: InputMaybe<AddAnswerInput>;
 };
 
-/** Logical operators */
-export enum Operator {
-  /** Stands for Equal. Symbol: = */
-  Eq = 'EQ',
-  /** Stands for Greater Than. Symbol: > */
-  Gt = 'GT',
-  /** Stands for Greater Than or Equal. Symbol: >= */
-  Gte = 'GTE',
-  /** Stands for 'IS NOT NULL' */
-  HasValue = 'HAS_VALUE',
-  /** Stands for Less Than. Symbol: < */
-  Lt = 'LT',
-  /** Stands for Less Than or Equal. Symbol: <= */
-  Lte = 'LTE',
-  /** Stands for 'IS NULL' */
-  NoValue = 'NO_VALUE'
-}
 
-/** An enumeration. */
-export enum OrderStrategy {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
+export type MutationAddCaseArgs = {
+  input: InputMaybe<AddCaseInput>;
+};
 
-/** The Relay compliant `PageInfo` type, containing data necessary to paginate this connection. */
+
+export type MutationAddCategoryArgs = {
+  input: InputMaybe<AddCategoryInput>;
+};
+
+
+export type MutationAddClientTokenArgs = {
+  input: InputMaybe<AddClientTokenInput>;
+};
+
+
+export type MutationAddClinicArgs = {
+  input: InputMaybe<AddClinicInput>;
+};
+
+
+export type MutationAddClinicImageArgs = {
+  input: InputMaybe<AddClinicImageInput>;
+};
+
+
+export type MutationAddConsultArgs = {
+  input: InputMaybe<AddConsultInput>;
+};
+
+
+export type MutationAddConsultTopicArgs = {
+  input: InputMaybe<AddConsultTopicInput>;
+};
+
+
+export type MutationAddDoctorArgs = {
+  input: InputMaybe<AddDoctorInput>;
+};
+
+
+export type MutationAddPostArgs = {
+  input: InputMaybe<AddPostInput>;
+};
+
+
+export type MutationAddQuestionArgs = {
+  input: InputMaybe<AddQuestionInput>;
+};
+
+
+export type MutationAddUserArgs = {
+  input: InputMaybe<AddUserInput>;
+};
+
+
+export type MutationCollectCaseArgs = {
+  input: InputMaybe<CollectCaseInput>;
+};
+
+
+export type MutationConsultClinicArgs = {
+  input: InputMaybe<ConsultClinicInput>;
+};
+
+
+export type MutationDeleteActivityArgs = {
+  input: InputMaybe<DeleteActivityInput>;
+};
+
+
+export type MutationDeleteAdCardArgs = {
+  input: InputMaybe<DeleteAdCardInput>;
+};
+
+
+export type MutationDeleteAdImageArgs = {
+  input: InputMaybe<DeleteAdImageInput>;
+};
+
+
+export type MutationDeleteCaseArgs = {
+  input: InputMaybe<DeleteCaseInput>;
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  input: InputMaybe<DeleteCategoryInput>;
+};
+
+
+export type MutationDeleteClientTokenArgs = {
+  input: InputMaybe<DeleteClientTokenInput>;
+};
+
+
+export type MutationDeleteClinicArgs = {
+  input: InputMaybe<DeleteClinicInput>;
+};
+
+
+export type MutationDeleteClinicImageArgs = {
+  input: InputMaybe<DeleteClinicImageInput>;
+};
+
+
+export type MutationDeleteConsultArgs = {
+  input: InputMaybe<DeleteConsultInput>;
+};
+
+
+export type MutationDeleteDoctorArgs = {
+  input: InputMaybe<DeleteDoctorInput>;
+};
+
+
+export type MutationDeletePostArgs = {
+  input: InputMaybe<DeletePostInput>;
+};
+
+
+export type MutationDeleteUserArgs = {
+  input: InputMaybe<DeleteUserInput>;
+};
+
+
+export type MutationReadReplyArgs = {
+  input: InputMaybe<ReadReplyInput>;
+};
+
+
+export type MutationRemoveCollectedCaseArgs = {
+  input: InputMaybe<RemoveCollectedCaseInput>;
+};
+
+
+export type MutationReplyTopicArgs = {
+  input: InputMaybe<ReplyTopicInput>;
+};
+
+
+export type MutationSetPopularKeywordsArgs = {
+  input: InputMaybe<SetPopularKeywordsInput>;
+};
+
+
+export type MutationUpdateActivityArgs = {
+  input: InputMaybe<UpdateActivityInput>;
+};
+
+
+export type MutationUpdateAdCardArgs = {
+  input: InputMaybe<UpdateAdCardInput>;
+};
+
+
+export type MutationUpdateAdImageArgs = {
+  input: InputMaybe<UpdateAdImageInput>;
+};
+
+
+export type MutationUpdateCaseArgs = {
+  input: InputMaybe<UpdateCaseInput>;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  input: InputMaybe<UpdateCategoryInput>;
+};
+
+
+export type MutationUpdateClinicArgs = {
+  input: InputMaybe<UpdateClinicInput>;
+};
+
+
+export type MutationUpdateClinicImageArgs = {
+  input: InputMaybe<UpdateClinicImageInput>;
+};
+
+
+export type MutationUpdateDoctorArgs = {
+  input: InputMaybe<UpdateDoctorInput>;
+};
+
+
+export type MutationUpdatePostArgs = {
+  input: InputMaybe<UpdatePostInput>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: InputMaybe<UpdateUserInput>;
+};
+
+/** Information about pagination in a connection. */
 export type PageInfo = {
   __typename: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor: Maybe<Scalars['String']>;
-  /** When paginating forwards, are there more items? */
+  /** Indicates whether more edges exist following the set defined by the clients arguments. */
   hasNextPage: Scalars['Boolean'];
-  /** When paginating backwards, are there more items? */
+  /** Indicates whether more edges exist prior the set defined by the clients arguments. */
   hasPreviousPage: Scalars['Boolean'];
   /** When paginating backwards, the cursor to continue. */
   startCursor: Maybe<Scalars['String']>;
 };
 
-export type PeriodOnPeriod = {
-  __typename: 'PeriodOnPeriod';
-  compareDate: Maybe<Scalars['Int']>;
-  value: Maybe<Scalars['Int']>;
+/** 熱門搜尋 */
+export type PopularKeywords = {
+  __typename: 'PopularKeywords';
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 關鍵字 */
+  keywords: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-export type PeriodOnPeriodPercent = {
-  __typename: 'PeriodOnPeriodPercent';
-  day: Maybe<Scalars['Float']>;
-  week: Maybe<Scalars['Float']>;
+/** 討論串回覆 */
+export type Post = {
+  __typename: 'Post';
+  /** 內容 */
+  content: Maybe<Scalars['String']>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 取得發表時間 */
+  postAt: Scalars['Long'];
+  /** 標題 */
+  subject: Maybe<Scalars['String']>;
 };
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
+/** 討論串回覆 */
+export type PostFilterInput = {
+  and: InputMaybe<Array<PostFilterInput>>;
+  /** 內容 */
+  content: InputMaybe<StringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<PostFilterInput>>;
+  /** 標題 */
+  subject: InputMaybe<StringOperationFilterInput>;
+};
+
+/** 討論串回覆 */
+export type PostSortInput = {
+  /** 內容 */
+  content: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 標題 */
+  subject: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type PostsConnection = {
+  __typename: 'PostsConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<PostsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<Post>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type PostsEdge = {
+  __typename: 'PostsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<Post>;
+};
+
 export type Query = {
   __typename: 'Query';
-  customGroup: Maybe<CustomGroup>;
-  customGroupList: Maybe<Array<Maybe<CustomGroup>>>;
-  featureLabels: Maybe<Array<Maybe<LabelForFeature>>>;
-  groupUsers: Maybe<GroupUserCollection>;
-  labelDetail: Maybe<LabelSummaryDetail>;
-  optionLabels: Maybe<ConditionOption>;
-  sideBar: Maybe<SideBarDataQuery>;
-  suggestionDetail: Maybe<LabelCombine>;
+  /** 查詢診所活動 */
+  activities: Maybe<ActivitiesConnection>;
+  /** 查詢廠商廣告卡 */
+  adCards: Maybe<AdCardsConnection>;
+  /** 取得所有廣告圖，最多五張 */
+  adImages: Maybe<AdImagesConnection>;
+  /** 取得指定問卷回答 */
+  answersByQuestionId: Maybe<AnswersByQuestionIdConnection>;
+  /** 依識別碼取得病例 */
+  case: Maybe<ClinicCase>;
+  /** 取得診所內所有案例 */
+  caseByClinicId: Maybe<Array<Maybe<ClinicCase>>>;
+  /** 取得所有病例 */
+  cases: Maybe<CasesConnection>;
+  /** 取得小分類 */
+  categories: Maybe<Array<Maybe<Category>>>;
+  /** 依識別碼取得診所 */
+  clinic: Maybe<Clinic>;
+  /** 取得指定診所圖片 */
+  clinicImages: Maybe<Array<Maybe<ClinicImage>>>;
+  /** 取得所有診所 */
+  clinics: Maybe<ClinicsConnection>;
+  /** 取得指定的諮詢 */
+  consult: Maybe<Consult>;
+  /** 取得所有諮詢 */
+  consults: Maybe<Array<Maybe<Consult>>>;
+  /** 依使用者識別碼取得該使用者的所有諮詢 */
+  consultsByUserId: Maybe<Array<Maybe<Consult>>>;
+  /**
+   * 登入 firebase 後，以 firebase uid 取得該使用者在此系統中的個人資料所產生的 token,
+   * 再以此 token 呼叫 signWithCustomToken(token)產生新 idToken 進行登入。
+   */
+  customToken: Maybe<CustomTokenPayload>;
+  /** 依識別碼取得醫生 */
+  doctor: Maybe<ClinicDoctor>;
+  /** 取得診所內所有醫生 */
+  doctorByClinicId: Maybe<Array<Maybe<ClinicDoctor>>>;
+  /** 取得所有醫生 */
+  doctors: Maybe<DoctorsConnection>;
+  /** 取得最新一筆發文 */
+  latestPost: Maybe<Post>;
+  /** 取得熱門搜尋 */
+  popularKeywords: Maybe<PopularKeywords>;
+  /** 取得所有發文 */
+  posts: Maybe<PostsConnection>;
+  /** 取得指定問卷 */
+  question: Maybe<Question>;
+  /** 取得問卷列表 */
+  questions: Maybe<QuestionsConnection>;
+  /** 取得分類樹 */
+  topCategories: Maybe<Array<Maybe<TopCategory>>>;
+  /** 依 Topic 識別碼取得 Topic */
+  topic: Maybe<ClinicConsultTopic>;
+  /** 取得診所相關諮詢 */
+  topicsByClinicId: Maybe<TopicsByClinicIdConnection>;
+  /** 依識別碼取得取用者 */
   user: Maybe<User>;
-  userList: Maybe<Array<Maybe<User>>>;
-  vendor: Maybe<VendorSchema>;
+  /** 取得所有使用者 */
+  users: Maybe<UsersConnection>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryCustomGroupArgs = {
-  groupId: Scalars['Int'];
-  vendor: Vendor;
+export type QueryActivitiesArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<ClinicActivitySortInput>>;
+  where: InputMaybe<ClinicActivityFilterInput>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryCustomGroupListArgs = {
-  isAllGroups?: InputMaybe<Scalars['Boolean']>;
-  vendor: Vendor;
+export type QueryAdCardsArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<AdCardSortInput>>;
+  where: InputMaybe<AdCardFilterInput>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryFeatureLabelsArgs = {
-  featureId: Scalars['String'];
-  labelIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  lang: Language;
-  vendor: Vendor;
+export type QueryAdImagesArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<AdImageSortInput>>;
+  where: InputMaybe<AdImageFilterInput>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryGroupUsersArgs = {
-  account?: InputMaybe<Scalars['String']>;
-  currency?: InputMaybe<Scalars['String']>;
-  date: Scalars['Int'];
-  groupId: Scalars['Int'];
-  isCurrencySortKey?: InputMaybe<Scalars['Boolean']>;
-  lang: Language;
-  order?: InputMaybe<Scalars['String']>;
-  requiredKeys?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  sortKey?: InputMaybe<Scalars['String']>;
-  vendor: Vendor;
+export type QueryAnswersByQuestionIdArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<AnswerSortInput>>;
+  questionId: InputMaybe<Scalars['String']>;
+  where: InputMaybe<AnswerFilterInput>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryLabelDetailArgs = {
-  labelId: Scalars['String'];
-  lang: Language;
-  vendor: Vendor;
+export type QueryCaseArgs = {
+  id: InputMaybe<Scalars['String']>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryOptionLabelsArgs = {
-  lang: Language;
-  vendor: Vendor;
+export type QueryCaseByClinicIdArgs = {
+  clinicId: InputMaybe<Scalars['String']>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QuerySideBarArgs = {
-  lang: Language;
-  vendor: Vendor;
+export type QueryCasesArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<ClinicCaseSortInput>>;
+  where: InputMaybe<ClinicCaseFilterInput>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QuerySuggestionDetailArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  lang: Language;
-  suggestionLabelId: Scalars['String'];
-  vendor: Vendor;
+export type QueryClinicArgs = {
+  id: InputMaybe<Scalars['String']>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
+export type QueryClinicImagesArgs = {
+  clinicId: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryClinicsArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<ClinicSortInput>>;
+  where: InputMaybe<ClinicFilterInput>;
+};
+
+
+export type QueryConsultArgs = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryConsultsByUserIdArgs = {
+  userId: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryDoctorArgs = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryDoctorByClinicIdArgs = {
+  clinicId: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryDoctorsArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<ClinicDoctorSortInput>>;
+  where: InputMaybe<ClinicDoctorFilterInput>;
+};
+
+
+export type QueryPostsArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<PostSortInput>>;
+  where: InputMaybe<PostFilterInput>;
+};
+
+
+export type QueryQuestionArgs = {
+  id: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryQuestionsArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<QuestionSortInput>>;
+  where: InputMaybe<QuestionFilterInput>;
+};
+
+
+export type QueryTopicArgs = {
+  topicId: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryTopicsByClinicIdArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  clinicId: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<ClinicConsultTopicSortInput>>;
+  where: InputMaybe<ClinicConsultTopicFilterInput>;
+};
+
+
 export type QueryUserArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  lang: Language;
-  userId: Scalars['String'];
-  vendor: Vendor;
+  id: InputMaybe<Scalars['String']>;
 };
 
 
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryUserListArgs = {
-  account: Scalars['String'];
-  vendor: Vendor;
+export type QueryUsersArgs = {
+  after: InputMaybe<Scalars['String']>;
+  before: InputMaybe<Scalars['String']>;
+  first: InputMaybe<Scalars['Int']>;
+  last: InputMaybe<Scalars['Int']>;
+  order: InputMaybe<Array<UserSortInput>>;
+  where: InputMaybe<UserFilterInput>;
 };
 
-
-/**
- * Entrypoint for GraphQL Query.
- *
- */
-export type QueryVendorArgs = {
-  vendor: Vendor;
+/** 問卷 */
+export type Question = {
+  __typename: 'Question';
+  /** 取得問卷回覆 */
+  answers: Maybe<Array<Maybe<Answer>>>;
+  /** 物件識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 問卷題目 */
+  items: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-/**
- * Provides side bar of labels by args of query
- *
- */
-export type SideBarDataQuery = {
-  __typename: 'SideBarDataQuery';
-  /** Themes of Labels */
-  labelList: Maybe<Themes>;
-  /** (Input data) zh_tw: 繁體中文, zh_cn:简体中文 */
-  language: Maybe<Scalars['String']>;
-  /** (Input data) Owner's name */
-  vendor: Maybe<Scalars['String']>;
+/** 問卷 */
+export type QuestionFilterInput = {
+  and: InputMaybe<Array<QuestionFilterInput>>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 問卷題目 */
+  items: InputMaybe<ListStringOperationFilterInput>;
+  or: InputMaybe<Array<QuestionFilterInput>>;
 };
 
-/** Indicating how is a Label used. */
-export enum SourceType {
-  /** Category Type. It may come with several Label Item */
-  Info = 'INFO',
-  /** Primitive Type. It may a INTEGER, DATE, STRING, and so on. */
-  Raw = 'RAW'
+/** 問卷 */
+export type QuestionSortInput = {
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type QuestionsConnection = {
+  __typename: 'QuestionsConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<QuestionsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<Question>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type QuestionsEdge = {
+  __typename: 'QuestionsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<Question>;
+};
+
+/** 讀取諮詢回覆訊息所需資訊 */
+export type ReadReplyInput = {
+  /** 回覆訊息識別碼 */
+  replyId: InputMaybe<Scalars['String']>;
+  /** 讀取者識別碼 */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 讀取諮詢回覆訊息 */
+export type ReadReplyPayload = {
+  __typename: 'ReadReplyPayload';
+  /** 己讀取訊息識別碼 */
+  replyId: Maybe<Scalars['String']>;
+};
+
+/** 移除病例輸入資料 */
+export type RemoveCollectedCaseInput = {
+  /** 蒐集案例識別碼 */
+  caseId: InputMaybe<Scalars['String']>;
+  /** 蒐集者識別碼，對應 User.Id */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+/** 移除病例輸出資料 */
+export type RemoveCollectedCasePayload = {
+  __typename: 'RemoveCollectedCasePayload';
+  /** 使用者識別碼 */
+  userId: Maybe<Scalars['String']>;
+};
+
+export type ReplyTopicInput = {
+  /** 回覆內容 */
+  content: InputMaybe<Scalars['String']>;
+  /** 內容類型，image/text */
+  contentType: InputMaybe<Scalars['String']>;
+  /** 回覆診所諮詢 Topic 識別碼 */
+  topicId: InputMaybe<Scalars['String']>;
+  /** 回覆者識別碼，對應 User.id */
+  userId: InputMaybe<Scalars['String']>;
+};
+
+export type ReplyTopicPayload = {
+  __typename: 'ReplyTopicPayload';
+  /** 諮詢試別碼 */
+  consultId: Maybe<Scalars['String']>;
+  /** 回覆識別碼 */
+  id: Maybe<Scalars['String']>;
+  /** 主題識別碼 */
+  topicId: Maybe<Scalars['String']>;
+};
+
+/** 設定熱門搜尋資料 */
+export type SetPopularKeywordsInput = {
+  /** 關鍵字 */
+  keywords: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+/** 設定熱門結果 */
+export type SetPopularKeywordsPayload = {
+  __typename: 'SetPopularKeywordsPayload';
+  keywords: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+export enum SortEnumType {
+  Asc = 'ASC',
+  Desc = 'DESC'
 }
 
-export type StatisticLabelsDetailList = {
-  __typename: 'StatisticLabelsDetailList';
-  labelValues: Maybe<Array<Maybe<LabelItemPercent>>>;
-  statisticDate: Maybe<Scalars['Int']>;
-  userCount: Maybe<Scalars['Int']>;
+export type StringOperationFilterInput = {
+  and: InputMaybe<Array<StringOperationFilterInput>>;
+  contains: InputMaybe<Scalars['String']>;
+  endsWith: InputMaybe<Scalars['String']>;
+  eq: InputMaybe<Scalars['String']>;
+  in: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ncontains: InputMaybe<Scalars['String']>;
+  nendsWith: InputMaybe<Scalars['String']>;
+  neq: InputMaybe<Scalars['String']>;
+  nin: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  nstartsWith: InputMaybe<Scalars['String']>;
+  or: InputMaybe<Array<StringOperationFilterInput>>;
+  startsWith: InputMaybe<Scalars['String']>;
 };
 
-
-export type StatisticLabelsDetailListLabelValuesArgs = {
-  infoIds?: InputMaybe<Array<Scalars['String']>>;
-  numsOfValues?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<OrderStrategy>;
-  pivotDate?: InputMaybe<Scalars['Int']>;
-};
-
-export type Statistics = {
-  __typename: 'Statistics';
-  drillDownLabels: Maybe<Array<Maybe<DrillDownLabel>>>;
-  linearLabels: Maybe<Array<Maybe<LinearLabel>>>;
-};
-
-
-export type StatisticsDrillDownLabelsArgs = {
-  interval?: InputMaybe<Interval>;
-  labelIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-
-export type StatisticsLinearLabelsArgs = {
-  dataUnit: DataUnit;
-  interval: Interval;
-  labelIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-};
-
-/** Themes category schema */
-export type ThemeData = {
-  __typename: 'ThemeData';
-  /** List of category label */
-  category: Maybe<Array<Maybe<LabelCategory>>>;
-  /** Label count of category */
-  count: Maybe<Scalars['Int']>;
-  /** Theme's Id */
-  id: Maybe<Scalars['String']>;
-  /** Theme's name */
+export type TopCategory = {
+  __typename: 'TopCategory';
+  /** 大分類名稱 */
   name: Maybe<Scalars['String']>;
+  /** 其下中分類 */
+  secondCategories: Maybe<Array<Maybe<MiddleCategory>>>;
 };
 
-/** Themes base schema */
-export type Themes = {
-  __typename: 'Themes';
-  /** Label count of theme */
-  count: Maybe<Scalars['Int']>;
-  /** Themes Category */
-  themes: Array<Maybe<ThemeData>>;
+/** A connection to a list of items. */
+export type TopicsByClinicIdConnection = {
+  __typename: 'TopicsByClinicIdConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<TopicsByClinicIdEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<ClinicConsultTopic>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
-/** Data within trackingDates will be provided */
-export type TrackingDates = {
-  /** Timestamp of End Date of TrackingDates */
-  endDate: InputMaybe<Scalars['Int']>;
-  /** Timestamp of Start Date of TrackingDates */
-  startDate: Scalars['Int'];
+/** An edge in a connection. */
+export type TopicsByClinicIdEdge = {
+  __typename: 'TopicsByClinicIdEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Maybe<ClinicConsultTopic>;
 };
 
-/** Update custom grouping basic information */
-export type UpdateCustomGroup = {
-  __typename: 'UpdateCustomGroup';
-  /**
-   * true:The group is success.
-   *         false:The data is same or Group Id is not exist
-   */
-  isUpdate: Maybe<Scalars['Boolean']>;
+/** 更新診所活動頁 */
+export type UpdateActivityInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 活動內容 */
+  content: InputMaybe<Scalars['String']>;
+  id: InputMaybe<Scalars['String']>;
+  /** 活動圖片 */
+  image: InputMaybe<Scalars['String']>;
+  /** 活動主題 */
+  subject: InputMaybe<Scalars['String']>;
 };
 
-/** User schema */
+export type UpdateActivityPayload = {
+  __typename: 'UpdateActivityPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 更新廠商廣告卡參數 */
+export type UpdateAdCardInput = {
+  /** 廣告內容 */
+  content: InputMaybe<Scalars['String']>;
+  id: InputMaybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 廣告標題 */
+  title: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateAdCardPayload = {
+  __typename: 'UpdateAdCardPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 更新廣告圖片參數 */
+export type UpdateAdImageInput = {
+  id: InputMaybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<Scalars['String']>;
+  /** 廣告圖片用途，如：首頁輪播/診所輪播/症例輪播 */
+  usageType: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateAdImagePayload = {
+  __typename: 'UpdateAdImagePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type UpdateCaseInput = {
+  /** 術後照 */
+  afterImage: InputMaybe<Scalars['String']>;
+  /** 術後照關鍵字 */
+  afterImageText: InputMaybe<Scalars['String']>;
+  /** 術前照 */
+  beforeImage: InputMaybe<Scalars['String']>;
+  /** 術前照關鍵字 */
+  beforeImageText: InputMaybe<Scalars['String']>;
+  /** 案例分類 */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 案例描述 */
+  description: InputMaybe<Scalars['String']>;
+  /** 是否被設為熱門案例 */
+  hot: Scalars['Boolean'];
+  id: InputMaybe<Scalars['String']>;
+  /** 病例標題 */
+  title: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateCasePayload = {
+  __typename: 'UpdateCasePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 修改小分類 */
+export type UpdateCategoryInput = {
+  id: InputMaybe<Scalars['String']>;
+  /** 小分類名稱 */
+  name: InputMaybe<Scalars['String']>;
+  /** 所屬大分類 */
+  parent: InputMaybe<Scalars['String']>;
+  /** 所屬大分類 */
+  topParent: InputMaybe<Scalars['String']>;
+};
+
+/** 修改小分類結果 */
+export type UpdateCategoryPayload = {
+  __typename: 'UpdateCategoryPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 更新廣告圖片參數 */
+export type UpdateClinicImageInput = {
+  /** 所屬診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  id: InputMaybe<Scalars['String']>;
+  /** 廣告圖片網址 */
+  image: InputMaybe<Scalars['String']>;
+  /** 點擊後轉址類型，如：Clinic/Case/Doctor */
+  redirectType: InputMaybe<Scalars['String']>;
+  /** 排序 */
+  sort: Scalars['Int'];
+  /** 點擊後轉址目標識別碼 */
+  targetId: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateClinicImagePayload = {
+  __typename: 'UpdateClinicImagePayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type UpdateClinicInput = {
+  /** 診所地址 */
+  address: InputMaybe<Scalars['String']>;
+  /** 診所小分類 */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 聯絡人信箱 */
+  contactEmail: InputMaybe<Scalars['String']>;
+  /** 聯絡人姓名 */
+  contactName: InputMaybe<Scalars['String']>;
+  /** 聯絡人電話 */
+  contactPhone: InputMaybe<Scalars['String']>;
+  /** 診所縣市 */
+  county: InputMaybe<Scalars['String']>;
+  /** 診所描述 */
+  description: InputMaybe<Scalars['String']>;
+  id: InputMaybe<Scalars['String']>;
+  /** 最後付費時間 */
+  latestPayAt: Scalars['Long'];
+  /** 診所名稱 */
+  name: InputMaybe<Scalars['String']>;
+  /** 診所管理人電子郵件信箱 */
+  ownerEmail: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 是否已付費 */
+  paid: Scalars['Boolean'];
+  /** 付費組數 */
+  paySets: Scalars['Int'];
+  /** 診所電話 */
+  phone: InputMaybe<Scalars['String']>;
+  /** 診所鄉鎮市區 */
+  town: InputMaybe<Scalars['String']>;
+  /** 診所網站網址 */
+  web: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateClinicPayload = {
+  __typename: 'UpdateClinicPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type UpdateDoctorInput = {
+  /** 診所識別碼 */
+  clinicId: InputMaybe<Scalars['String']>;
+  /** 醫師專長，自填 */
+  expertise: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id: InputMaybe<Scalars['String']>;
+  /** 醫師姓名 */
+  name: InputMaybe<Scalars['String']>;
+  /** 照片 */
+  photo: InputMaybe<Scalars['String']>;
+  /** 學經歷 */
+  resumes: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 頭銜 */
+  title: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateDoctorPayload = {
+  __typename: 'UpdateDoctorPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 修改貼文 */
+export type UpdatePostInput = {
+  /** 發文內容 */
+  content: InputMaybe<Scalars['String']>;
+  id: InputMaybe<Scalars['String']>;
+  /** 標題 */
+  subject: InputMaybe<Scalars['String']>;
+};
+
+/** 修改貼文回覆 */
+export type UpdatePostPayload = {
+  __typename: 'UpdatePostPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+export type UpdateUserInput = {
+  /** 關注分類 */
+  categories: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 使用者所使用的裝識識別碼，用於接收 firebase 訊息用 */
+  clientToken: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** /// 蒐集的病症案例編號，對應 ClinicCase.id */
+  collectedCases: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  /** 使手者電子郵件信箱，必填 */
+  email: InputMaybe<Scalars['String']>;
+  /** 儲存搜尋條件 */
+  filters: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  id: InputMaybe<Scalars['String']>;
+  /** 使用者姓名 */
+  name: InputMaybe<Scalars['String']>;
+  /** 使用者電話 */
+  phone: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateUserPayload = {
+  __typename: 'UpdateUserPayload';
+  id: Maybe<Scalars['String']>;
+};
+
+/** 使用者資料 */
 export type User = {
   __typename: 'User';
-  /** User's account */
-  account: Maybe<Scalars['String']>;
-  /** Activities of User' behavior */
-  activityCollection: Maybe<UserActivityCollection>;
-  /** User's groups */
-  groups: Maybe<Array<Maybe<Scalars['Int']>>>;
-  /** User's Id */
+  /** 取得使用者有興趣的小分類 */
+  categories: Maybe<Array<Maybe<Category>>>;
+  /** 使用者使用的裝置識別碼，接收 firebase message 用 */
+  clientTokens: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 取得使用者諮詢 */
+  consults: Maybe<Array<Maybe<Consult>>>;
+  /** 使用者電子郵件信箱 */
+  email: Maybe<Scalars['String']>;
+  /** 儲存搜尋條件 */
+  filters: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** 物件識別碼 */
   id: Maybe<Scalars['String']>;
-  /** Label data of User */
-  labels: Maybe<Array<Maybe<Label>>>;
-  /** Timestamp of last data updated time */
-  lastUpdateDate: Maybe<Scalars['Int']>;
-  /** Timestamp of date of user registration */
-  registryDate: Maybe<Scalars['Int']>;
-  /** Charts data of User */
-  statistics: Maybe<Statistics>;
-  /** Timestamp of data date */
-  statisticsDate: Maybe<Scalars['Int']>;
-  /** Vendor's Id */
-  vendor: Maybe<Scalars['String']>;
+  /** 使用者名稱 */
+  name: Maybe<Scalars['String']>;
+  /** 使用者電話 */
+  phone: Maybe<Scalars['String']>;
+  /** GCP Firebase 中的識別碼 */
+  uid: Maybe<Scalars['String']>;
+  /** 取得使用者蒐取病例 */
+  userCollectedCases: Maybe<Array<Maybe<ClinicCase>>>;
 };
 
-
-/** User schema */
-export type UserActivityCollectionArgs = {
-  interval?: InputMaybe<Interval>;
-  order?: InputMaybe<OrderStrategy>;
-  statisticsDate: Scalars['Int'];
+/** 使用者資料 */
+export type UserFilterInput = {
+  and: InputMaybe<Array<UserFilterInput>>;
+  /** 關注分類 */
+  categories: InputMaybe<ListStringOperationFilterInput>;
+  /** 使用者使用的裝置識別碼，接收 firebase message 用 */
+  clientTokens: InputMaybe<ListStringOperationFilterInput>;
+  /** 蒐集的病症案例編號，對應 ClinicCase.id */
+  collectedCases: InputMaybe<ListStringOperationFilterInput>;
+  /** 使用者電子郵件信箱 */
+  email: InputMaybe<StringOperationFilterInput>;
+  /** 儲存搜尋條件 */
+  filters: InputMaybe<ListStringOperationFilterInput>;
+  /** 物件識別碼 */
+  id: InputMaybe<StringOperationFilterInput>;
+  /** 使用者名稱 */
+  name: InputMaybe<StringOperationFilterInput>;
+  or: InputMaybe<Array<UserFilterInput>>;
+  /** 使用者電話 */
+  phone: InputMaybe<StringOperationFilterInput>;
+  /** GCP Firebase 中的識別碼 */
+  uid: InputMaybe<StringOperationFilterInput>;
 };
 
-
-/** User schema */
-export type UserLabelsArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  ids?: InputMaybe<Array<Scalars['String']>>;
-  themeIds?: InputMaybe<Array<Scalars['String']>>;
+/** 使用者資料 */
+export type UserSortInput = {
+  /** 使用者電子郵件信箱 */
+  email: InputMaybe<SortEnumType>;
+  /** 物件識別碼 */
+  id: InputMaybe<SortEnumType>;
+  /** 使用者名稱 */
+  name: InputMaybe<SortEnumType>;
+  /** 使用者電話 */
+  phone: InputMaybe<SortEnumType>;
+  /** GCP Firebase 中的識別碼 */
+  uid: InputMaybe<SortEnumType>;
 };
 
-
-/** User schema */
-export type UserStatisticsArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-};
-
-/** Activity of a user. There are events in a Activity Date */
-export type UserActivity = Node & {
-  __typename: 'UserActivity';
-  /** date of a activity */
-  activityDate: Maybe<Scalars['Int']>;
-  /** events of a user */
-  events: Array<UserEvent>;
-  /** The ID of the object */
-  id: Scalars['ID'];
-};
-
-export type UserActivityCollection = Node & {
-  __typename: 'UserActivityCollection';
-  activities: Maybe<UserActivityConnection>;
-  /** The ID of the object */
-  id: Scalars['ID'];
-};
-
-
-export type UserActivityCollectionActivitiesArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-};
-
-export type UserActivityConnection = {
-  __typename: 'UserActivityConnection';
-  /** Contains the nodes in this connection. */
-  edges: Array<Maybe<UserActivityEdge>>;
-  /** Pagination data for this connection. */
+/** A connection to a list of items. */
+export type UsersConnection = {
+  __typename: 'UsersConnection';
+  /** A list of edges. */
+  edges: Maybe<Array<UsersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<User>>>;
+  /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
-/** A Relay edge containing a `UserActivity` and its cursor. */
-export type UserActivityEdge = {
-  __typename: 'UserActivityEdge';
-  /** A cursor for use in pagination */
+/** An edge in a connection. */
+export type UsersEdge = {
+  __typename: 'UsersEdge';
+  /** A cursor for use in pagination. */
   cursor: Scalars['String'];
-  /** The item at the end of the edge */
-  node: Maybe<UserActivity>;
-};
-
-/** Events of a user. For example, login, deposit, and etc. */
-export type UserEvent = {
-  __typename: 'UserEvent';
-  /** If currency is not null, this field will be a number with string format */
-  amount: Maybe<Scalars['String']>;
-  /** category Id of an event */
-  categoryId: Maybe<Scalars['String']>;
-  /** category of an event */
-  categoryName: Maybe<Scalars['String']>;
-  /** currency type of an event */
-  currency: Maybe<Scalars['String']>;
-  /** electronic device type of an user */
-  device: Maybe<Scalars['String']>;
-  /** timestamp of an event */
-  eventDate: Maybe<Scalars['Int']>;
-  /** If UserEvent is game, gameDetail have value, else None. */
-  gameDetail: Maybe<GameDetail>;
-  /** sub-category of an event */
-  subCategoryName: Maybe<Scalars['String']>;
-};
-
-export enum ValueType {
-  /** Data Type of the value is Date. The value is a timestamp such as "1629259200". */
-  Date = 'DATE',
-  /** Data Type of the value is Null. The value is null. */
-  Null = 'NULL',
-  /** Data Type of the value is Number. The format of value could be "1.0" or "2". */
-  Number = 'NUMBER',
-  /** Data Type of the value is String */
-  String = 'STRING'
-}
-
-/** An enumeration. */
-export enum Vendor {
-  Dmo = 'DMO',
-  Pd1 = 'PD1',
-  Pd2 = 'PD2',
-  Pd4 = 'PD4',
-  Ua2 = 'UA2',
-  Ua3 = 'UA3',
-  Ua4 = 'UA4',
-  Ua5 = 'UA5',
-  Uat = 'UAT'
-}
-
-export type VendorDrillDownStatistic = {
-  __typename: 'VendorDrillDownStatistic';
-  /** Label's description */
-  description: Maybe<Scalars['String']>;
-  /** Label's Id */
-  labelId: Maybe<Scalars['String']>;
-  /** List of Item's statistic data */
-  labelValues: Maybe<Array<Maybe<VendorStatisticItem>>>;
-  /** Label's name */
-  name: Maybe<Scalars['String']>;
-};
-
-export type VendorLiveStatistics = {
-  __typename: 'VendorLiveStatistics';
-  data: Maybe<Array<Maybe<VendorLiveStatisticsData>>>;
-  date: Maybe<Scalars['Int']>;
-};
-
-export type VendorLiveStatisticsData = {
-  __typename: 'VendorLiveStatisticsData';
-  description: Maybe<Scalars['String']>;
-  labelId: Maybe<Scalars['ID']>;
-  name: Maybe<Scalars['String']>;
-  periodOnPeriodPercent: Maybe<PeriodOnPeriodPercent>;
-  value: Maybe<Scalars['Float']>;
-};
-
-/** Provides details info of vendor */
-export type VendorSchema = {
-  __typename: 'VendorSchema';
-  statistics: Maybe<VendorStatistic>;
-  /** Total User Count of latest data date. */
-  userCount: Maybe<Scalars['Int']>;
-  /** Vendor's ID */
-  vendorId: Maybe<Scalars['String']>;
-};
-
-
-/** Provides details info of vendor */
-export type VendorSchemaStatisticsArgs = {
-  currency: Scalars['String'];
-  lang: Language;
-};
-
-export type VendorStatistic = {
-  __typename: 'VendorStatistic';
-  drillDownLabels: Maybe<Array<Maybe<VendorDrillDownStatistic>>>;
-  /** Latest timestamp of data calculated */
-  lastUpdateDate: Maybe<Scalars['Int']>;
-  /** Today's live statistics. Update Frequency: 1 hour */
-  liveStatistics: Maybe<VendorLiveStatistics>;
-  /** Data date */
-  statisticsDate: Maybe<Scalars['Int']>;
-  /** Total User Count of latest data date */
-  userCount: Maybe<Scalars['Int']>;
-};
-
-
-export type VendorStatisticDrillDownLabelsArgs = {
-  currency?: InputMaybe<Scalars['String']>;
-  interval: Interval;
-  statisticIds: Array<Scalars['String']>;
-};
-
-
-export type VendorStatisticLiveStatisticsArgs = {
-  statisticIds: Array<Scalars['String']>;
-};
-
-export type VendorStatisticItem = {
-  __typename: 'VendorStatisticItem';
-  info: Maybe<Scalars['String']>;
-  infoDescription: Maybe<Scalars['String']>;
-  infoName: Maybe<Scalars['String']>;
-  /** Drill-down statistic data of item. */
-  moreLabels: Maybe<Array<Maybe<VendorDrillDownStatistic>>>;
-  percent: Maybe<Scalars['Float']>;
-  /** Count for the Item */
-  value: Scalars['Int'];
+  /** The item at the end of the edge. */
+  node: Maybe<User>;
 };
