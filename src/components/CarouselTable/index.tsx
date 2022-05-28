@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styled from "./NoticeTable.module.scss"
+import styled from "./CarouselTable.module.scss"
 import { Table, Pagination } from 'rsuite';
 import { LinkButton } from "components/Button"
 
@@ -7,6 +7,7 @@ import { LinkButton } from "components/Button"
 const fakeData = [
   {
     "id": 1,
+    "status": "open",
     "title": "New Amieshire",
     "content": "Ratke Port",
     "createTime": "2022-04-18",
@@ -14,7 +15,7 @@ const fakeData = [
 ]
 
 
-const NoticeTable = () => {
+const CarouselTable = () => {
   const { Column, HeaderCell, Cell } = Table
 
   const [limit, setLimit] = useState(10);
@@ -37,6 +38,11 @@ const NoticeTable = () => {
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
           <Cell dataKey="id" />
+        </Column>
+
+        <Column width={70} align="center" fixed>
+          <HeaderCell>狀態</HeaderCell>
+          <Cell dataKey="status" />
         </Column>
 
         <Column width={200} fixed>
@@ -62,7 +68,7 @@ const NoticeTable = () => {
               }
               return (
                 <span>
-                  <LinkButton onClick={handleAction}> 預覽圖 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={handleAction}> 輪播圖 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
               );
             }}
@@ -92,4 +98,4 @@ const NoticeTable = () => {
   )
 }
 
-export default NoticeTable
+export default CarouselTable

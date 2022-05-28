@@ -1,21 +1,36 @@
 import { useState } from 'react'
 import Button from "components/Button"
 import Card from "components/Card"
-import CarouselPreview from "components/CarouselPreview"
+import CarouselTable from "components/CarouselTable"
 import ClinicTable from "./ClinicTable"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import Layout from "components/Layout"
-import ImageUploading from "react-images-uploading"
-import { ImageListType } from "react-images-uploading/dist/typings"
+import { Uploader } from 'rsuite';
+import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
+import Editor from "components/Editor"
 import styled from "./CosmeticClinic.module.scss"
-import Icon from 'components/Icon'
 
-const MAX_NUMBER = 5
+interface FileType {
+  /** File Name */
+  name?: string;
+  /** File unique identifier */
+  fileKey?: number | string;
+
+  /** File upload status */
+  status?: 'inited' | 'uploading' | 'error' | 'finished';
+
+  /** File upload status */
+  progress?: number;
+
+  /** The url of the file can be previewed. */
+  url?: string;
+}
 
 const CosmeticClinic = () => {
   const [open, setOpen] = useState(false)
-  const [images, setImages] = useState<ImageListType>([])
+  const [openCarousel, setOpenCarousel] = useState(false)
+  const [carouselList, setCarouselList] = useState<FileType[]>([]);
 
   return (
     <>
@@ -23,113 +38,97 @@ const CosmeticClinic = () => {
         <Layout.Breadcrumbs.Item>診所</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <Card>
-        <Card.Header title="輪播" />
+        <Card.Header title="輪播">
+          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>新增</Button>
+          <Modal
+            title="新增輪播圖"
+            open={openCarousel}
+            confirmText="新增"
+            cancelText="取消"
+            onConfirm={() => { console.log("onConfirm") }}
+            onClose={() => setOpenCarousel(false)}
+          >
+            <Modal.Body>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                  <Uploader
+                    listType="picture"
+                    action="//jsonplaceholder.typicode.com/posts/"
+                    disabled={carouselList.length > 0}
+                    onChange={(fileList: FileType[]) => {
+                      setCarouselList(fileList)
+                    }}>
+                    <button>
+                      <CameraRetro />
+                    </button>
+                  </Uploader>
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>標題</Form.Label>
+                  <Form.Input type="text" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>超連結</Form.Label>
+                  <Form.Input type="text" />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+          </Modal>
+        </Card.Header>
         <Card.Body>
-          <CarouselPreview />
+          <CarouselTable />
         </Card.Body>
       </Card>
-      <div>
-        <ImageUploading
-          multiple
-          value={images}
-          onChange={(imageList: ImageListType) => setImages(imageList)}
-          maxNumber={MAX_NUMBER}
-          dataURLKey="data_url"
-        >
-          {({
-            imageList,
-            onImageUpload,
-            onImageUpdate,
-            onImageRemove,
-            dragProps,
-          }) => (
-            <div
-              className={styled["filepond-wrapper"]}
-              onClick={onImageUpload}
-              {...dragProps}
-            >
-              <div className={styled["drag-area"]}>
-                Drag / Drop your files or Browser
-              </div>
-              {imageList.length > 0 && (<div className={styled["items-wrapper"]}>
-                {imageList.map((image, index) => (
-                  <div
-                    key={index}
-                    className={styled["image-item"]}
-                    onClick={e => {
-                      e.stopPropagation()
-                      onImageUpdate(index)
-                    }}
-                  >
-                    <img src={image["data_url"]} alt="" />
-                    <button
-                      className={styled.remove}
-                      onClick={e => {
-                        e.stopPropagation()
-                        onImageRemove(index)
-                      }}>
-                      <Icon name="cross" />
-                    </button>
-                    <div
-                      className={styled.upload}
-                      onClick={e => {
-                        e.stopPropagation()
-                      }}
-                    >
-                      Upload
-                    </div>
-                  </div>
-                ))}
-              </div>)}
-            </div>
-          )}
-        </ImageUploading>
-      </div>
       <Card>
         <Card.Header title="診所" >
           <Button variant="secondary" onClick={() => setOpen(true)}>新增診所</Button>
           <Modal
             title="新增診所"
             open={open}
-            confirmText="建立"
+            confirmText="新增"
             cancelText="取消"
             onClose={() => setOpen(false)}
           >
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label required>診所名稱</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>大分類</Form.Label>
-                <Form.Checkbox>大分類1</Form.Checkbox>
-                <Form.Checkbox>大分類2</Form.Checkbox>
-                <Form.Checkbox>大分類3</Form.Checkbox>
-                <Form.Checkbox>大分類4</Form.Checkbox>
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>電子信箱</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>完整地址</Form.Label>
-                <Form.Input type="text" placeholder='縣市'/>
-                <Form.Input type="text" placeholder='地區'/>
-                <Form.Input type="text" placeholder='地址'/>
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>診所網址</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>診所電話</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>診所介紹</Form.Label>
-                <Form.Textarea style={{ height: "100px" }} />
-              </Form.Group>
-            </Form>
+            <Modal.Body style={{ overflow: 'auto', height: '500px' }}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label required>診所名稱</Form.Label>
+                  <Form.Input type="text" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>大分類</Form.Label>
+                  <Form.Checkbox>大分類1</Form.Checkbox>
+                  <Form.Checkbox>大分類2</Form.Checkbox>
+                  <Form.Checkbox>大分類3</Form.Checkbox>
+                  <Form.Checkbox>大分類4</Form.Checkbox>
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>電子信箱</Form.Label>
+                  <Form.Input type="email" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>完整地址</Form.Label>
+                  <div className="inline-flex">
+                    <Form.Input type="text" placeholder='縣市' />
+                    <Form.Input type="text" placeholder='地區' />
+                    <Form.Input type="text" placeholder='地址' />
+                  </div>
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所網址</Form.Label>
+                  <Form.Input type="url" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所電話</Form.Label>
+                  <Form.Input type="tel" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所介紹</Form.Label>
+                  <Editor />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
           </Modal>
         </Card.Header>
         <Card.Body>

@@ -47,6 +47,9 @@ const ModalFooter = (props: ModalFooterProps) => {
   return (
     <footer className={cx(styled.wrapper, props.className)} style={props.style}>
       {props.children}
+      <Button onClick={handleConfirm} {...props.confirmButtonProps}>
+        {props.confirmText}
+      </Button>
       {!!props.cancelText && (
         <Button
           variant="secondary"
@@ -56,9 +59,6 @@ const ModalFooter = (props: ModalFooterProps) => {
           {props.cancelText}
         </Button>
       )}
-      <Button onClick={handleConfirm} {...props.confirmButtonProps}>
-        {props.confirmText}
-      </Button>
     </footer>
   );
 };

@@ -1,51 +1,124 @@
-import styled from "./ClinicTable.module.scss"
-import { ReactComponent as ArrowRight } from "./ArrowRight.svg"
+import { useState } from 'react'
 import { useGo } from "components/Router"
+import { Table, Pagination } from 'rsuite';
+import { LinkButton } from "components/Button"
+
+const fakeData = [
+  {
+    "name": "星采醫學美容診所",
+    "address": "100台北市中正區羅斯福路一段32號2樓",
+    "caseCount": 100,
+    "replyCount": 100,
+  },
+]
+interface ImageCellProps {
+  dataKey: string;
+  [propName: string]: {};
+}
 
 const ClinicTable = () => {
+  const { Column, HeaderCell, Cell } = Table
   const go = useGo()
 
-  return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th className="p-0 w-50px"></th>
-          <th className="p-0 min-w-150px"></th>
-          <th className="p-0 min-w-120px"></th>
-          <th className="p-0 min-w-70px"></th>
-          <th className="p-0 min-w-70px"></th>
-          <th className="p-0 min-w-50px"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="px-0 py-3">
-            <div className="symbol symbol-55px mt-1 me-5">
-              <div className="symbol-label bg-light-primary">星</div>
-            </div>
-          </td>
-          <td className="px-0">
-            <a href="#a" className="text-gray-800 fw-bold d-block fs-6">星采醫學美容診所</a>
-            <span className="text-muted fw-bold mt-1 d-block fs-7">100台北市中正區羅斯福路一段32號2樓</span>
-          </td>
-          <td></td>
-          <td className="text-end">
-            <span className="text-gray-800 fw-bold d-block fs-6">100</span>
-            <span className="text-muted fw-bold mt-1 d-block fs-7">症例數</span>
-          </td>
-          <td className="text-end">
-            <span className="text-gray-800 fw-bold d-block fs-6">100</span>
-            <span className="text-muted fw-bold mt-1 d-block fs-7">回覆數</span>
-          </td>
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
 
-          <td className="text-end">
-            <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm" onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}>
-              <ArrowRight />
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  const handleChangeLimit = (dataKey: number) => {
+    setPage(1);
+    setLimit(dataKey);
+  };
+
+  const ImageCell = ({ dataKey, ...props }: ImageCellProps) => (
+    <Cell {...props} style={{ padding: 0 }}>
+      {rowData => {
+        return (
+          <div
+            className="inline-flex justify-center items-center"
+            style={{
+              width: 40,
+              height: 40,
+              background: '#f5f5f5',
+              borderRadius: 20,
+              marginTop: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {rowData?.name.charAt(0)}
+          </div>
+        )
+      }}
+    </Cell>
+  );
+
+  return (
+    <>
+      <Table
+        height={400}
+        data={fakeData}
+        onRowClick={data => {
+          console.log(data);
+        }}>
+        <Column width={80} align="center" fixed>
+          <HeaderCell>圖示</HeaderCell>
+          <ImageCell dataKey="name" />
+        </Column>
+
+        <Column width={160} fixed>
+          <HeaderCell>診所名稱</HeaderCell>
+          <Cell dataKey="name" />
+        </Column>
+
+        <Column width={300} flexGrow={1}>
+          <HeaderCell>診所地址</HeaderCell>
+          <Cell dataKey="address" />
+        </Column>
+
+        <Column width={100} align="center" fixed>
+          <HeaderCell>案例數</HeaderCell>
+          <Cell dataKey="caseCount" />
+        </Column>
+
+        <Column width={100} align="center" fixed>
+          <HeaderCell>回覆數</HeaderCell>
+          <Cell dataKey="replyCount" />
+        </Column>
+
+        <Column width={120} fixed="right">
+          <HeaderCell>動作</HeaderCell>
+          <Cell>
+            {rowData => {
+              function handleAction() {
+                alert(`id:${rowData.id}`);
+              }
+              return (
+                <span>
+                  <LinkButton onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                </span>
+              );
+            }}
+          </Cell>
+        </Column>
+      </Table>
+      <div style={{ padding: 20 }}>
+        <Pagination
+          prev
+          next
+          first
+          last
+          ellipsis
+          boundaryLinks
+          maxButtons={5}
+          size="xs"
+          layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+          total={fakeData.length}
+          limitOptions={[10, 20]}
+          limit={limit}
+          activePage={page}
+          onChangePage={setPage}
+          onChangeLimit={handleChangeLimit}
+        />
+      </div>
+    </>
   )
 }
 

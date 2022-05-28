@@ -9,7 +9,7 @@ export type FormInputProps = FormControlProps & ReactProps.WithClassName &
     /**
      * Specify the type of the
      */
-    type?: "text" | "password" | "number"
+    type?: "text" | "password" | "number" | "email" | "url" | "tel"
   }
 
 const FormInput = React.forwardRef(function FormInput(
