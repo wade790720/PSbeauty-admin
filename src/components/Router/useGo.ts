@@ -5,8 +5,6 @@ type toTarget = {
   toHome: () => void
   /** 診所 */
   toCosmeticClinicDetail: ({ id }: { id: string }) => void
-  /** 診所-病例 */
-  toCosmeticClinicDetailCase: ({ id, caseId }: { id: string, caseId: number }) => void
   /** 用戶分群 */
   toUserGroups: () => void
   /** 建立分群 */
@@ -24,7 +22,6 @@ const useGo = (): toTarget => {
   return {
     toHome: () => navigate("/cms"),
     toCosmeticClinicDetail: ({ id }) => navigate(`/cms/cosmetic-clinic/${id}`),
-    toCosmeticClinicDetailCase: ({ id, caseId }) => navigate(`/cms/cosmetic-clinic/${id}/${caseId}`),
     toUserGroups: () => navigate("/cms/user-groups"),
     toUserGroupCreate: () => navigate("/cms/user-groups/create"),
     toUserGroup: ({ id }) => navigate(`/cms/user-groups/${id}`),

@@ -1,42 +1,86 @@
-import styled from "./MemberTable.module.scss"
-import { ReactComponent as Edit } from "./Edit.svg"
-import { ReactComponent as Remove } from "./Remove.svg"
+import { useState } from 'react'
+import { Table, Pagination } from 'rsuite';
+import { LinkButton } from "components/Button"
+
+const fakeData = [
+  {
+    "id": 1,
+    "account": "WadeZhu",
+    "email": "wade790720@gmail.com",
+  },
+]
 
 const MemberTable = () => {
+  const { Column, HeaderCell, Cell } = Table
+
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
+  const handleChangeLimit = (dataKey: number) => {
+    setPage(1);
+    setLimit(dataKey);
+  };
+
   return (
-    <div className={styled.wrapper}>
-      <table>
-        <thead>
-          <tr>
-            <th>名稱</th>
-            <th>信箱</th>
-            <th className="text-end">動作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <span className="text-gray-800 fw-bold mt-1 d-block fs-7">WadeZhu</span>
-            </td>
-            <td>
-              <span className="text-gray-800 fw-bold d-block fs-6">wade790720@gmail.com</span>
-            </td>
-            <td className="text-end">
-              <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm me-3">
-                <span className="svg-icon">
-                  <Edit />
+    <>
+      <Table
+        height={400}
+        data={fakeData}
+        onRowClick={data => {
+          console.log(data);
+        }}
+      >
+        <Column width={70} align="center" fixed>
+          <HeaderCell>序號</HeaderCell>
+          <Cell dataKey="id" />
+        </Column>
+
+        <Column width={200} fixed>
+          <HeaderCell>帳號</HeaderCell>
+          <Cell dataKey="account" />
+        </Column>
+
+        <Column width={200} flexGrow={1}>
+          <HeaderCell>信箱</HeaderCell>
+          <Cell dataKey="email" />
+        </Column>
+
+        <Column width={120} fixed="right">
+          <HeaderCell>動作</HeaderCell>
+          <Cell>
+            {rowData => {
+              function handleAction() {
+                alert(`id:${rowData.id}`);
+              }
+              return (
+                <span>
+                  <LinkButton onClick={handleAction}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
-              </div>
-              <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-                <span className="svg-icon">
-                  <Remove />
-                </span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              );
+            }}
+          </Cell>
+        </Column>
+      </Table>
+      <div style={{ padding: 20 }}>
+        <Pagination
+          prev
+          next
+          first
+          last
+          ellipsis
+          boundaryLinks
+          maxButtons={5}
+          size="xs"
+          layout={['total', '-', 'limit', '|', 'pager', 'skip']}
+          total={fakeData.length}
+          limitOptions={[10, 20]}
+          limit={limit}
+          activePage={page}
+          onChangePage={setPage}
+          onChangeLimit={handleChangeLimit}
+        />
+      </div>
+    </>
   )
 }
 

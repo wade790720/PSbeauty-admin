@@ -1,42 +1,102 @@
-import { ReactComponent as ArrowRight } from "./ArrowRight.svg"
+import { useState } from 'react'
+import { Table } from 'rsuite';
+import { LinkButton } from "components/Button"
+import Modal from "components/Modal"
+
+const fakeData = [
+  {
+    "name": "楊效誠",
+    "title": "院長",
+    "skill": "顏面疤痕 / 雙眼皮手術 / 眼袋 / 眼瞼下垂 / 醫學美容光療雷射 / 微整形注射美容",
+  },
+]
+interface ImageCellProps {
+  dataKey: string;
+  [propName: string]: {};
+}
 
 const MedicalTeamTable = () => {
+  const { Column, HeaderCell, Cell } = Table
+  const [open, setOpen] = useState(false)
+
+  const ImageCell = ({ dataKey, ...props }: ImageCellProps) => (
+    <Cell {...props} style={{ padding: 0 }}>
+      {rowData => {
+        return (
+          <div
+            className="inline-flex justify-center items-center"
+            style={{
+              width: 40,
+              height: 40,
+              background: '#f5f5f5',
+              borderRadius: 20,
+              marginTop: 2,
+              overflow: 'hidden',
+            }}
+          >
+            {rowData?.name.charAt(0)}
+          </div>
+        )
+      }}
+    </Cell>
+  );
+
+
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th className="p-0 w-50px" style={{ width: "50px" }}></th>
-          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "150px" }}>姓名</th>
-          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "70px" }}>專長</th>
-          <th className="p-0" style={{ minWidth: "70px" }}></th>
-          <th className="p-0 text-start text-gray-800 fw-bold" style={{ minWidth: "50px" }}>動作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td className="px-0 py-3">
-            <div className="symbol symbol-55px mt-1 me-5">
-              <div className="symbol-label bg-light-primary">楊</div>
-            </div>
-          </td>
-          <td className="px-0">
-            <a href="#a" className="text-gray-800 fw-bold d-block fs-6">楊效誠</a>
-            <span className="text-muted fw-bold mt-1 d-block fs-7">院長</span>
-          </td>
-          <td>
-            <span className="text-gray-800 fw-bold d-block fs-6">顏面疤痕 / 雙眼皮手術 / 眼袋 / 眼瞼下垂 / 醫學美容光療雷射 / 微整形注射美容</span>
-          </td>
-          <td></td>
-          <td>
-            <div className="btn btn-icon btn-bg-light btn-active-primary btn-sm">
-              <span className="svg-icon">
-                <ArrowRight />
+    <Table
+      height={400}
+      data={fakeData}
+      onRowClick={data => {
+        console.log(data);
+      }}>
+      <Column width={80} align="center" fixed>
+        <HeaderCell> </HeaderCell>
+        <ImageCell dataKey="name" />
+      </Column>
+
+      <Column width={160} fixed>
+        <HeaderCell>姓名</HeaderCell>
+        <Cell dataKey="name" />
+      </Column>
+      
+      <Column width={160} fixed>
+        <HeaderCell>職稱</HeaderCell>
+        <Cell dataKey="title" />
+      </Column>
+
+      <Column width={300} flexGrow={1}>
+        <HeaderCell>專長</HeaderCell>
+        <Cell dataKey="skill" />
+      </Column>
+
+      <Column width={120} fixed="right">
+        <HeaderCell>動作</HeaderCell>
+        <Cell>
+          {rowData => {
+            function handleAction() {
+              alert(`id:${rowData.id}`);
+            }
+            return (
+              <span>
+                <LinkButton onClick={() => setOpen(true)}> 檢視 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                <Modal
+                  title="醫師資訊"
+                  open={open}
+                  confirmText="修改"
+                  cancelText="取消"
+                  onConfirm={() => { console.log("onConfirm") }}
+                  onClose={() => setOpen(false)}
+                >
+                  <Modal.Body>
+                    醫師資訊
+                  </Modal.Body>
+                </Modal>
               </span>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            );
+          }}
+        </Cell>
+      </Column>
+    </Table>
   )
 }
 

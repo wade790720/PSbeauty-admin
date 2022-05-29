@@ -10,22 +10,8 @@ import { Uploader } from 'rsuite';
 import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
 import Editor from "components/Editor"
 import styled from "./CosmeticClinic.module.scss"
+import { FileType } from "types";
 
-interface FileType {
-  /** File Name */
-  name?: string;
-  /** File unique identifier */
-  fileKey?: number | string;
-
-  /** File upload status */
-  status?: 'inited' | 'uploading' | 'error' | 'finished';
-
-  /** File upload status */
-  progress?: number;
-
-  /** The url of the file can be previewed. */
-  url?: string;
-}
 
 const CosmeticClinic = () => {
   const [open, setOpen] = useState(false)

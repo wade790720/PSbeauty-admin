@@ -34,7 +34,6 @@ function App() {
   const Home = lazy(() => import("pages/Home"))
   const CosmeticClinic = lazy(() => import("pages/CosmeticClinic"))
   const CosmeticClinicDetail = lazy(() => import("pages/CosmeticClinicDetail"))
-  const CosmeticClinicDetailCase = lazy(() => import("pages/CosmeticClinicDetailCase"))
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
 
   return (
@@ -57,7 +56,6 @@ function App() {
               <Route path="home" element={<Home />} />
               <Route path="cosmetic-clinic" element={<CosmeticClinic />} />
               <Route path="cosmetic-clinic/:id" element={<CosmeticClinicDetail />} />
-              <Route path="cosmetic-clinic/:id/:caseId" element={<CosmeticClinicDetailCase />} />
               <Route path="system-settings" element={<SystemSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

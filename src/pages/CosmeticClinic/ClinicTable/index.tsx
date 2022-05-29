@@ -59,7 +59,7 @@ const ClinicTable = () => {
           console.log(data);
         }}>
         <Column width={80} align="center" fixed>
-          <HeaderCell>圖示</HeaderCell>
+          <HeaderCell> </HeaderCell>
           <ImageCell dataKey="name" />
         </Column>
 
