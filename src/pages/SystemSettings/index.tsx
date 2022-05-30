@@ -3,8 +3,14 @@ import Card from "components/Card"
 import MemberTable from "./MemberTable"
 import Select from "components/Select"
 import Layout from "components/Layout"
+import Modal from "components/Modal"
+import Form from "components/Form"
+import { useState } from 'react'
+import List from './List';
 
 const SystemSettings = () => {
+  const [open, setOpen] = useState(false);
+
   const options = [
     { value: "小分類美容項目01", eventKey: "vanilla" },
     { value: "小分類美容項目02", eventKey: "strawberry" },
@@ -14,6 +20,11 @@ const SystemSettings = () => {
     { value: "小分類美容項目06", eventKey: "hazelnut" },
     { value: "小分類美容項目07", eventKey: "durian" },
   ]
+
+  const bigCategory = ['整形手術', '皮膚治療', '毛髮改善', '審美牙科', '微整注射', '雷射光療', '身體雕塑', '埋線拉提', '中醫美容', '其他項目'];
+  const midCategory = ['眼睛', "臉頰", "鼻子", "嘴唇", "下巴", "額頭"]
+  const smallCategory = ['美容項目01', "美容項目02", "美容項目03", "美容項目04", "美容項目05", "美容項目06", "美容項目07", "美容項目08", "美容項目09", "美容項目10", "美容項目11"]
+
   return (
     <>
       <Layout.Breadcrumbs>
@@ -22,136 +33,75 @@ const SystemSettings = () => {
       <Card>
         <Card.Header title="設定分類" />
         <Card.Body>
-          <h3>整形手術</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>皮膚治療</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>毛髮改善</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>審美牙科</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>微整注射</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>雷射光療</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>身體雕塑</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>埋線拉提</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>中醫美容</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <h3>其他項目</h3>
-          <Select
-            isMulti
-            defaultValue={[options[0], options[1]]}
-            placeholder="Select.."
-            onChange={(e, value) => console.log("onChange", value)}>
-            {options.map(option => (
-              <Select.Option key={option.value} value={option.value} eventKey={option.eventKey}>
-                {option.value}
-              </Select.Option>
-            ))}
-          </Select>
-          <Button style={{ marginTop: "10px", marginRight: "10px" }}>儲存</Button>
-          <Button variant="secondary" style={{ marginTop: "10px" }}>取消</Button>
+          <div className="inline-flex w-full">
+            <div className="flex-auto p-4 w-2/6">
+              <div className="text-lg pb-4">大分類</div>
+              <List>
+                {bigCategory.map((item, index) => (
+                  <List.Item key={index}>
+                    {item}
+                  </List.Item>
+                ))}
+              </List>
+            </div>
+            <div className="flex-auto p-4 w-2/6">
+              <div className="text-lg pb-4">中分類</div>
+              <List>
+                {midCategory.map((item, index) => (
+                  <List.Item key={index}>
+                    {item}
+                  </List.Item>
+                ))}
+              </List>
+              <div className="flex mt-4">
+                <Form.Input type="text" className="mr-4" />
+                <Button >新增</Button>
+              </div>
+            </div>
+            <div className="flex-auto p-4 w-2/6">
+              <div className="text-lg pb-4">小分類</div>
+              <List>
+                {smallCategory.map((item, index) => (
+                  <List.Item key={index}>
+                    {item}
+                  </List.Item>
+                ))}
+              </List>
+              <div className="flex mt-4">
+                <Form.Input type="text" className="mr-4" />
+                <Button >新增</Button>
+              </div>
+            </div>
+          </div>
         </Card.Body>
       </Card>
       <Card>
         <Card.Header title="會員列表">
-          <Button variant="secondary">新增</Button>
+          <Button variant="secondary" onClick={() => setOpen(true)}>新增</Button>
         </Card.Header>
         <Card.Body>
           <MemberTable />
+          <Modal
+            title="新增會員"
+            open={open}
+            confirmText="儲存"
+            cancelText="取消"
+            onConfirm={() => { console.log("onConfirm") }}
+            onClose={() => setOpen(false)}
+          >
+            <Modal.Body>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label required>帳號</Form.Label>
+                  <Form.Input type="text" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>信箱</Form.Label>
+                  <Form.Input type="text" />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+          </Modal>
         </Card.Body>
       </Card>
     </>

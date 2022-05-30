@@ -6,12 +6,11 @@ import ClinicTable from "./ClinicTable"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import Layout from "components/Layout"
-import { Uploader } from 'rsuite';
+import { Uploader, CheckTreePicker } from 'rsuite';
 import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
 import Editor from "components/Editor"
-import styled from "./CosmeticClinic.module.scss"
 import { FileType } from "types";
-
+import data from './category.json';
 
 const CosmeticClinic = () => {
   const [open, setOpen] = useState(false)
@@ -84,10 +83,7 @@ const CosmeticClinic = () => {
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label required>大分類</Form.Label>
-                  <Form.Checkbox>大分類1</Form.Checkbox>
-                  <Form.Checkbox>大分類2</Form.Checkbox>
-                  <Form.Checkbox>大分類3</Form.Checkbox>
-                  <Form.Checkbox>大分類4</Form.Checkbox>
+                  <CheckTreePicker data={data} style={{ width: 280 }} />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label required>電子信箱</Form.Label>
@@ -95,9 +91,9 @@ const CosmeticClinic = () => {
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>完整地址</Form.Label>
-                  <div className="inline-flex">
-                    <Form.Input type="text" placeholder='縣市' />
-                    <Form.Input type="text" placeholder='地區' />
+                  <div className="inline-flex w-full">
+                    <Form.Input type="text" placeholder='縣市' className="mr-4" style={{ flex: "1 1 300px" }} />
+                    <Form.Input type="text" placeholder='地區' className="mr-4" style={{ flex: "1 1 300px" }} />
                     <Form.Input type="text" placeholder='地址' />
                   </div>
                 </Form.Group>

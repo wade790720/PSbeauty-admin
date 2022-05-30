@@ -35,14 +35,14 @@ const FormInput = React.forwardRef(function FormInput(
         [styled.disabled]: !!props.disabled,
         [styled["read-only"]]: !!props.readOnly,
       },
-      styled[props.variant || ""])}
+        styled[props.variant || ""], className)}
       style={props.style}>
       <input
         {...props}
         ref={ref}
         type={type}
         id={attributes?.formId}
-        className={cx(styled.control, className)}
+        className={styled.control}
         onChange={e => {
           if (e.target.value.trim() === "") setEntered(false)
           else setEntered(true)

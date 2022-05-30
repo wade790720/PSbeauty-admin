@@ -40,9 +40,9 @@ const CosmeticClinicDetail = () => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>完整地址</Form.Label>
-              <div className="inline-flex">
-                <Form.Input type="text" placeholder='縣市' />
-                <Form.Input type="text" placeholder='地區' />
+              <div className="inline-flex w-full">
+                <Form.Input type="text" placeholder='縣市' className="mr-4" style={{ flex: "1 1 300px" }} />
+                <Form.Input type="text" placeholder='地區' className="mr-4" style={{ flex: "1 1 300px" }} />
                 <Form.Input type="text" placeholder='地址' />
               </div>
             </Form.Group>

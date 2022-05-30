@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Table, Pagination } from 'rsuite';
 import { LinkButton } from "components/Button"
+import Modal from "components/Modal"
+import Form from "components/Form"
 
 const fakeData = [
   {
@@ -12,6 +14,7 @@ const fakeData = [
 
 const MemberTable = () => {
   const { Column, HeaderCell, Cell } = Table
+  const [open, setOpen] = useState(false);
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -54,7 +57,28 @@ const MemberTable = () => {
               }
               return (
                 <span>
-                  <LinkButton onClick={handleAction}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <Modal
+                    title="編輯會員"
+                    open={open}
+                    confirmText="儲存"
+                    cancelText="取消"
+                    onConfirm={() => { console.log("onConfirm") }}
+                    onClose={() => setOpen(false)}
+                  >
+                    <Modal.Body>
+                      <Form>
+                        <Form.Group layout="vertical">
+                          <Form.Label required>帳號</Form.Label>
+                          <Form.Input type="text" value="WadeZhu" />
+                        </Form.Group>
+                        <Form.Group layout="vertical">
+                          <Form.Label>信箱</Form.Label>
+                          <Form.Input type="text" value="wade790720@gmail.com" />
+                        </Form.Group>
+                      </Form>
+                    </Modal.Body>
+                  </Modal>
                 </span>
               );
             }}

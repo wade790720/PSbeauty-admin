@@ -1,0 +1,17 @@
+.wrapper {
+  overflow-y: auto;
+  min-height: 472px;
+  max-height: 472px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.item {
+  position: relative;
+  padding-top: 13px;
+  padding-right: 20px;
+  padding-bottom: 13px;
+  padding-left: 20px;
+  border-bottom: 1px solid #e5e5ea;
+  cursor: pointer;
+}
