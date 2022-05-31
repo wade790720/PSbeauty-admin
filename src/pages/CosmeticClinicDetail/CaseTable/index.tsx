@@ -4,7 +4,7 @@ import { LinkButton } from "components/Button"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import { Table, Pagination, Uploader, CheckTreePicker } from 'rsuite';
+import { Table, Pagination, Uploader, MultiCascader } from 'rsuite';
 import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
 import data from '../category.json';
 
@@ -28,7 +28,6 @@ const CaseTable = () => {
     setPage(1);
     setLimit(dataKey);
   };
-
 
   return (
     <>
@@ -116,7 +115,12 @@ const CaseTable = () => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>分類</Form.Label>
-            <CheckTreePicker data={data} style={{ width: 280 }} />
+            <MultiCascader
+              data={data}
+              searchable={false}
+              menuStyle={{ padding: '6px 0' }}
+              style={{ width: '100%' }}
+              placeholder="請選擇" />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>內容</Form.Label>

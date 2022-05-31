@@ -23,47 +23,6 @@ const CosmeticClinic = () => {
         <Layout.Breadcrumbs.Item>診所</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <Card>
-        <Card.Header title="輪播">
-          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>新增</Button>
-          <Modal
-            title="新增輪播圖"
-            open={openCarousel}
-            confirmText="新增"
-            cancelText="取消"
-            onConfirm={() => { console.log("onConfirm") }}
-            onClose={() => setOpenCarousel(false)}
-          >
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (350 x 135px)</Form.Label>
-                <Uploader
-                  listType="picture"
-                  action="//jsonplaceholder.typicode.com/posts/"
-                  disabled={carouselList.length > 0}
-                  onChange={(fileList: FileType[]) => {
-                    setCarouselList(fileList)
-                  }}>
-                  <button>
-                    <CameraRetro />
-                  </button>
-                </Uploader>
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>標題</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>超連結</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-            </Form>
-          </Modal>
-        </Card.Header>
-        <Card.Body>
-          <CarouselTable />
-        </Card.Body>
-      </Card>
-      <Card>
         <Card.Header title="診所" >
           <Button variant="secondary" onClick={() => setOpen(true)}>新增診所</Button>
           <Modal
@@ -115,6 +74,48 @@ const CosmeticClinic = () => {
           <ClinicTable />
         </Card.Body>
       </Card>
+      <Card>
+        <Card.Header title="輪播">
+          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>新增</Button>
+          <Modal
+            title="新增輪播圖"
+            open={openCarousel}
+            confirmText="新增"
+            cancelText="取消"
+            onConfirm={() => { console.log("onConfirm") }}
+            onClose={() => setOpenCarousel(false)}
+          >
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (350 x 135px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  disabled={carouselList.length > 0}
+                  onChange={(fileList: FileType[]) => {
+                    setCarouselList(fileList)
+                  }}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>超連結</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+            </Form>
+          </Modal>
+        </Card.Header>
+        <Card.Body>
+          <CarouselTable />
+        </Card.Body>
+      </Card>
+
     </>
   )
 }

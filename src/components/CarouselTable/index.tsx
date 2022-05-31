@@ -4,7 +4,6 @@ import Form from "components/Form"
 import { LinkButton } from "components/Button"
 import { Table, Pagination, Toggle } from 'rsuite';
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
-import styled from "./CarouselTable.module.scss"
 
 const fakeData = [
   {
@@ -29,7 +28,7 @@ const CarouselTable = () => {
   };
 
   return (
-    <div className={styled.wrapper}>
+    <>
       <Table
         height={400}
         data={fakeData}
@@ -122,7 +121,7 @@ const CarouselTable = () => {
           </Form.Group>
         </Form>
       </Modal>
-    </div>
+    </>
   )
 }
 

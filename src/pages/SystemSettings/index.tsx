@@ -1,14 +1,18 @@
 import Button from "components/Button"
 import Card from "components/Card"
-import MemberTable from "./MemberTable"
+
 import Layout from "components/Layout"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import { useState } from 'react'
 import List from './List';
+import MemberTable from "./MemberTable"
+import KeywordTable from "./KeywordTable"
 
 const SystemSettings = () => {
   const [open, setOpen] = useState(false);
+  const [keywordOpen, setKeywordOpen] = useState(false);
+
 
   const bigCategory = ['整形手術', '皮膚治療', '毛髮改善', '審美牙科', '微整注射', '雷射光療', '身體雕塑', '埋線拉提', '中醫美容', '其他項目'];
   const midCategory = ['眼睛', "臉頰", "鼻子", "嘴唇", "下巴", "額頭"]
@@ -42,7 +46,7 @@ const SystemSettings = () => {
                   </List.Item>
                 ))}
               </List>
-              <div className="flex mt-4">
+              <div className="flex items-center mt-4">
                 <Form.Input type="text" className="mr-4" />
                 <Button >新增</Button>
               </div>
@@ -56,12 +60,35 @@ const SystemSettings = () => {
                   </List.Item>
                 ))}
               </List>
-              <div className="flex mt-4">
+              <div className="flex items-center mt-4">
                 <Form.Input type="text" className="mr-4" />
                 <Button >新增</Button>
               </div>
             </div>
           </div>
+        </Card.Body>
+      </Card>
+      <Card>
+        <Card.Header title="熱門關鍵字設定">
+          <Button variant="secondary" onClick={() => setKeywordOpen(true)}>新增</Button>
+        </Card.Header>
+        <Card.Body>
+          <KeywordTable />
+          <Modal
+            title="新增熱門關鍵字"
+            open={keywordOpen}
+            confirmText="新增"
+            cancelText="取消"
+            onConfirm={() => { console.log("onConfirm") }}
+            onClose={() => setKeywordOpen(false)}
+          >
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label required>關鍵詞</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+            </Form>
+          </Modal>
         </Card.Body>
       </Card>
       <Card>
@@ -78,18 +105,16 @@ const SystemSettings = () => {
             onConfirm={() => { console.log("onConfirm") }}
             onClose={() => setOpen(false)}
           >
-            <Modal.Body>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label required>帳號</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>信箱</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label required>帳號</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>信箱</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+            </Form>
           </Modal>
         </Card.Body>
       </Card>

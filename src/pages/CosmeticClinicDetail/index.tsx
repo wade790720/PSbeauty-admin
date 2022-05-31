@@ -8,7 +8,7 @@ import Form from "components/Form"
 import Modal from "components/Modal"
 import Layout from "components/Layout"
 import Editor from "components/Editor"
-import { Uploader, CheckTreePicker } from 'rsuite';
+import { Uploader, MultiCascader } from 'rsuite';
 import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
 import CarouselTable from "components/CarouselTable"
 import { FileType } from "types";
@@ -19,6 +19,13 @@ const CosmeticClinicDetail = () => {
   const [openCase, setOpenCase] = useState(false);
   const [openCarousel, setOpenCarousel] = useState(false);
   const [carouselList, setCarouselList] = useState<FileType[]>([]);
+
+  const test = [
+    {
+      "label": "test",
+      "value": 123,
+    }
+  ]
 
   return (
     <>
@@ -36,7 +43,7 @@ const CosmeticClinicDetail = () => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>大小分類</Form.Label>
-              <CheckTreePicker data={data} style={{ width: 280 }} />
+              <MultiCascader data={data} searchable={false} menuStyle={{ padding: '6px 0' }} style={{ width: 280 }} placeholder="請選擇" />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>完整地址</Form.Label>
@@ -138,7 +145,12 @@ const CosmeticClinicDetail = () => {
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>分類</Form.Label>
-                <CheckTreePicker data={data} style={{ width: 280 }} />
+                <MultiCascader
+                  data={data}
+                  searchable={false}
+                  menuStyle={{ padding: '6px 0' }}
+                  style={{ width: '100%' }}
+                  placeholder="請選擇" />
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label>內容</Form.Label>
