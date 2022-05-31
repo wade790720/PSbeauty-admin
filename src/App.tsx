@@ -1,13 +1,12 @@
-import { Suspense } from "react"
-import { HashRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom"
+import { Suspense, lazy } from "react"
 import { Container, Row } from "react-grid-system"
-import styled from "./App.module.scss"
-import "boxicons/css/boxicons.min.css"
-import QueryStatus from "components/QueryStatus"
-import { lazy } from "react"
+import { HashRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom"
 import SideBar from "components/SideBar"
+import QueryStatus from "components/QueryStatus"
+
 import "./App.css"
 import 'rsuite/dist/rsuite.min.css';
+import styled from "./App.module.scss"
 
 const BasicLayout = () => (
   <Container fluid className={styled["container-basic"]}>
