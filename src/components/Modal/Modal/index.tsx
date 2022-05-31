@@ -24,7 +24,7 @@ const Modal = (props: ModalProps) => {
       closeOnDocumentClick={props.backdrop}
       onClose={props.onClose}
     >
-      <ModalDialog>
+      <ModalDialog style={props.style}>
         <Header title={props.title} />
         <Body content={props.content}>{props.children}</Body>
         <Footer

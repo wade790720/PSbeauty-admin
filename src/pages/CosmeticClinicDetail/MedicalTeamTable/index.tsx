@@ -13,37 +13,10 @@ const fakeData = [
     "skill": "顏面疤痕 / 雙眼皮手術 / 眼袋 / 眼瞼下垂 / 醫學美容光療雷射 / 微整形注射美容",
   },
 ]
-// interface ImageCellProps {
-//   dataKey: string;
-//   [propName: string]: {};
-// }
 
 const MedicalTeamTable = () => {
   const { Column, HeaderCell, Cell } = Table
   const [open, setOpen] = useState(false)
-
-  // const ImageCell = ({ dataKey, ...props }: ImageCellProps) => (
-  //   <Cell {...props} style={{ padding: 0 }}>
-  //     {rowData => {
-  //       return (
-  //         <div
-  //           className="inline-flex justify-center items-center"
-  //           style={{
-  //             width: 40,
-  //             height: 40,
-  //             background: '#f5f5f5',
-  //             borderRadius: 20,
-  //             marginTop: 2,
-  //             overflow: 'hidden',
-  //           }}
-  //         >
-  //           {rowData?.name.charAt(0)}
-  //         </div>
-  //       )
-  //     }}
-  //   </Cell>
-  // );
-
 
   return (
     <>
@@ -58,11 +31,6 @@ const MedicalTeamTable = () => {
           <HeaderCell>序號</HeaderCell>
           <Cell dataKey="id" />
         </Column>
-
-        {/* <Column width={80} align="center" fixed>
-        <HeaderCell> </HeaderCell>
-        <ImageCell dataKey="name" />
-      </Column> */}
 
         <Column width={160} fixed>
           <HeaderCell>姓名</HeaderCell>
@@ -102,6 +70,7 @@ const MedicalTeamTable = () => {
         cancelText="取消"
         onConfirm={() => { console.log("onConfirm") }}
         onClose={() => setOpen(false)}
+        style={{ maxWidth: '450px' }}
       >
         <Form>
           <Form.Group layout="vertical">

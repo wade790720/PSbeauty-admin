@@ -2,17 +2,22 @@ import { useRef } from "react";
 import { Editor as TinyMceReactEditor } from "@tinymce/tinymce-react"
 import { Editor as TinyMCEEditor } from "tinymce"
 import styled from "./Editor.module.scss"
+import { EventHandler } from "@tinymce/tinymce-react/lib/cjs/main/ts/Events";
+interface EditorProps {
+  onEdit?: EventHandler<any>
+  value?: string
+}
 
-
-const Editor = () => {
+const Editor = (props: EditorProps) => {
   const editorRef = useRef<TinyMCEEditor>()
 
   return (
     <div className={styled.wrapper}>
       <TinyMceReactEditor
-        onInit={(_, editor) => { 
+        onInit={(_, editor) => {
           editorRef.current = editor
-         }}
+        }}
+        onEditorChange={props.onEdit}
         tinymceScriptSrc="/js/tinymce/tinymce.min.js"
         init={{
           width: '100%',

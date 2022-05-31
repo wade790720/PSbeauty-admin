@@ -55,6 +55,7 @@ const Home = () => {
               action="//jsonplaceholder.typicode.com/posts/"
               disabled={postList.length > 0}
               onChange={(fileList: FileType[]) => {
+                console.log(fileList)
                 setPostList(fileList)
               }}>
               <button>
@@ -68,7 +69,7 @@ const Home = () => {
           </Form.Group>
           <Form.Group layout="vertical" style={{ height: '200px' }}>
             <Form.Label required>內容</Form.Label>
-            <Editor />
+            <Editor onEdit={(newValue) => { console.log(newValue) }} />
           </Form.Group>
         </Form>
       </Modal>

@@ -63,7 +63,7 @@ const CosmeticClinicDetail = () => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>診所介紹</Form.Label>
-              <Editor />
+              <Editor onEdit={(newValue) => { console.log(newValue) }}/>
             </Form.Group>
             <div className="flex justify-end">
               <Button style={{ marginRight: "10px" }}>儲存</Button>
@@ -154,7 +154,7 @@ const CosmeticClinicDetail = () => {
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label>內容</Form.Label>
-                <Editor />
+                <Editor onEdit={(newValue) => { console.log(newValue) }}/>
               </Form.Group>
             </Form>
           </Modal>
@@ -199,7 +199,7 @@ const CosmeticClinicDetail = () => {
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label>經歷</Form.Label>
-                <Editor />
+                <Editor onEdit={(newValue) => { console.log(newValue) }}/>
               </Form.Group>
             </Form>
           </Modal>

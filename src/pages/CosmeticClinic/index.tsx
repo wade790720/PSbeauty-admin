@@ -64,7 +64,7 @@ const CosmeticClinic = () => {
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>診所介紹</Form.Label>
-                  <Editor />
+                  <Editor onEdit={(newValue) => { console.log(newValue) }}/>
                 </Form.Group>
               </Form>
             </div>
