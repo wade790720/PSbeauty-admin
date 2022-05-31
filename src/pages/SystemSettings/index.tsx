@@ -1,7 +1,6 @@
 import Button from "components/Button"
 import Card from "components/Card"
 import MemberTable from "./MemberTable"
-import Select from "components/Select"
 import Layout from "components/Layout"
 import Modal from "components/Modal"
 import Form from "components/Form"
@@ -10,16 +9,6 @@ import List from './List';
 
 const SystemSettings = () => {
   const [open, setOpen] = useState(false);
-
-  const options = [
-    { value: "小分類美容項目01", eventKey: "vanilla" },
-    { value: "小分類美容項目02", eventKey: "strawberry" },
-    { value: "小分類美容項目03", eventKey: "chocolate" },
-    { value: "小分類美容項目04", eventKey: "mango" },
-    { value: "小分類美容項目05", eventKey: "passionfruit" },
-    { value: "小分類美容項目06", eventKey: "hazelnut" },
-    { value: "小分類美容項目07", eventKey: "durian" },
-  ]
 
   const bigCategory = ['整形手術', '皮膚治療', '毛髮改善', '審美牙科', '微整注射', '雷射光療', '身體雕塑', '埋線拉提', '中醫美容', '其他項目'];
   const midCategory = ['眼睛', "臉頰", "鼻子", "嘴唇", "下巴", "額頭"]

@@ -5,50 +5,25 @@ import { LinkButton } from "components/Button"
 
 const fakeData = [
   {
+    "id": 1,
     "name": "星采醫學美容診所",
     "address": "100台北市中正區羅斯福路一段32號2樓",
     "caseCount": 100,
     "replyCount": 100,
   },
 ]
-interface ImageCellProps {
-  dataKey: string;
-  [propName: string]: {};
-}
 
 const ClinicTable = () => {
   const { Column, HeaderCell, Cell } = Table
   const go = useGo()
 
-  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-
+  const [limit, setLimit] = useState(10);
+  
   const handleChangeLimit = (dataKey: number) => {
     setPage(1);
     setLimit(dataKey);
   };
-
-  const ImageCell = ({ dataKey, ...props }: ImageCellProps) => (
-    <Cell {...props} style={{ padding: 0 }}>
-      {rowData => {
-        return (
-          <div
-            className="inline-flex justify-center items-center"
-            style={{
-              width: 40,
-              height: 40,
-              background: '#f5f5f5',
-              borderRadius: 20,
-              marginTop: 2,
-              overflow: 'hidden',
-            }}
-          >
-            {rowData?.name.charAt(0)}
-          </div>
-        )
-      }}
-    </Cell>
-  );
 
   return (
     <>
@@ -58,9 +33,9 @@ const ClinicTable = () => {
         onRowClick={data => {
           console.log(data);
         }}>
-        <Column width={80} align="center" fixed>
-          <HeaderCell> </HeaderCell>
-          <ImageCell dataKey="name" />
+        <Column width={70} align="center" fixed>
+          <HeaderCell>序號</HeaderCell>
+          <Cell dataKey="id" />
         </Column>
 
         <Column width={160} fixed>
@@ -99,25 +74,24 @@ const ClinicTable = () => {
           </Cell>
         </Column>
       </Table>
-      <div style={{ padding: 20 }}>
-        <Pagination
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-          total={fakeData.length}
-          limitOptions={[10, 20]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
-      </div>
+      <Pagination
+        className="p-5"
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        maxButtons={5}
+        size="xs"
+        layout={['-', 'limit', '|', 'pager', 'skip']}
+        total={fakeData.length}
+        limitOptions={[10, 20]}
+        limit={limit}
+        activePage={page}
+        onChangePage={setPage}
+        onChangeLimit={handleChangeLimit}
+      />
     </>
   )
 }

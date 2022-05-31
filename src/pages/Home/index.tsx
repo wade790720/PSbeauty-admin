@@ -38,6 +38,7 @@ const Home = () => {
           <CarouselTable />
         </Card.Body>
       </Card>
+
       <Modal
         title="新增廣告卡"
         open={open}
@@ -46,33 +47,32 @@ const Home = () => {
         onConfirm={() => { console.log("onConfirm") }}
         onClose={() => setOpen(false)}
       >
-        <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label required>預覽圖</Form.Label>
-              <Uploader
-                listType="picture"
-                action="//jsonplaceholder.typicode.com/posts/"
-                disabled={postList.length > 0}
-                onChange={(fileList: FileType[]) => {
-                  setPostList(fileList)
-                }}>
-                <button>
-                  <CameraRetro />
-                </button>
-              </Uploader>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" />
-            </Form.Group>
-            <Form.Group layout="vertical" style={{ height: '200px' }}>
-              <Form.Label required>內容</Form.Label>
-              <Editor />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
+        <Form>
+          <Form.Group layout="vertical">
+            <Form.Label required>預覽圖</Form.Label>
+            <Uploader
+              listType="picture"
+              action="//jsonplaceholder.typicode.com/posts/"
+              disabled={postList.length > 0}
+              onChange={(fileList: FileType[]) => {
+                setPostList(fileList)
+              }}>
+              <button>
+                <CameraRetro />
+              </button>
+            </Uploader>
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label required>標題</Form.Label>
+            <Form.Input type="text" />
+          </Form.Group>
+          <Form.Group layout="vertical" style={{ height: '200px' }}>
+            <Form.Label required>內容</Form.Label>
+            <Editor />
+          </Form.Group>
+        </Form>
       </Modal>
+
       <Modal
         title="新增輪播圖"
         open={openCarousel}
@@ -81,32 +81,30 @@ const Home = () => {
         onConfirm={() => { console.log("onConfirm") }}
         onClose={() => setOpenCarousel(false)}
       >
-        <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-              <Uploader
-                listType="picture"
-                action="//jsonplaceholder.typicode.com/posts/"
-                disabled={carouselList.length > 0}
-                onChange={(fileList: FileType[]) => {
-                  setCarouselList(fileList)
-                }}>
-                <button>
-                  <CameraRetro />
-                </button>
-              </Uploader>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>超連結</Form.Label>
-              <Form.Input type="text" />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
+        <Form>
+          <Form.Group layout="vertical">
+            <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+            <Uploader
+              listType="picture"
+              action="//jsonplaceholder.typicode.com/posts/"
+              disabled={carouselList.length > 0}
+              onChange={(fileList: FileType[]) => {
+                setCarouselList(fileList)
+              }}>
+              <button>
+                <CameraRetro />
+              </button>
+            </Uploader>
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label required>標題</Form.Label>
+            <Form.Input type="text" />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>超連結</Form.Label>
+            <Form.Input type="text" />
+          </Form.Group>
+        </Form>
       </Modal>
     </>
   )

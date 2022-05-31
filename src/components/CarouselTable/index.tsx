@@ -1,25 +1,27 @@
 import { useState } from 'react'
-import styled from "./CarouselTable.module.scss"
-import { Table, Pagination } from 'rsuite';
+import Modal from "components/Modal"
+import Form from "components/Form"
 import { LinkButton } from "components/Button"
-
+import { Table, Pagination, Toggle } from 'rsuite';
+import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
+import styled from "./CarouselTable.module.scss"
 
 const fakeData = [
   {
     "id": 1,
     "status": "open",
-    "title": "New Amieshire",
-    "content": "Ratke Port",
+    "title": "測試輪播",
+    "url": "/home",
     "createTime": "2022-04-18",
   },
 ]
-
 
 const CarouselTable = () => {
   const { Column, HeaderCell, Cell } = Table
 
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [open, setOpen] = useState(false)
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1);
@@ -51,8 +53,8 @@ const CarouselTable = () => {
         </Column>
 
         <Column width={200} flexGrow={1}>
-          <HeaderCell>內容</HeaderCell>
-          <Cell dataKey="content" />
+          <HeaderCell>超連結</HeaderCell>
+          <Cell dataKey="url" />
         </Column>
 
         <Column width={200}>
@@ -68,32 +70,58 @@ const CarouselTable = () => {
               }
               return (
                 <span>
-                  <LinkButton onClick={handleAction}> 輪播圖 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
               );
             }}
           </Cell>
         </Column>
       </Table>
-      <div style={{ padding: 20 }}>
-        <Pagination
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-          total={fakeData.length}
-          limitOptions={[10, 20]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
-      </div>
+      <Pagination
+        className="p-5"
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        maxButtons={5}
+        size="xs"
+        layout={['-', 'limit', '|', 'pager', 'skip']}
+        total={fakeData.length}
+        limitOptions={[10, 20]}
+        limit={limit}
+        activePage={page}
+        onChangePage={setPage}
+        onChangeLimit={handleChangeLimit}
+      />
+      <Modal
+        title="編輯"
+        open={open}
+        confirmText="儲存"
+        cancelText="取消"
+        onConfirm={() => { console.log("onConfirm") }}
+        onClose={() => setOpen(false)}
+      >
+        <Form>
+          <Form.Group layout="vertical">
+            <Form.Label>預覽圖</Form.Label>
+            <DefaultPhoto style={{ width: '350px', height: '135px', border: '1px solid #e4e6ef' }} />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label required>標題</Form.Label>
+            <Form.Input type="text" value="測試輪播" />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>超連結</Form.Label>
+            <Form.Input type="text" value="/url" />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>狀態</Form.Label>
+            <Toggle defaultChecked />
+          </Form.Group>
+        </Form>
+      </Modal>
     </div>
   )
 }

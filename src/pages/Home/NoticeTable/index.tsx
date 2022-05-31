@@ -3,22 +3,19 @@ import styled from "./NoticeTable.module.scss"
 import { Table, Pagination } from 'rsuite';
 import { LinkButton } from "components/Button"
 
-
 const fakeData = [
   {
     "id": 1,
     "title": "New Amieshire",
-    "content": "Ratke Port",
     "createTime": "2022-04-18",
   },
 ]
 
-
 const NoticeTable = () => {
   const { Column, HeaderCell, Cell } = Table
 
-  const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1);
@@ -39,14 +36,9 @@ const NoticeTable = () => {
           <Cell dataKey="id" />
         </Column>
 
-        <Column width={200} fixed>
+        <Column width={200} flexGrow={1}>
           <HeaderCell>標題</HeaderCell>
           <Cell dataKey="title" />
-        </Column>
-
-        <Column width={200} flexGrow={1}>
-          <HeaderCell>內容</HeaderCell>
-          <Cell dataKey="content" />
         </Column>
 
         <Column width={200}>
@@ -69,25 +61,24 @@ const NoticeTable = () => {
           </Cell>
         </Column>
       </Table>
-      <div style={{ padding: 20 }}>
-        <Pagination
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={['total', '-', 'limit', '|', 'pager', 'skip']}
-          total={fakeData.length}
-          limitOptions={[10, 20]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
-      </div>
+      <Pagination
+        className="p-5"
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        maxButtons={5}
+        size="xs"
+        layout={['-', 'limit', '|', 'pager', 'skip']}
+        total={fakeData.length}
+        limitOptions={[10, 20]}
+        limit={limit}
+        activePage={page}
+        onChangePage={setPage}
+        onChangeLimit={handleChangeLimit}
+      />
     </div>
   )
 }

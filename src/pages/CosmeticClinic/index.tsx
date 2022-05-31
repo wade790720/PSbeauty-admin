@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import Button from "components/Button"
-import Card from "components/Card"
-import CarouselTable from "components/CarouselTable"
 import ClinicTable from "./ClinicTable"
-import Modal from "components/Modal"
+import Button from "components/Button"
 import Form from "components/Form"
+import Card from "components/Card"
+import Modal from "components/Modal"
 import Layout from "components/Layout"
+import Editor from "components/Editor"
+import CarouselTable from "components/CarouselTable"
 import { Uploader, CheckTreePicker } from 'rsuite';
 import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
-import Editor from "components/Editor"
 import { FileType } from "types";
 import data from './category.json';
 
@@ -33,32 +33,30 @@ const CosmeticClinic = () => {
             onConfirm={() => { console.log("onConfirm") }}
             onClose={() => setOpenCarousel(false)}
           >
-            <Modal.Body>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                  <Uploader
-                    listType="picture"
-                    action="//jsonplaceholder.typicode.com/posts/"
-                    disabled={carouselList.length > 0}
-                    onChange={(fileList: FileType[]) => {
-                      setCarouselList(fileList)
-                    }}>
-                    <button>
-                      <CameraRetro />
-                    </button>
-                  </Uploader>
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>標題</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>超連結</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (350 x 135px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  disabled={carouselList.length > 0}
+                  onChange={(fileList: FileType[]) => {
+                    setCarouselList(fileList)
+                  }}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>超連結</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+            </Form>
           </Modal>
         </Card.Header>
         <Card.Body>
@@ -75,7 +73,7 @@ const CosmeticClinic = () => {
             cancelText="取消"
             onClose={() => setOpen(false)}
           >
-            <Modal.Body style={{ overflow: 'auto', height: '500px' }}>
+            <div className="px-5 mb-5" style={{ overflow: 'auto', height: '500px' }}>
               <Form>
                 <Form.Group layout="vertical">
                   <Form.Label required>診所名稱</Form.Label>
@@ -110,7 +108,7 @@ const CosmeticClinic = () => {
                   <Editor />
                 </Form.Group>
               </Form>
-            </Modal.Body>
+            </div>
           </Modal>
         </Card.Header>
         <Card.Body>

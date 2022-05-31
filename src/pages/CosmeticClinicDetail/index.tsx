@@ -32,7 +32,7 @@ const CosmeticClinicDetail = () => {
           <Form>
             <Form.Group layout="vertical">
               <Form.Label required>診所名稱</Form.Label>
-              <Form.Input type="text" />
+              <Form.Input type="text" value="星采醫學美容診所" />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>大小分類</Form.Label>
@@ -41,25 +41,27 @@ const CosmeticClinicDetail = () => {
             <Form.Group layout="vertical">
               <Form.Label>完整地址</Form.Label>
               <div className="inline-flex w-full">
-                <Form.Input type="text" placeholder='縣市' className="mr-4" style={{ flex: "1 1 300px" }} />
-                <Form.Input type="text" placeholder='地區' className="mr-4" style={{ flex: "1 1 300px" }} />
-                <Form.Input type="text" placeholder='地址' />
+                <Form.Input type="text" placeholder='縣市' className="mr-4" style={{ flex: "1 1 300px" }} value="台北市" />
+                <Form.Input type="text" placeholder='地區' className="mr-4" style={{ flex: "1 1 300px" }} value="中正區" />
+                <Form.Input type="text" placeholder='地址' value="羅斯福路一段32號2樓" />
               </div>
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>診所網址</Form.Label>
-              <Form.Input type="url" />
+              <Form.Input type="url" value="starclinic.com.tw" />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>診所電話</Form.Label>
-              <Form.Input type="tel" />
+              <Form.Input type="tel" value="02-2395-1167" />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>診所介紹</Form.Label>
               <Editor />
             </Form.Group>
-            <Button style={{ marginRight: "10px" }}>儲存</Button>
-            <Button variant="secondary">清除</Button>
+            <div className="flex justify-end">
+              <Button style={{ marginRight: "10px" }}>儲存</Button>
+              <Button variant="secondary">清除</Button>
+            </div>
           </Form>
         </Card.Body>
       </Card>
@@ -74,32 +76,30 @@ const CosmeticClinicDetail = () => {
             onConfirm={() => { console.log("onConfirm") }}
             onClose={() => setOpenCarousel(false)}
           >
-            <Modal.Body>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                  <Uploader
-                    listType="picture"
-                    action="//jsonplaceholder.typicode.com/posts/"
-                    disabled={carouselList.length > 0}
-                    onChange={(fileList: FileType[]) => {
-                      setCarouselList(fileList)
-                    }}>
-                    <button>
-                      <CameraRetro />
-                    </button>
-                  </Uploader>
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>標題</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>超連結</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  disabled={carouselList.length > 0}
+                  onChange={(fileList: FileType[]) => {
+                    setCarouselList(fileList)
+                  }}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>超連結</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+            </Form>
           </Modal>
         </Card.Header>
         <Card.Body>
@@ -117,36 +117,34 @@ const CosmeticClinicDetail = () => {
             onConfirm={() => { console.log("onConfirm") }}
             onClose={() => setOpenCase(false)}
           >
-            <Modal.Body>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                  <Uploader
-                    listType="picture"
-                    action="//jsonplaceholder.typicode.com/posts/"
-                    disabled={carouselList.length > 0}
-                    onChange={(fileList: FileType[]) => {
-                      setCarouselList(fileList)
-                    }}>
-                    <button>
-                      <CameraRetro />
-                    </button>
-                  </Uploader>
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>標題</Form.Label>
-                  <Form.Input type="text" />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>分類</Form.Label>
-                  <CheckTreePicker data={data} style={{ width: 280 }} />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>內容</Form.Label>
-                  <Editor />
-                </Form.Group>
-              </Form>
-            </Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  disabled={carouselList.length > 0}
+                  onChange={(fileList: FileType[]) => {
+                    setCarouselList(fileList)
+                  }}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>分類</Form.Label>
+                <CheckTreePicker data={data} style={{ width: 280 }} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor />
+              </Form.Group>
+            </Form>
           </Modal>
         </Card.Header>
         <Card.Body>
@@ -158,7 +156,7 @@ const CosmeticClinicDetail = () => {
         <Card.Header title="醫療團隊" >
           <Button variant="secondary" onClick={() => setOpen(true)}>新增</Button>
           <Modal
-            title="新增診所"
+            title="新增醫師"
             open={open}
             confirmText="建立"
             cancelText="取消"
@@ -166,7 +164,7 @@ const CosmeticClinicDetail = () => {
           >
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>照片 (850 x 315px)</Form.Label>
+                <Form.Label>照片 (100 x 100px)</Form.Label>
                 <Uploader
                   listType="picture"
                   action="//jsonplaceholder.typicode.com/posts/"

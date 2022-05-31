@@ -7,7 +7,7 @@ import QueryStatus from "components/QueryStatus"
 import { lazy } from "react"
 import SideBar from "components/SideBar"
 import "./App.css"
-import 'rsuite/dist/rsuite.min.css'; 
+import 'rsuite/dist/rsuite.min.css';
 
 const BasicLayout = () => (
   <Container fluid className={styled["container-basic"]}>
@@ -21,7 +21,7 @@ const CmsLayout = () => (
   <Container fluid className={styled["container-cms"]}>
     <Row direction="column" style={{ flex: 1 }}>
       <SideBar />
-      <main>
+      <main style={{ background: " #f0f5ff" }}>
         <Outlet />
       </main>
     </Row>
@@ -41,18 +41,12 @@ function App() {
       <Router>
         <Suspense fallback={<QueryStatus.Loading />}>
           <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="/login" />}
-            />
+            <Route path="/" element={<Navigate to="/login" />} />
             <Route path="login" element={<BasicLayout />}>
-              <Route index element={<Login />} />  
+              <Route index element={<Login />} />
             </Route>
             <Route path="cms" element={<CmsLayout />}>
-              <Route
-                index
-                element={<Navigate to="/cms/home" />}
-              />
+              <Route index element={<Navigate to="/cms/home" />} />
               <Route path="home" element={<Home />} />
               <Route path="cosmetic-clinic" element={<CosmeticClinic />} />
               <Route path="cosmetic-clinic/:id" element={<CosmeticClinicDetail />} />
