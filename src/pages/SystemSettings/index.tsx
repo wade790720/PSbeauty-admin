@@ -92,30 +92,9 @@ const SystemSettings = () => {
         </Card.Body>
       </Card>
       <Card>
-        <Card.Header title="會員列表">
-          <Button variant="secondary" onClick={() => setOpen(true)}>新增</Button>
-        </Card.Header>
+        <Card.Header title="會員列表"/>
         <Card.Body>
           <MemberTable />
-          <Modal
-            title="新增會員"
-            open={open}
-            confirmText="儲存"
-            cancelText="取消"
-            onConfirm={() => { console.log("onConfirm") }}
-            onClose={() => setOpen(false)}
-          >
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label required>帳號</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>信箱</Form.Label>
-                <Form.Input type="text" />
-              </Form.Group>
-            </Form>
-          </Modal>
         </Card.Body>
       </Card>
     </>
