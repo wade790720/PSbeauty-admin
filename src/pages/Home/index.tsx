@@ -1,28 +1,47 @@
-import { useState } from 'react'
+import { useState } from "react"
 import Card from "components/Card"
 import Layout from "components/Layout"
 import Form from "components/Form"
 import Button from "components/Button"
 import CarouselTable from "components/CarouselTable"
-import { Uploader } from 'rsuite';
-import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
+import { Uploader } from "rsuite"
+import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import Modal from "components/Modal"
-import { FileType } from "types";
-import AdListCard from './AdListCard'
+import { FileType } from "types"
+import AdListCard from "./AdListCard"
+import { SortEnumType } from "types/schema"
+import QueryStatus from "components/QueryStatus"
+
+import { useGetHomeQueryQuery } from "./Home.graphql.generated"
 
 const Home = () => {
-  const [carouselList, setCarouselList] = useState<FileType[]>([]);
+  const [carouselList, setCarouselList] = useState<FileType[]>([])
   const [openCarousel, setOpenCarousel] = useState(false)
+
+  const { data, loading, error } = useGetHomeQueryQuery({
+    variables: {
+      adCardsFirst: 5,
+      adCardsOrderId: SortEnumType.Desc,
+      adImagesFirst: 5,
+      adImagesOrderId: SortEnumType.Desc,
+      adImagesWhere: "首頁輪播",
+    },
+  })
+
+  if (loading) return <QueryStatus.Loading />
+  if (error) return <QueryStatus.Error />
 
   return (
     <>
       <Layout.Breadcrumbs>
         <Layout.Breadcrumbs.Item>首頁</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
-      <AdListCard />
+      {data && <AdListCard data={data?.adCards} />}
       <Card>
         <Card.Header title="輪播">
-          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>新增</Button>
+          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>
+            新增
+          </Button>
         </Card.Header>
         <Card.Body>
           <CarouselTable />
@@ -34,9 +53,10 @@ const Home = () => {
         open={openCarousel}
         confirmText="新增"
         cancelText="取消"
-        onConfirm={() => { console.log("onConfirm") }}
-        onClose={() => setOpenCarousel(false)}
-      >
+        onConfirm={() => {
+          console.log("onConfirm")
+        }}
+        onClose={() => setOpenCarousel(false)}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>預覽圖 (700 x 800px)</Form.Label>

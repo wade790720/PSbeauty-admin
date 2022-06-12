@@ -5,7 +5,7 @@ import SideBar from "components/SideBar"
 import QueryStatus from "components/QueryStatus"
 
 import "./App.css"
-import 'rsuite/dist/rsuite.min.css';
+import "rsuite/dist/rsuite.min.css"
 import styled from "./App.module.scss"
 
 const BasicLayout = () => (
@@ -56,7 +56,7 @@ function App() {
         </Suspense>
       </Router>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

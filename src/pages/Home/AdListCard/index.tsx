@@ -1,52 +1,72 @@
-import { useState } from 'react'
+import { useState, useMemo, useRef } from "react"
 import Button, { LinkButton } from "components/Button"
-import { Table, Pagination, Uploader } from 'rsuite';
+import { Table, Pagination, Uploader } from "rsuite"
 import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
-import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
-import { FileType } from "types";
+import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
+import { FileType, FileElementResponse } from "types"
+import { GetHomeQueryQuery } from "../Home.graphql.generated"
 
-const fakeData = [
-  {
-    "id": 1,
-    "title": "全新臉部拉提計畫",
-    "createTime": "2022-04-18",
-  },
-]
+type AdListCardProps = {
+  data: GetHomeQueryQuery["adCards"]
+}
 
-const AdListCard = () => {
+type Card = {
+  index: number
+  id: string
+  title: string
+  content: string
+  image: string
+}
+
+const AdListCard = ({ data }: AdListCardProps) => {
   const { Column, HeaderCell, Cell } = Table
 
   const [open, setOpen] = useState(false)
   const [reviewOpen, setReviewOpen] = useState(false)
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [postList, setPostList] = useState<FileType[]>([]);
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+  const [postList, setPostList] = useState<FileType[]>([])
+  const activeCard = useRef<Card | null>(null)
+
+  const [result, setResult] = useState<string>()
 
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
+
+  const uploadedFile = (response: object) => {
+    const file = response as FileElementResponse
+    setResult(file.url)
+  }
+
+  const adCardsList = useMemo(() => {
+    if (!data?.edges) return []
+
+    return data?.edges?.map((card, index) => ({
+      index: index + 1,
+      id: card.node?.id || "",
+      title: card.node?.title || "",
+      content: card.node?.content || "",
+      image: card.node?.image || "",
+    }))
+  }, [data?.edges])
 
   return (
     <Card>
       <Card.Header title="廣告卡列表">
-        <Button variant="secondary" onClick={() => setOpen(true)}>新增</Button>
+        <Button variant="secondary" onClick={() => setOpen(true)}>
+          新增
+        </Button>
       </Card.Header>
       <Card.Body>
-        <Table
-          height={400}
-          data={fakeData}
-          onRowClick={data => {
-            console.log(data);
-          }}
-        >
+        <Table height={400} data={adCardsList}>
           <Column width={70} align="center" fixed>
             <HeaderCell>序號</HeaderCell>
-            <Cell dataKey="id" />
+            <Cell dataKey="index" />
           </Column>
 
           <Column width={200} flexGrow={1}>
@@ -64,13 +84,26 @@ const AdListCard = () => {
             <Cell>
               {rowData => {
                 function handleAction() {
-                  alert(`id:${rowData.id}`);
+                  alert(`id:${rowData.id}`)
                 }
                 return (
                   <span>
-                    <LinkButton onClick={() => setReviewOpen(true)}> 預覽圖 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                    <LinkButton
+                      onClick={() => {
+                        setReviewOpen(true)
+                        activeCard.current = {
+                          index: rowData.index,
+                          id: rowData.id,
+                          title: rowData.title,
+                          content: rowData.content,
+                          image: rowData.image,
+                        }
+                      }}>
+                      預覽圖
+                    </LinkButton>
+                    | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                   </span>
-                );
+                )
               }}
             </Cell>
           </Column>
@@ -85,8 +118,8 @@ const AdListCard = () => {
           boundaryLinks
           maxButtons={5}
           size="xs"
-          layout={['-', 'limit', '|', 'pager', 'skip']}
-          total={fakeData.length}
+          layout={["-", "limit", "|", "pager", "skip"]}
+          total={adCardsList.length}
           limitOptions={[10, 20]}
           limit={limit}
           activePage={page}
@@ -100,16 +133,17 @@ const AdListCard = () => {
           open={open}
           confirmText="建立"
           cancelText="取消"
-          onConfirm={() => { console.log("onConfirm") }}
-          onClose={() => setOpen(false)}
-        >
+          onConfirm={() => {
+            console.log("onConfirm")
+          }}
+          onClose={() => setOpen(false)}>
           <Form>
             <Form.Group layout="vertical">
-              <Form.Label required>預覽圖</Form.Label>
+              {/* <Form.Label required>預覽圖</Form.Label> */}
               <Uploader
-                listType="picture"
-                action="//jsonplaceholder.typicode.com/posts/"
                 disabled={postList.length > 0}
+                onSuccess={uploadedFile}
+                action="//jsonplaceholder.typicode.com/posts/"
                 onChange={(fileList: FileType[]) => {
                   console.log(fileList)
                   setPostList(fileList)
@@ -123,9 +157,13 @@ const AdListCard = () => {
               <Form.Label required>標題</Form.Label>
               <Form.Input type="text" />
             </Form.Group>
-            <Form.Group layout="vertical" style={{ height: '200px' }}>
+            <Form.Group layout="vertical" style={{ height: "200px" }}>
               <Form.Label required>內容</Form.Label>
-              <Editor onEdit={(newValue) => { console.log(newValue) }} />
+              <Editor
+                onEdit={newValue => {
+                  console.log(newValue)
+                }}
+              />
             </Form.Group>
           </Form>
         </Modal>
@@ -136,23 +174,24 @@ const AdListCard = () => {
           open={reviewOpen}
           confirmText="確定"
           cancelText="取消"
-          onConfirm={() => { console.log("onConfirm") }}
           onClose={() => setReviewOpen(false)}
-          style={{ maxWidth: '450px' }}
-        >
+          style={{ maxWidth: "450px" }}>
           <Form>
             <Form.Group layout="vertical">
               <Form.Label>預覽圖 (390 x 240px)</Form.Label>
-              <DefaultPhoto style={{ width: '390px', height: '240px', border: '1px solid #e4e6ef' }} />
+              <img
+                src={activeCard.current?.image}
+                alt="preview"
+                style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
+              />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>標題</Form.Label>
-              <p>全新臉部拉提計畫</p>
+              <p>{activeCard.current?.title}</p>
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
-              <p>從台北皮膚科起家，北中南共有十六間醫美診，另外還有四間頂級SPA，旗艦店座落在熱鬧的東區跟台北火車站周遭，網友熱門討論項目大都集中在面部雷射光療，以及肉毒桿菌醫學美容，解決不少有咀嚼肌困擾的愛美女孩煩惱，讓臉部線條更明顯，另外ＸＸ診所也設置「ＸＸ學院」，將醫師與相關工作人員，與設備原廠合作認證課程，相關紀錄都在官網可見，讓消費者更安心
-                網友熱門討論項目大都集中在面部雷射光療，以及肉毒桿菌醫學美容，解決不少有咀嚼肌困擾的愛美女孩煩惱，讓臉部線條更明顯。</p>
+              <div>{activeCard.current?.content}</div>
             </Form.Group>
           </Form>
         </Modal>

@@ -1,7 +1,9 @@
 import { ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client"
 import { onError } from "@apollo/client/link/error"
 
-const httpLink = createHttpLink({ uri: "https://cloud-run-api-psbeauty-deuedjpwuq-de.a.run.app/api/graphql" })
+const httpLink = createHttpLink({
+  uri: "https://cloud-run-api-psbeauty-deuedjpwuq-de.a.run.app/api/graphql",
+})
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error] ${networkError}`)
