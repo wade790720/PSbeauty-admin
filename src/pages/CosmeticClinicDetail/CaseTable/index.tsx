@@ -1,33 +1,33 @@
-import { useState } from 'react'
-import { FileType } from "types";
+import { useState } from "react"
+import { FileType } from "types"
 import { LinkButton } from "components/Button"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import { Table, Pagination, Uploader, MultiCascader } from 'rsuite';
-import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
-import data from '../category.json';
+import { Table, Pagination, Uploader, MultiCascader } from "rsuite"
+import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
+import data from "../category.json"
 
 const fakeData = [
   {
-    "id": 1,
-    "title": "音波拉提比對圖",
-    "category": "顏面疤痕 / 雙眼皮手術 / 眼袋"
+    id: 1,
+    title: "音波拉提比對圖",
+    category: "顏面疤痕 / 雙眼皮手術 / 眼袋",
   },
 ]
 
 const CaseTable = () => {
   const { Column, HeaderCell, Cell } = Table
-  const [openCase, setOpenCase] = useState(false);
-  const [carouselList, setCarouselList] = useState<FileType[]>([]);
+  const [openCase, setOpenCase] = useState(false)
+  const [carouselList, setCarouselList] = useState<FileType[]>([])
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
 
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
 
   return (
     <>
@@ -35,7 +35,7 @@ const CaseTable = () => {
         height={400}
         data={fakeData}
         onRowClick={data => {
-          console.log(data);
+          console.log(data)
         }}>
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
@@ -57,13 +57,14 @@ const CaseTable = () => {
           <Cell>
             {rowData => {
               function handleAction() {
-                alert(`id:${rowData.id}`);
+                alert(`id:${rowData.id}`)
               }
               return (
                 <span>
-                  <LinkButton onClick={() => setOpenCase(true)}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={() => setOpenCase(true)}> 編輯 </LinkButton> |{" "}
+                  <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
-              );
+              )
             }}
           </Cell>
         </Column>
@@ -78,7 +79,7 @@ const CaseTable = () => {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['-', 'limit', '|', 'pager', 'skip']}
+        layout={["-", "limit", "|", "pager", "skip"]}
         total={fakeData.length}
         limitOptions={[10, 20]}
         limit={limit}
@@ -91,9 +92,10 @@ const CaseTable = () => {
         open={openCase}
         confirmText="修改"
         cancelText="取消"
-        onConfirm={() => { console.log("onConfirm") }}
-        onClose={() => setOpenCase(false)}
-      >
+        onConfirm={() => {
+          console.log("onConfirm")
+        }}
+        onClose={() => setOpenCase(false)}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>預覽圖 (700 x 800px)</Form.Label>
@@ -118,9 +120,10 @@ const CaseTable = () => {
             <MultiCascader
               data={data}
               searchable={false}
-              menuStyle={{ padding: '6px 0' }}
-              style={{ width: '100%' }}
-              placeholder="請選擇" />
+              menuStyle={{ padding: "6px 0" }}
+              style={{ width: "100%" }}
+              placeholder="請選擇"
+            />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>內容</Form.Label>
@@ -129,7 +132,7 @@ const CaseTable = () => {
         </Form>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default CaseTable;
+export default CaseTable

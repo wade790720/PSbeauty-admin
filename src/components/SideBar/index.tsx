@@ -1,7 +1,6 @@
 import styled from "./SideBar.module.scss"
 import ActiveLink from "./ActiveLink"
 export default function SideBar() {
-
   return (
     <div className={styled.wrapper}>
       <div className={styled.menu}>

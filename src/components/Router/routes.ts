@@ -27,7 +27,7 @@ const routes: RouteConfig[] = [
         path: "/cms/system-settings",
         component: SystemSettings,
       },
-    ]
+    ],
   },
   /* 404 not found */
   {

@@ -11,9 +11,7 @@ export type BreadcrumbsItemProps = {
 const BreadcrumbsItem = ({ href, children }: BreadcrumbsItemProps) => {
   return (
     <li className={styled.wrapper}>
-      <a
-        className={cx(styled.text, { [styled.active]: !href })}
-        href={href}>
+      <a className={cx(styled.text, { [styled.active]: !href })} href={href}>
         {children}
       </a>
     </li>

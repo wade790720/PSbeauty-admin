@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState } from "react"
 import { useGo } from "components/Router"
-import { Table, Pagination } from 'rsuite';
+import { Table, Pagination } from "rsuite"
 import { LinkButton } from "components/Button"
 
 const fakeData = [
   {
-    "id": 1,
-    "name": "星采醫學美容診所",
-    "address": "100台北市中正區羅斯福路一段32號2樓",
-    "caseCount": 100,
-    "replyCount": 100,
+    id: 1,
+    name: "星采醫學美容診所",
+    address: "100台北市中正區羅斯福路一段32號2樓",
+    caseCount: 100,
+    replyCount: 100,
   },
 ]
 
@@ -17,13 +17,13 @@ const ClinicTable = () => {
   const { Column, HeaderCell, Cell } = Table
   const go = useGo()
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
 
   return (
     <>
@@ -31,7 +31,7 @@ const ClinicTable = () => {
         height={400}
         data={fakeData}
         onRowClick={data => {
-          console.log(data);
+          console.log(data)
         }}>
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
@@ -63,13 +63,17 @@ const ClinicTable = () => {
           <Cell>
             {rowData => {
               function handleAction() {
-                alert(`id:${rowData.id}`);
+                alert(`id:${rowData.id}`)
               }
               return (
                 <span>
-                  <LinkButton onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}>
+                    {" "}
+                    編輯{" "}
+                  </LinkButton>{" "}
+                  | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
-              );
+              )
             }}
           </Cell>
         </Column>
@@ -84,7 +88,7 @@ const ClinicTable = () => {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['-', 'limit', '|', 'pager', 'skip']}
+        layout={["-", "limit", "|", "pager", "skip"]}
         total={fakeData.length}
         limitOptions={[10, 20]}
         limit={limit}

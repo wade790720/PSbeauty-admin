@@ -4,19 +4,41 @@ import Card from "components/Card"
 import Layout from "components/Layout"
 import Modal from "components/Modal"
 import Form from "components/Form"
-import { useState } from 'react'
-import List from './List';
+import { useState } from "react"
+import List from "./List"
 import MemberTable from "./MemberTable"
 import KeywordTable from "./KeywordTable"
 
 const SystemSettings = () => {
-  const [open, setOpen] = useState(false);
-  const [keywordOpen, setKeywordOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [keywordOpen, setKeywordOpen] = useState(false)
 
-
-  const bigCategory = ['整形手術', '皮膚治療', '毛髮改善', '審美牙科', '微整注射', '雷射光療', '身體雕塑', '埋線拉提', '中醫美容', '其他項目'];
-  const midCategory = ['眼睛', "臉頰", "鼻子", "嘴唇", "下巴", "額頭"]
-  const smallCategory = ['美容項目01', "美容項目02", "美容項目03", "美容項目04", "美容項目05", "美容項目06", "美容項目07", "美容項目08", "美容項目09", "美容項目10", "美容項目11"]
+  const bigCategory = [
+    "整形手術",
+    "皮膚治療",
+    "毛髮改善",
+    "審美牙科",
+    "微整注射",
+    "雷射光療",
+    "身體雕塑",
+    "埋線拉提",
+    "中醫美容",
+    "其他項目",
+  ]
+  const midCategory = ["眼睛", "臉頰", "鼻子", "嘴唇", "下巴", "額頭"]
+  const smallCategory = [
+    "美容項目01",
+    "美容項目02",
+    "美容項目03",
+    "美容項目04",
+    "美容項目05",
+    "美容項目06",
+    "美容項目07",
+    "美容項目08",
+    "美容項目09",
+    "美容項目10",
+    "美容項目11",
+  ]
 
   return (
     <>
@@ -31,9 +53,7 @@ const SystemSettings = () => {
               <div className="text-lg pb-4">大分類</div>
               <List>
                 {bigCategory.map((item, index) => (
-                  <List.Item key={index}>
-                    {item}
-                  </List.Item>
+                  <List.Item key={index}>{item}</List.Item>
                 ))}
               </List>
             </div>
@@ -41,28 +61,24 @@ const SystemSettings = () => {
               <div className="text-lg pb-4">中分類</div>
               <List>
                 {midCategory.map((item, index) => (
-                  <List.Item key={index}>
-                    {item}
-                  </List.Item>
+                  <List.Item key={index}>{item}</List.Item>
                 ))}
               </List>
               <div className="flex items-center mt-4">
                 <Form.Input type="text" className="mr-4" />
-                <Button >新增</Button>
+                <Button>新增</Button>
               </div>
             </div>
             <div className="flex-auto p-4 w-2/6">
               <div className="text-lg pb-4">小分類</div>
               <List>
                 {smallCategory.map((item, index) => (
-                  <List.Item key={index}>
-                    {item}
-                  </List.Item>
+                  <List.Item key={index}>{item}</List.Item>
                 ))}
               </List>
               <div className="flex items-center mt-4">
                 <Form.Input type="text" className="mr-4" />
-                <Button >新增</Button>
+                <Button>新增</Button>
               </div>
             </div>
           </div>
@@ -70,7 +86,9 @@ const SystemSettings = () => {
       </Card>
       <Card>
         <Card.Header title="熱門關鍵字設定">
-          <Button variant="secondary" onClick={() => setKeywordOpen(true)}>新增</Button>
+          <Button variant="secondary" onClick={() => setKeywordOpen(true)}>
+            新增
+          </Button>
         </Card.Header>
         <Card.Body>
           <KeywordTable />
@@ -79,9 +97,10 @@ const SystemSettings = () => {
             open={keywordOpen}
             confirmText="新增"
             cancelText="取消"
-            onConfirm={() => { console.log("onConfirm") }}
-            onClose={() => setKeywordOpen(false)}
-          >
+            onConfirm={() => {
+              console.log("onConfirm")
+            }}
+            onClose={() => setKeywordOpen(false)}>
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label required>關鍵詞</Form.Label>
@@ -92,7 +111,7 @@ const SystemSettings = () => {
         </Card.Body>
       </Card>
       <Card>
-        <Card.Header title="會員列表"/>
+        <Card.Header title="會員列表" />
         <Card.Body>
           <MemberTable />
         </Card.Body>

@@ -1,32 +1,34 @@
-import { useState } from 'react'
-import { Table, Pagination } from 'rsuite';
+import { useState } from "react"
+import { Table, Pagination } from "rsuite"
 import { LinkButton } from "components/Button"
 import Modal from "components/Modal"
 import Form from "components/Form"
 
 const fakeData = [
   {
-    "id": 1,
-    "account": "減齡回春計畫",
-  }, {
-    "id": 2,
-    "account": "金藝珍臉部拉提計畫",
-  }, {
-    "id": 3,
-    "account": "白冰冰瘦臉計畫",
+    id: 1,
+    account: "減齡回春計畫",
+  },
+  {
+    id: 2,
+    account: "金藝珍臉部拉提計畫",
+  },
+  {
+    id: 3,
+    account: "白冰冰瘦臉計畫",
   },
 ]
 
 const KeywordTable = () => {
   const { Column, HeaderCell, Cell } = Table
-  const [open, setOpen] = useState(false);
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [open, setOpen] = useState(false)
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
 
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
 
   return (
     <>
@@ -34,9 +36,8 @@ const KeywordTable = () => {
         height={400}
         data={fakeData}
         onRowClick={data => {
-          console.log(data);
-        }}
-      >
+          console.log(data)
+        }}>
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
           <Cell dataKey="id" />
@@ -52,13 +53,13 @@ const KeywordTable = () => {
           <Cell>
             {rowData => {
               function handleAction() {
-                alert(`id:${rowData.id}`);
+                alert(`id:${rowData.id}`)
               }
               return (
                 <>
                   <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </>
-              );
+              )
             }}
           </Cell>
         </Column>
@@ -73,7 +74,7 @@ const KeywordTable = () => {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['-', 'limit', '|', 'pager', 'skip']}
+        layout={["-", "limit", "|", "pager", "skip"]}
         total={fakeData.length}
         limitOptions={[10, 20]}
         limit={limit}
@@ -86,9 +87,10 @@ const KeywordTable = () => {
         open={open}
         confirmText="儲存"
         cancelText="取消"
-        onConfirm={() => { console.log("onConfirm") }}
-        onClose={() => setOpen(false)}
-      >
+        onConfirm={() => {
+          console.log("onConfirm")
+        }}
+        onClose={() => setOpen(false)}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label required>帳號</Form.Label>

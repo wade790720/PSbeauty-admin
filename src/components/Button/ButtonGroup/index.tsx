@@ -12,7 +12,7 @@ export type ButtonGroupProps = {
    */
   onSelect?: (
     e: React.MouseEvent<Element, MouseEvent>,
-    { eventKey }: { eventKey?: & ReactProps.EventKey },
+    { eventKey }: { eventKey?: ReactProps.EventKey },
   ) => void
 } & ReactProps.Component
 

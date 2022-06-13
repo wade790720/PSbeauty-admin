@@ -1,5 +1,5 @@
-import cx from "classnames";
-import styled from "./ModalDialog.module.scss";
+import cx from "classnames"
+import styled from "./ModalDialog.module.scss"
 
 export type ModalDialogProps = ReactProps.Component
 
@@ -8,7 +8,7 @@ const ModalDialog = (props: ModalDialogProps) => {
     <div className={cx(styled.wrapper, props.className)} style={props.style}>
       {props.children}
     </div>
-  );
-};
+  )
+}
 
-export default ModalDialog;
+export default ModalDialog

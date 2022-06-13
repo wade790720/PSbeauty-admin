@@ -1,5 +1,5 @@
-import styled from './List.module.scss'
-import cx from 'classnames'
+import styled from "./List.module.scss"
+import cx from "classnames"
 
 export type ItemProps = {
   onClick?: React.MouseEventHandler<HTMLElement>

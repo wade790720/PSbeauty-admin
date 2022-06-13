@@ -6,8 +6,12 @@ import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import { FileType, FileElementResponse } from "types"
 import { GetHomeQuery } from "../Home.graphql.generated"
+import { storage } from "firebaseConfig"
+import { FileType } from "rsuite/Uploader"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+
+import { useAddAdCardMutation } from "../Home.graphql.generated"
 
 type AdListCardProps = {
   data: GetHomeQuery["adCards"]
@@ -20,6 +24,7 @@ type Card = {
   content: string
   image: string
 }
+const MAX_FILE_SIZE = 1000 * 1024 * 5
 
 const AdListCard = ({ data }: AdListCardProps) => {
   const { Column, HeaderCell, Cell } = Table
@@ -28,20 +33,14 @@ const AdListCard = ({ data }: AdListCardProps) => {
   const [reviewOpen, setReviewOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
-  const [postList, setPostList] = useState<FileType[]>([])
+  const [fileList, setFileList] = useState<FileType[]>([])
   const activeCard = useRef<Card | null>(null)
-
-  const [result, setResult] = useState<string>()
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
-  }
-
-  const uploadedFile = (response: object) => {
-    const file = response as FileElementResponse
-    setResult(file.url)
-  }
+  const [newPost, setNewPost] = useState({
+    title: "",
+    content: "",
+    image: "",
+  })
+  const [addAdCardMutation] = useAddAdCardMutation()
 
   const adCardsList = useMemo(() => {
     if (!data?.edges) return []
@@ -54,6 +53,43 @@ const AdListCard = ({ data }: AdListCardProps) => {
       image: card.node?.image || "",
     }))
   }, [data?.edges])
+
+  const handleChangeLimit = (dataKey: number) => {
+    setPage(1)
+    setLimit(dataKey)
+  }
+
+  const onChange = (fileList: FileType[]) => {
+    const fileToUpload = fileList[0].blobFile as Blob
+    const fileName = fileList[0].name
+    const newRef = ref(storage, `images/${fileName}`)
+    const uploadTask = uploadBytesResumable(newRef, fileToUpload)
+    setFileList(fileList)
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        console.log(snapshot.bytesTransferred)
+      },
+      err => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          setNewPost({ ...newPost, image: url + "" })
+        })
+      },
+    )
+  }
+
+  const create = () => {
+    console.log(newPost)
+    addAdCardMutation({
+      variables: {
+        image: newPost.image,
+        title: newPost.title,
+        content: newPost.content,
+      },
+    })
+  }
 
   return (
     <Card>
@@ -133,23 +169,18 @@ const AdListCard = ({ data }: AdListCardProps) => {
           open={open}
           confirmText="建立"
           cancelText="取消"
-          onConfirm={() => {
-            console.log("onConfirm")
-          }}
+          onConfirm={create}
           onClose={() => setOpen(false)}>
           <Form>
             <Form.Group layout="vertical">
-              {/* <Form.Label required>預覽圖</Form.Label> */}
+              <Form.Label required>預覽圖</Form.Label>
               <Uploader
                 listType="picture"
                 action=""
-                fileList={postList}
+                fileList={fileList}
                 autoUpload={false}
-                disabled={postList.length > 0}
-                onChange={(fileList: FileType[]) => {
-                  console.log(fileList)
-                  setPostList(fileList)
-                }}>
+                disabled={fileList.length > 0}
+                onChange={onChange}>
                 <button>
                   <CameraRetro />
                 </button>
@@ -157,13 +188,16 @@ const AdListCard = ({ data }: AdListCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" />
+              <Form.Input
+                type="text"
+                onChange={e => setNewPost({ ...newPost, title: e.target.value + "" })}
+              />
             </Form.Group>
             <Form.Group layout="vertical" style={{ height: "200px" }}>
               <Form.Label required>內容</Form.Label>
               <Editor
                 onEdit={newValue => {
-                  console.log(newValue)
+                  setNewPost({ ...newPost, content: newValue + "" })
                 }}
               />
             </Form.Group>

@@ -1,22 +1,15 @@
-import Popup from "reactjs-popup";
-import { PopupProps } from "reactjs-popup/dist/types";
+import Popup from "reactjs-popup"
+import { PopupProps } from "reactjs-popup/dist/types"
 
 export type ModalPopupProps = {
   /**
    * Should the modal appear on screen or not
    */
-  open?: boolean;
-  backdrop?: boolean;
-} & Partial<
-  Pick<PopupProps, "open" | "closeOnDocumentClick" | "onClose" | "children">
->;
+  open?: boolean
+  backdrop?: boolean
+} & Partial<Pick<PopupProps, "open" | "closeOnDocumentClick" | "onClose" | "children">>
 
-const ModalPopup = ({
-  open = false,
-  backdrop = true,
-  ...props
-}: ModalPopupProps) => {
-
+const ModalPopup = ({ open = false, backdrop = true, ...props }: ModalPopupProps) => {
   return (
     <Popup
       modal
@@ -33,11 +26,10 @@ const ModalPopup = ({
       }}
       overlayStyle={{
         backgroundColor: "#091e428a",
-      }}
-    >
+      }}>
       {props.children}
     </Popup>
-  );
-};
+  )
+}
 
-export default ModalPopup;
+export default ModalPopup

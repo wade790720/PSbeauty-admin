@@ -3,11 +3,11 @@ import cx from "classnames"
 import styled from "./Button.module.scss"
 
 const VARIANT = {
-  PRIMARY: 'primary',
-  SECONDARY: 'secondary',
-  IMPORTANT: 'important',
-  TEXT: 'text'
-} as const;
+  PRIMARY: "primary",
+  SECONDARY: "secondary",
+  IMPORTANT: "important",
+  TEXT: "text",
+} as const
 
 export type ButtonProps = {
   /**

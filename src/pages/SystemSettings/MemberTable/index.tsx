@@ -1,24 +1,24 @@
-import { useState } from 'react'
-import { Table, Pagination } from 'rsuite';
+import { useState } from "react"
+import { Table, Pagination } from "rsuite"
 import { LinkButton } from "components/Button"
 
 const fakeData = [
   {
-    "id": 1,
-    "account": "WadeZhu",
-    "email": "wade790720@gmail.com",
+    id: 1,
+    account: "WadeZhu",
+    email: "wade790720@gmail.com",
   },
 ]
 
 const MemberTable = () => {
   const { Column, HeaderCell, Cell } = Table
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
+
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
 
   return (
     <>
@@ -26,9 +26,8 @@ const MemberTable = () => {
         height={400}
         data={fakeData}
         onRowClick={data => {
-          console.log(data);
-        }}
-      >
+          console.log(data)
+        }}>
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
           <Cell dataKey="id" />
@@ -49,13 +48,13 @@ const MemberTable = () => {
           <Cell>
             {rowData => {
               function handleAction() {
-                alert(`id:${rowData.id}`);
+                alert(`id:${rowData.id}`)
               }
               return (
                 <span>
                   <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
-              );
+              )
             }}
           </Cell>
         </Column>
@@ -70,7 +69,7 @@ const MemberTable = () => {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['-', 'limit', '|', 'pager', 'skip']}
+        layout={["-", "limit", "|", "pager", "skip"]}
         total={fakeData.length}
         limitOptions={[10, 20]}
         limit={limit}

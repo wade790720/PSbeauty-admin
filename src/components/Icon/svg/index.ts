@@ -15,23 +15,26 @@ import { ReactComponent as Clock } from "./Clock.svg"
 import { ReactComponent as Plus } from "./Plus.svg"
 import { ReactComponent as Trash } from "./Trash.svg"
 
-const Image = Object.assign({}, {
-  Group,
-  Information,
-  Search,
-  ArrowUp,
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  Cross,
-  Calendar,
-  UpTriangle,
-  DownTriangle,
-  Dash,
-  Shortcut,
-  Clock,
-  Plus,
-  Trash,
-})
+const Image = Object.assign(
+  {},
+  {
+    Group,
+    Information,
+    Search,
+    ArrowUp,
+    ArrowDown,
+    ArrowLeft,
+    ArrowRight,
+    Cross,
+    Calendar,
+    UpTriangle,
+    DownTriangle,
+    Dash,
+    Shortcut,
+    Clock,
+    Plus,
+    Trash,
+  },
+)
 
 export default Image
