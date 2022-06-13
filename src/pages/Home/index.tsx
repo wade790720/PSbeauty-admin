@@ -12,13 +12,13 @@ import AdListCard from "./AdListCard"
 import { SortEnumType } from "types/schema"
 import QueryStatus from "components/QueryStatus"
 
-import { useGetHomeQueryQuery } from "./Home.graphql.generated"
+import { useGetHomeQuery } from "./Home.graphql.generated"
 
 const Home = () => {
   const [carouselList, setCarouselList] = useState<FileType[]>([])
   const [openCarousel, setOpenCarousel] = useState(false)
 
-  const { data, loading, error } = useGetHomeQueryQuery({
+  const { data, loading, error } = useGetHomeQuery({
     variables: {
       adCardsFirst: 5,
       adCardsOrderId: SortEnumType.Desc,
@@ -62,7 +62,9 @@ const Home = () => {
             <Form.Label>預覽圖 (700 x 800px)</Form.Label>
             <Uploader
               listType="picture"
-              action="//jsonplaceholder.typicode.com/posts/"
+              action=""
+              fileList={carouselList}
+              autoUpload={false}
               disabled={carouselList.length > 0}
               onChange={(fileList: FileType[]) => {
                 setCarouselList(fileList)

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react"
 import ClinicTable from "./ClinicTable"
 import Button from "components/Button"
 import Form from "components/Form"
@@ -7,15 +7,15 @@ import Modal from "components/Modal"
 import Layout from "components/Layout"
 import Editor from "components/Editor"
 import CarouselTable from "components/CarouselTable"
-import { Uploader, CheckTreePicker } from 'rsuite';
-import CameraRetro from '@rsuite/icons/legacy/CameraRetro';
-import { FileType } from "types";
-import data from './category.json';
+import { Uploader, CheckTreePicker } from "rsuite"
+import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
+import { FileType } from "types"
+import data from "./category.json"
 
 const CosmeticClinic = () => {
   const [open, setOpen] = useState(false)
   const [openCarousel, setOpenCarousel] = useState(false)
-  const [carouselList, setCarouselList] = useState<FileType[]>([]);
+  const [carouselList, setCarouselList] = useState<FileType[]>([])
 
   return (
     <>
@@ -23,16 +23,17 @@ const CosmeticClinic = () => {
         <Layout.Breadcrumbs.Item>診所</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <Card>
-        <Card.Header title="診所" >
-          <Button variant="secondary" onClick={() => setOpen(true)}>新增診所</Button>
+        <Card.Header title="診所">
+          <Button variant="secondary" onClick={() => setOpen(true)}>
+            新增診所
+          </Button>
           <Modal
             title="新增診所"
             open={open}
             confirmText="新增"
             cancelText="取消"
-            onClose={() => setOpen(false)}
-          >
-            <div className="px-5 mb-5" style={{ overflow: 'auto', height: '500px' }}>
+            onClose={() => setOpen(false)}>
+            <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
               <Form>
                 <Form.Group layout="vertical">
                   <Form.Label required>診所名稱</Form.Label>
@@ -49,9 +50,19 @@ const CosmeticClinic = () => {
                 <Form.Group layout="vertical">
                   <Form.Label>完整地址</Form.Label>
                   <div className="inline-flex w-full">
-                    <Form.Input type="text" placeholder='縣市' className="mr-4" style={{ flex: "1 1 300px" }} />
-                    <Form.Input type="text" placeholder='地區' className="mr-4" style={{ flex: "1 1 300px" }} />
-                    <Form.Input type="text" placeholder='地址' />
+                    <Form.Input
+                      type="text"
+                      placeholder="縣市"
+                      className="mr-4"
+                      style={{ flex: "1 1 300px" }}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="地區"
+                      className="mr-4"
+                      style={{ flex: "1 1 300px" }}
+                    />
+                    <Form.Input type="text" placeholder="地址" />
                   </div>
                 </Form.Group>
                 <Form.Group layout="vertical">
@@ -64,7 +75,11 @@ const CosmeticClinic = () => {
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>診所介紹</Form.Label>
-                  <Editor onEdit={(newValue) => { console.log(newValue) }}/>
+                  <Editor
+                    onEdit={newValue => {
+                      console.log(newValue)
+                    }}
+                  />
                 </Form.Group>
               </Form>
             </div>
@@ -76,15 +91,18 @@ const CosmeticClinic = () => {
       </Card>
       <Card>
         <Card.Header title="輪播">
-          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>新增</Button>
+          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>
+            新增
+          </Button>
           <Modal
             title="新增輪播圖"
             open={openCarousel}
             confirmText="新增"
             cancelText="取消"
-            onConfirm={() => { console.log("onConfirm") }}
-            onClose={() => setOpenCarousel(false)}
-          >
+            onConfirm={() => {
+              console.log("onConfirm")
+            }}
+            onClose={() => setOpenCarousel(false)}>
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (350 x 135px)</Form.Label>
@@ -115,7 +133,6 @@ const CosmeticClinic = () => {
           <CarouselTable />
         </Card.Body>
       </Card>
-
     </>
   )
 }

@@ -7,10 +7,10 @@ import Modal from "components/Modal"
 import Editor from "components/Editor"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import { FileType, FileElementResponse } from "types"
-import { GetHomeQueryQuery } from "../Home.graphql.generated"
+import { GetHomeQuery } from "../Home.graphql.generated"
 
 type AdListCardProps = {
-  data: GetHomeQueryQuery["adCards"]
+  data: GetHomeQuery["adCards"]
 }
 
 type Card = {
@@ -141,9 +141,11 @@ const AdListCard = ({ data }: AdListCardProps) => {
             <Form.Group layout="vertical">
               {/* <Form.Label required>預覽圖</Form.Label> */}
               <Uploader
+                listType="picture"
+                action=""
+                fileList={postList}
+                autoUpload={false}
                 disabled={postList.length > 0}
-                onSuccess={uploadedFile}
-                action="//jsonplaceholder.typicode.com/posts/"
                 onChange={(fileList: FileType[]) => {
                   console.log(fileList)
                   setPostList(fileList)

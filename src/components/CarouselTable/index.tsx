@@ -1,31 +1,31 @@
-import { useState } from 'react'
+import { useState } from "react"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import { LinkButton } from "components/Button"
-import { Table, Pagination, Toggle } from 'rsuite';
+import { Table, Pagination, Toggle } from "rsuite"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
 
 const fakeData = [
   {
-    "id": 1,
-    "status": "open",
-    "title": "測試輪播",
-    "url": "/home",
-    "createTime": "2022-04-18",
+    id: 1,
+    status: "open",
+    title: "測試輪播",
+    url: "/home",
+    createTime: "2022-04-18",
   },
 ]
 
 const CarouselTable = () => {
   const { Column, HeaderCell, Cell } = Table
 
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10)
+  const [page, setPage] = useState(1)
   const [open, setOpen] = useState(false)
 
   const handleChangeLimit = (dataKey: number) => {
-    setPage(1);
-    setLimit(dataKey);
-  };
+    setPage(1)
+    setLimit(dataKey)
+  }
 
   return (
     <>
@@ -33,9 +33,8 @@ const CarouselTable = () => {
         height={400}
         data={fakeData}
         onRowClick={data => {
-          console.log(data);
-        }}
-      >
+          console.log(data)
+        }}>
         <Column width={70} align="center" fixed>
           <HeaderCell>序號</HeaderCell>
           <Cell dataKey="id" />
@@ -65,13 +64,14 @@ const CarouselTable = () => {
           <Cell>
             {rowData => {
               function handleAction() {
-                alert(`id:${rowData.id}`);
+                alert(`id:${rowData.id}`)
               }
               return (
                 <span>
-                  <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                  <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> |{" "}
+                  <LinkButton onClick={handleAction}> 刪除 </LinkButton>
                 </span>
-              );
+              )
             }}
           </Cell>
         </Column>
@@ -86,7 +86,7 @@ const CarouselTable = () => {
         boundaryLinks
         maxButtons={5}
         size="xs"
-        layout={['-', 'limit', '|', 'pager', 'skip']}
+        layout={["-", "limit", "|", "pager", "skip"]}
         total={fakeData.length}
         limitOptions={[10, 20]}
         limit={limit}
@@ -99,13 +99,16 @@ const CarouselTable = () => {
         open={open}
         confirmText="儲存"
         cancelText="取消"
-        onConfirm={() => { console.log("onConfirm") }}
-        onClose={() => setOpen(false)}
-      >
+        onConfirm={() => {
+          console.log("onConfirm")
+        }}
+        onClose={() => setOpen(false)}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>預覽圖</Form.Label>
-            <DefaultPhoto style={{ width: '350px', height: '135px', border: '1px solid #e4e6ef' }} />
+            <DefaultPhoto
+              style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
+            />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>標題</Form.Label>
