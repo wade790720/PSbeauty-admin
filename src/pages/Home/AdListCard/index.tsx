@@ -10,8 +10,8 @@ import { GetHomeQuery } from "../Home.graphql.generated"
 import { storage } from "firebaseConfig"
 import { FileType } from "rsuite/Uploader"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-
 import { useAddAdCardMutation } from "../Home.graphql.generated"
+import uuid from "utils/uuid"
 
 type AdListCardProps = {
   data: GetHomeQuery["adCards"]
@@ -60,10 +60,10 @@ const AdListCard = ({ data }: AdListCardProps) => {
   }
 
   const onChange = (fileList: FileType[]) => {
-    const fileToUpload = fileList[0].blobFile as Blob
-    const fileName = fileList[0].name
-    const newRef = ref(storage, `images/${fileName}`)
-    const uploadTask = uploadBytesResumable(newRef, fileToUpload)
+    const fileToUpload = fileList[0].blobFile
+    const fileName = fileList[0].name || ""
+    const newRef = ref(storage, `image/${uuid()}/${fileName}`)
+    const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
     setFileList(fileList)
 
     uploadTask.on(
@@ -82,6 +82,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
 
   const create = () => {
     console.log(newPost)
+
     addAdCardMutation({
       variables: {
         image: newPost.image,
