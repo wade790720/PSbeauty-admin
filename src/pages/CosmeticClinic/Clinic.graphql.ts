@@ -1,7 +1,13 @@
 import { gql } from "@apollo/client"
 
 export const GetClinic = gql`
-  query GetClinic($clinicFirst: Int, $clinicOrderId: SortEnumType) {
+  query GetClinic(
+    $clinicFirst: Int
+    $clinicOrderId: SortEnumType
+    $adImagesFirst: Int
+    $adImagesOrderId: SortEnumType
+    $adImagesWhere: String
+  ) {
     clinics(order: { id: $clinicOrderId }, first: $clinicFirst) {
       totalCount
       pageInfo {
@@ -20,6 +26,30 @@ export const GetClinic = gql`
           address
           name
           id
+        }
+      }
+    }
+    adImages(
+      where: { usageType: { eq: $adImagesWhere } }
+      order: { id: $adImagesOrderId }
+      first: $adImagesFirst
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          image
+          sort
+          usageType
+          redirectType
+          targetId
+          status
         }
       }
     }
@@ -57,6 +87,21 @@ export const DeleteClinic = gql`
   mutation DeleteClinic($id: String) {
     deleteClinic(input: { id: $id }) {
       id
+    }
+  }
+`
+
+export const GetCategories = gql`
+  query GetCategories {
+    topCategories {
+      name
+      secondCategories {
+        name
+        categories {
+          id
+          name
+        }
+      }
     }
   }
 `

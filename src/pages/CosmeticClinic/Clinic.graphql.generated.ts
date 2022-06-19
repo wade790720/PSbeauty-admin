@@ -6,6 +6,9 @@ const defaultOptions = {} as const
 export type GetClinicQueryVariables = Types.Exact<{
   clinicFirst: Types.InputMaybe<Types.Scalars["Int"]>
   clinicOrderId: Types.InputMaybe<Types.SortEnumType>
+  adImagesFirst: Types.InputMaybe<Types.Scalars["Int"]>
+  adImagesOrderId: Types.InputMaybe<Types.SortEnumType>
+  adImagesWhere: Types.InputMaybe<Types.Scalars["String"]>
 }>
 
 export type GetClinicQuery = {
@@ -24,13 +27,37 @@ export type GetClinicQuery = {
       cursor: string
       node: {
         __typename: "Clinic"
-        consultReplyCount: any
-        caseCount: any
+        consultReplyCount: number
+        caseCount: number
         county: string | null
         town: string | null
         address: string | null
         name: string | null
         id: string | null
+      } | null
+    }> | null
+  } | null
+  adImages: {
+    __typename: "AdImagesConnection"
+    pageInfo: {
+      __typename: "PageInfo"
+      hasNextPage: boolean
+      hasPreviousPage: boolean
+      startCursor: string | null
+      endCursor: string | null
+    }
+    edges: Array<{
+      __typename: "AdImagesEdge"
+      cursor: string
+      node: {
+        __typename: "AdImage"
+        id: string | null
+        image: string | null
+        sort: number
+        usageType: string | null
+        redirectType: string | null
+        targetId: string | null
+        status: boolean
       } | null
     }> | null
   } | null
@@ -61,8 +88,32 @@ export type DeleteClinicMutation = {
   deleteClinic: { __typename: "DeleteClinicPayload"; id: string | null } | null
 }
 
+export type GetCategoriesQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetCategoriesQuery = {
+  topCategories: Array<{
+    __typename: "TopCategory"
+    name: string | null
+    secondCategories: Array<{
+      __typename: "MiddleCategory"
+      name: string | null
+      categories: Array<{
+        __typename: "Category"
+        id: string | null
+        name: string | null
+      } | null> | null
+    } | null> | null
+  } | null> | null
+}
+
 export const GetClinicDocument = gql`
-  query GetClinic($clinicFirst: Int, $clinicOrderId: SortEnumType) {
+  query GetClinic(
+    $clinicFirst: Int
+    $clinicOrderId: SortEnumType
+    $adImagesFirst: Int
+    $adImagesOrderId: SortEnumType
+    $adImagesWhere: String
+  ) {
     clinics(order: { id: $clinicOrderId }, first: $clinicFirst) {
       totalCount
       pageInfo {
@@ -84,6 +135,30 @@ export const GetClinicDocument = gql`
         }
       }
     }
+    adImages(
+      where: { usageType: { eq: $adImagesWhere } }
+      order: { id: $adImagesOrderId }
+      first: $adImagesFirst
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          image
+          sort
+          usageType
+          redirectType
+          targetId
+          status
+        }
+      }
+    }
   }
 `
 
@@ -101,6 +176,9 @@ export const GetClinicDocument = gql`
  *   variables: {
  *      clinicFirst: // value for 'clinicFirst'
  *      clinicOrderId: // value for 'clinicOrderId'
+ *      adImagesFirst: // value for 'adImagesFirst'
+ *      adImagesOrderId: // value for 'adImagesOrderId'
+ *      adImagesWhere: // value for 'adImagesWhere'
  *   },
  * });
  */
@@ -233,4 +311,58 @@ export type DeleteClinicMutationResult = Apollo.MutationResult<DeleteClinicMutat
 export type DeleteClinicMutationOptions = Apollo.BaseMutationOptions<
   DeleteClinicMutation,
   DeleteClinicMutationVariables
+>
+export const GetCategoriesDocument = gql`
+  query GetCategories {
+    topCategories {
+      name
+      secondCategories {
+        name
+        categories {
+          id
+          name
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(
+    GetCategoriesDocument,
+    options,
+  )
+}
+export function useGetCategoriesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(
+    GetCategoriesDocument,
+    options,
+  )
+}
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>
+export type GetCategoriesQueryResult = Apollo.QueryResult<
+  GetCategoriesQuery,
+  GetCategoriesQueryVariables
 >

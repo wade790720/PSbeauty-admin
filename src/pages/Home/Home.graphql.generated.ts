@@ -53,6 +53,8 @@ export type GetHomeQuery = {
         usageType: string | null
         redirectType: string | null
         targetId: string | null
+        status: boolean
+        title: string | null
       } | null
     }> | null
   } | null
@@ -121,6 +123,8 @@ export const GetHomeDocument = gql`
           usageType
           redirectType
           targetId
+          status
+          title
         }
       }
     }

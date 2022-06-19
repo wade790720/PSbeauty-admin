@@ -18,6 +18,7 @@ generates:
     plugins:
       - typescript-operations
       - typescript-react-apollo
+
 config:
   avoidOptionals: true 
   nonOptionalTypename: true
@@ -25,11 +26,7 @@ config:
   withHooks: true
   preResolveTypes: true
   scalars:
-    Date: number
-    DateTime: number
-    Decimal: number
-    JSONString: string
-    JSONStringUTF8: string
+    Long: number
 overwrite: true
 hooks:
   afterAllFileWrite:

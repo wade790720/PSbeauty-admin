@@ -1,6 +1,6 @@
 import React from "react"
-import ReactDOM from "react-dom"
 import { ModalProps } from "./Modal"
+import { createRoot } from "react-dom/client"
 
 export const getPopupRoot = () => {
   let popupRoot = document.getElementById("popup-root")
@@ -36,7 +36,8 @@ export function open(Modal: React.FC<ModalProps>, config: ModalProps) {
   }
 
   function render(config: ModalProps) {
-    ReactDOM.render(<Modal {...bindClose(config)} />, modalDiv)
+    const root = createRoot(modalDiv)
+    root.render(<Modal {...bindClose(config)} />)
   }
 
   function update(newConfig: ModalProps) {

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react"
+import { useState, useRef } from "react"
 import Button, { LinkButton } from "components/Button"
 import { Table, Pagination, Uploader } from "rsuite"
 import Card from "components/Card"
@@ -6,11 +6,14 @@ import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import { GetHomeQuery } from "../Home.graphql.generated"
-import { storage } from "firebaseConfig"
+import { storage } from "../../../firebase"
 import { FileType } from "rsuite/Uploader"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import { useAddAdCardMutation } from "../Home.graphql.generated"
+import {
+  GetHomeQuery,
+  useAddAdCardMutation,
+  useDeleteAdCardMutation,
+} from "../Home.graphql.generated"
 import uuid from "utils/uuid"
 
 type AdListCardProps = {
@@ -24,7 +27,6 @@ type Card = {
   content: string
   image: string
 }
-const MAX_FILE_SIZE = 1000 * 1024 * 5
 
 const AdListCard = ({ data }: AdListCardProps) => {
   const { Column, HeaderCell, Cell } = Table
@@ -40,9 +42,8 @@ const AdListCard = ({ data }: AdListCardProps) => {
     content: "",
     image: "",
   })
-  const [addAdCardMutation] = useAddAdCardMutation()
 
-  const adCardsList = useMemo(() => {
+  const [adCardsList, setAdCardsList] = useState(() => {
     if (!data?.edges) return []
 
     return data?.edges?.map((card, index) => ({
@@ -52,14 +53,35 @@ const AdListCard = ({ data }: AdListCardProps) => {
       content: card.node?.content || "",
       image: card.node?.image || "",
     }))
-  }, [data?.edges])
+  })
+
+  const [addAdCardMutation] = useAddAdCardMutation({
+    onCompleted: data => {
+      setAdCardsList([
+        ...adCardsList,
+        {
+          index: adCardsList[adCardsList.length - 1].index + 1,
+          id: data.addAdCard?.id || "",
+          title: newPost.title || "",
+          content: newPost.content || "",
+          image: newPost.image || "",
+        },
+      ])
+    },
+  })
+
+  const [deleteAdCardMutation] = useDeleteAdCardMutation({
+    onCompleted: data => {
+      setAdCardsList(adCardsList.filter(card => card.id !== data.deleteAdCard?.id))
+    },
+  })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
   }
 
-  const onChange = (fileList: FileType[]) => {
+  const onChangeUploader = (fileList: FileType[]) => {
     const fileToUpload = fileList[0].blobFile
     const fileName = fileList[0].name || ""
     const newRef = ref(storage, `image/${uuid()}/${fileName}`)
@@ -81,8 +103,6 @@ const AdListCard = ({ data }: AdListCardProps) => {
   }
 
   const create = () => {
-    console.log(newPost)
-
     addAdCardMutation({
       variables: {
         image: newPost.image,
@@ -90,6 +110,16 @@ const AdListCard = ({ data }: AdListCardProps) => {
         content: newPost.content,
       },
     })
+  }
+
+  const handleDelete = (id: string) => {
+    const ask = confirm("確定要刪除嗎?")
+    if (ask)
+      deleteAdCardMutation({
+        variables: {
+          id,
+        },
+      })
   }
 
   return (
@@ -120,9 +150,6 @@ const AdListCard = ({ data }: AdListCardProps) => {
             <HeaderCell>動作</HeaderCell>
             <Cell>
               {rowData => {
-                function handleAction() {
-                  alert(`id:${rowData.id}`)
-                }
                 return (
                   <span>
                     <LinkButton
@@ -136,9 +163,9 @@ const AdListCard = ({ data }: AdListCardProps) => {
                           image: rowData.image,
                         }
                       }}>
-                      預覽圖
-                    </LinkButton>
-                    | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                      預覽
+                    </LinkButton>{" "}
+                    | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                   </span>
                 )
               }}
@@ -181,7 +208,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                 fileList={fileList}
                 autoUpload={false}
                 disabled={fileList.length > 0}
-                onChange={onChange}>
+                onChange={onChangeUploader}>
                 <button>
                   <CameraRetro />
                 </button>
@@ -228,7 +255,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
-              <div>{activeCard.current?.content}</div>
+              <div dangerouslySetInnerHTML={{ __html: activeCard.current?.content || "" }} />
             </Form.Group>
           </Form>
         </Modal>

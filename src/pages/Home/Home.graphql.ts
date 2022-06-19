@@ -45,6 +45,8 @@ export const GetHome = gql`
           usageType
           redirectType
           targetId
+          status
+          title
         }
       }
     }
