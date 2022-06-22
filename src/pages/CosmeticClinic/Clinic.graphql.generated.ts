@@ -101,6 +101,7 @@ export type GetCategoriesQuery = {
         __typename: "Category"
         id: string | null
         name: string | null
+        uniqueNumber: number
       } | null> | null
     } | null> | null
   } | null> | null
@@ -321,6 +322,7 @@ export const GetCategoriesDocument = gql`
         categories {
           id
           name
+          uniqueNumber
         }
       }
     }

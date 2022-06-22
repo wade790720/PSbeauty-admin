@@ -100,6 +100,7 @@ export const GetCategories = gql`
         categories {
           id
           name
+          uniqueNumber
         }
       }
     }

@@ -1,13 +1,16 @@
 import { useState, useMemo } from "react"
 import { useGo } from "components/Router"
-import { Table, Pagination } from "rsuite"
+import { Table, Pagination, CheckTreePicker } from "rsuite"
 import Button, { LinkButton } from "components/Button"
-import { GetClinicQuery, useGetCategoriesQuery } from "../Clinic.graphql.generated"
+import {
+  GetClinicQuery,
+  useGetCategoriesQuery,
+  useDeleteClinicMutation,
+} from "../Clinic.graphql.generated"
 import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import Editor from "components/Editor"
-import { CheckTreePicker } from "rsuite"
 
 type ClinicCardProps = {
   data: GetClinicQuery["clinics"]
@@ -21,7 +24,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const [open, setOpen] = useState(false)
   const categories = useGetCategoriesQuery()
 
-  const clinicList = useMemo(() => {
+  const [clinics, setClinics] = useState(() => {
     if (!data?.edges) return []
 
     return data?.edges?.map((clinic, index) => {
@@ -38,7 +41,13 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
         consultReplyCount: clinic.node?.consultReplyCount || 0,
       }
     })
-  }, [data?.edges])
+  })
+
+  const [deleteClinicMutation] = useDeleteClinicMutation({
+    onCompleted: data => {
+      setClinics(clinics.filter(clinic => clinic.id !== data.deleteClinic?.id))
+    },
+  })
 
   const options = useMemo(() => {
     if (!categories.data) return []
@@ -54,9 +63,9 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
             return {
               label: secondOption?.name,
               value: secondValue,
-              children: secondOption?.categories?.map((thirdOption, thirdIdx) => ({
+              children: secondOption?.categories?.map(thirdOption => ({
                 id: thirdOption?.id,
-                value: secondValue + thirdIdx + 1,
+                value: thirdOption?.uniqueNumber,
                 label: thirdOption?.name,
               })),
             }
@@ -70,6 +79,16 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
+  }
+
+  const handleDelete = (id: string) => {
+    const ask = confirm("確定要刪除嗎?")
+    if (ask)
+      deleteClinicMutation({
+        variables: {
+          id,
+        },
+      })
   }
 
   return (
@@ -138,7 +157,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
           </Modal>
         </Card.Header>
         <Card.Body>
-          <Table height={400} data={clinicList}>
+          <Table height={400} data={clinics}>
             <Column width={70} align="center" fixed>
               <HeaderCell>序號</HeaderCell>
               <Cell dataKey="index" />
@@ -168,15 +187,12 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
               <HeaderCell>動作</HeaderCell>
               <Cell>
                 {rowData => {
-                  function handleAction() {
-                    alert(`id:${rowData.id}`)
-                  }
                   return (
                     <span>
-                      <LinkButton onClick={() => go.toCosmeticClinicDetail({ id: "star-clinic" })}>
+                      <LinkButton onClick={() => go.toCosmeticClinicDetail({ id: rowData.id })}>
                         編輯
-                      </LinkButton>
-                      | <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                      </LinkButton>{" "}
+                      | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
                   )
                 }}
@@ -194,7 +210,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
             maxButtons={5}
             size="xs"
             layout={["-", "limit", "|", "pager", "skip"]}
-            total={clinicList.length}
+            total={clinics.length}
             limitOptions={[10, 20]}
             limit={limit}
             activePage={page}
