@@ -32,7 +32,7 @@ function App() {
   const Login = lazy(() => import("pages/Login"))
   const Home = lazy(() => import("pages/Home"))
   const CosmeticClinic = lazy(() => import("pages/CosmeticClinic"))
-  const CosmeticClinicDetail = lazy(() => import("pages/CosmeticClinicDetail"))
+  const CosmeticClinicDetail = lazy(() => import("pages/ClinicDetail"))
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
 
   return (

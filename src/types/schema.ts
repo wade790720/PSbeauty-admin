@@ -343,16 +343,10 @@ export type AddClinicInput = {
   county: InputMaybe<Scalars["String"]>
   /** 診所䢗述 */
   description: InputMaybe<Scalars["String"]>
-  /** 最後付費時間 */
-  latestPayAt: Scalars["Long"]
   /** 診所名稱 */
   name: InputMaybe<Scalars["String"]>
   /** 診所管理人電子郵件信箱 */
   ownerEmail: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  /** 是否已付費 */
-  paid: Scalars["Boolean"]
-  /** 付費組數 */
-  paySets: Scalars["Int"]
   /** 診所電話 */
   phone: InputMaybe<Scalars["String"]>
   /** 診所鄉鎮市區 */

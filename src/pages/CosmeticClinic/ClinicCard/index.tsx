@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react"
 import { useGo } from "components/Router"
-import { Table, Pagination, CheckTreePicker } from "rsuite"
+import { Table, Pagination, MultiCascader } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import {
   GetClinicQuery,
   useGetCategoriesQuery,
+  useAddClinicMutation,
   useDeleteClinicMutation,
 } from "../Clinic.graphql.generated"
 import Card from "components/Card"
@@ -24,6 +25,18 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const [open, setOpen] = useState(false)
   const categories = useGetCategoriesQuery()
 
+  const [newClinic, setNewClinic] = useState({
+    name: "",
+    email: "",
+    county: "",
+    town: "",
+    address: "",
+    web: "",
+    phone: "",
+    description: "",
+    categories: [""],
+  })
+
   const [clinics, setClinics] = useState(() => {
     if (!data?.edges) return []
 
@@ -41,6 +54,22 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
         consultReplyCount: clinic.node?.consultReplyCount || 0,
       }
     })
+  })
+
+  const [addClinicMutation] = useAddClinicMutation({
+    onCompleted: data => {
+      setClinics([
+        ...clinics,
+        {
+          index: clinics[clinics.length - 1].index + 1,
+          id: data.addClinic?.id || "",
+          name: newClinic.name,
+          address: newClinic.county + newClinic.town + newClinic.address,
+          caseCount: 0,
+          consultReplyCount: 0,
+        },
+      ])
+    },
   })
 
   const [deleteClinicMutation] = useDeleteClinicMutation({
@@ -65,7 +94,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
               value: secondValue,
               children: secondOption?.categories?.map(thirdOption => ({
                 id: thirdOption?.id,
-                value: thirdOption?.uniqueNumber,
+                value: thirdOption?.id || "",
                 label: thirdOption?.name,
               })),
             }
@@ -79,6 +108,21 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
+  }
+
+  const handleCreate = () => {
+    addClinicMutation({
+      variables: {
+        name: newClinic.name,
+        categories: newClinic.categories,
+        county: newClinic.county,
+        town: newClinic.town,
+        address: newClinic.address,
+        description: newClinic.description,
+        phone: newClinic.phone,
+        web: newClinic.web,
+      },
+    })
   }
 
   const handleDelete = (id: string) => {
@@ -103,20 +147,33 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
             open={open}
             confirmText="新增"
             cancelText="取消"
+            onConfirm={handleCreate}
             onClose={() => setOpen(false)}>
             <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
               <Form>
                 <Form.Group layout="vertical">
                   <Form.Label required>診所名稱</Form.Label>
-                  <Form.Input type="text" />
+                  <Form.Input
+                    type="text"
+                    onChange={e => setNewClinic({ ...newClinic, name: e.target.value + "" })}
+                  />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label required>大分類</Form.Label>
-                  <CheckTreePicker data={options || []} style={{ width: 280 }} />
+                  <MultiCascader
+                    data={options || []}
+                    style={{ width: 280 }}
+                    onChange={value => {
+                      setNewClinic({ ...newClinic, categories: value as string[] })
+                    }}
+                  />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label required>電子信箱</Form.Label>
-                  <Form.Input type="email" />
+                  <Form.Input
+                    type="email"
+                    onChange={e => setNewClinic({ ...newClinic, email: e.target.value + "" })}
+                  />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>完整地址</Form.Label>
@@ -126,29 +183,41 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
                       placeholder="縣市"
                       className="mr-4"
                       style={{ flex: "1 1 300px" }}
+                      onChange={e => setNewClinic({ ...newClinic, county: e.target.value + "" })}
                     />
                     <Form.Input
                       type="text"
                       placeholder="地區"
                       className="mr-4"
                       style={{ flex: "1 1 300px" }}
+                      onChange={e => setNewClinic({ ...newClinic, town: e.target.value + "" })}
                     />
-                    <Form.Input type="text" placeholder="地址" />
+                    <Form.Input
+                      type="text"
+                      placeholder="地址"
+                      onChange={e => setNewClinic({ ...newClinic, address: e.target.value + "" })}
+                    />
                   </div>
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>診所網址</Form.Label>
-                  <Form.Input type="url" />
+                  <Form.Input
+                    type="url"
+                    onChange={e => setNewClinic({ ...newClinic, web: e.target.value + "" })}
+                  />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>診所電話</Form.Label>
-                  <Form.Input type="tel" />
+                  <Form.Input
+                    type="tel"
+                    onChange={e => setNewClinic({ ...newClinic, phone: e.target.value + "" })}
+                  />
                 </Form.Group>
                 <Form.Group layout="vertical">
                   <Form.Label>診所介紹</Form.Label>
                   <Editor
                     onEdit={newValue => {
-                      console.log(newValue)
+                      setNewClinic({ ...newClinic, description: newValue + "" })
                     }}
                   />
                 </Form.Group>

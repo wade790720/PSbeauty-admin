@@ -14,6 +14,7 @@ const Editor = (props: EditorProps) => {
   return (
     <div className={styled.wrapper}>
       <TinyMceReactEditor
+        value={props.value}
         onInit={(_, editor) => {
           editorRef.current = editor
         }}
