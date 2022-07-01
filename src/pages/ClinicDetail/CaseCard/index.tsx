@@ -7,8 +7,15 @@ import Editor from "components/Editor"
 import { Table, Pagination, Uploader, MultiCascader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import { FileType } from "rsuite/Uploader"
-import data from "../category.json"
+import categoryData from "../category.json"
 import styled from "./CaseCard.module.scss"
+
+import { useMatch } from "react-router-dom"
+import { GetClinicQuery } from "../ClinicDetail.graphql.generated"
+
+type CaseCardProps = {
+  data: GetClinicQuery["caseByClinicId"]
+}
 
 const fakeData = [
   {
@@ -18,7 +25,7 @@ const fakeData = [
   },
 ]
 
-const CaseCard = () => {
+const CaseCard = ({ data }: CaseCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const [openCase, setOpenCase] = useState(false)
   const [carouselList, setCarouselList] = useState<FileType[]>([])
@@ -26,10 +33,26 @@ const CaseCard = () => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
 
+  const match = useMatch("/cms/cosmetic-clinic/:id")
+
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
   }
+
+  const [cases, setCases] = useState(() => {
+    return data
+      ? data.map((item, index) => ({
+          id: item?.id,
+          index: index + 1,
+          title: item?.title,
+          categories: (item?.categories || []).map(item => item?.name),
+          description: item?.description,
+          beforeImage: item?.beforeImage,
+          afterImage: item?.afterImage,
+        }))
+      : []
+  })
 
   return (
     <Card>
@@ -68,7 +91,7 @@ const CaseCard = () => {
             <Form.Group layout="vertical">
               <Form.Label required>分類</Form.Label>
               <MultiCascader
-                data={data}
+                data={categoryData}
                 searchable={false}
                 menuStyle={{ padding: "6px 0" }}
                 style={{ width: "100%" }}
@@ -109,7 +132,7 @@ const CaseCard = () => {
           }}>
           <Column width={70} align="center" fixed>
             <HeaderCell>序號</HeaderCell>
-            <Cell dataKey="id" />
+            <Cell dataKey="index" />
           </Column>
 
           <Column width={200} fixed>
@@ -119,7 +142,7 @@ const CaseCard = () => {
 
           <Column width={300} flexGrow={1}>
             <HeaderCell>分類</HeaderCell>
-            <Cell dataKey="category" />
+            <Cell dataKey="categories" />
           </Column>
 
           <Column width={120} fixed="right">
@@ -150,7 +173,7 @@ const CaseCard = () => {
           maxButtons={5}
           size="xs"
           layout={["-", "limit", "|", "pager", "skip"]}
-          total={fakeData.length}
+          total={cases.length}
           limitOptions={[10, 20]}
           limit={limit}
           activePage={page}
@@ -188,7 +211,7 @@ const CaseCard = () => {
             <Form.Group layout="vertical">
               <Form.Label required>分類</Form.Label>
               <MultiCascader
-                data={data}
+                data={categoryData}
                 searchable={false}
                 menuStyle={{ padding: "6px 0" }}
                 style={{ width: "100%" }}

@@ -24,6 +24,19 @@ export type GetClinicQuery = {
       name: string | null
     } | null> | null
   } | null
+  caseByClinicId: Array<{
+    __typename: "ClinicCase"
+    id: string | null
+    title: string | null
+    beforeImage: string | null
+    afterImage: string | null
+    description: string | null
+    categories: Array<{
+      __typename: "Category"
+      id: string | null
+      name: string | null
+    } | null> | null
+  } | null> | null
 }
 
 export type UpdateClinicMutationVariables = Types.Exact<{
@@ -54,6 +67,17 @@ export const GetClinicDocument = gql`
       town
       address
       web
+      description
+      categories {
+        id
+        name
+      }
+    }
+    caseByClinicId(clinicId: $id) {
+      id
+      title
+      beforeImage
+      afterImage
       description
       categories {
         id

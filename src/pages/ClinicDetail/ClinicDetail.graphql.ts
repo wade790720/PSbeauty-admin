@@ -16,6 +16,17 @@ export const GetClinic = gql`
         name
       }
     }
+    caseByClinicId(clinicId: $id) {
+      id
+      title
+      beforeImage
+      afterImage
+      description
+      categories {
+        id
+        name
+      }
+    }
   }
 `
 
