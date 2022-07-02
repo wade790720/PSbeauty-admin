@@ -3,15 +3,31 @@ import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
 
-const ContactCard = () => {
+import { GetClinicQuery, useUpdateClinicContactMutation } from "../ClinicDetail.graphql.generated"
+
+type ContactCardProps = {
+  id?: string
+  data: GetClinicQuery["myClinic"]
+}
+
+const ContactCard = ({ id, data }: ContactCardProps) => {
   const [contact, setContact] = useState({
-    name: "王院長",
-    phone: "02-2395-1167",
-    email: "test@gmail.com",
+    name: data?.contactName || "",
+    phone: data?.contactPhone || "",
+    email: data?.contactEmail || "",
   })
 
+  const [updateClinicContactMutation] = useUpdateClinicContactMutation()
+
   const handleSave = () => {
-    console.log(contact)
+    updateClinicContactMutation({
+      variables: {
+        id: id || "",
+        contactName: contact.name,
+        contactEmail: contact.email,
+        contactPhone: contact.phone,
+      },
+    })
   }
 
   const handleClear = () => {

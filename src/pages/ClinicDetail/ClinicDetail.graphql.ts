@@ -177,3 +177,23 @@ export const DeleteClinicImage = gql`
     }
   }
 `
+
+export const UpdateClinicContact = gql`
+  mutation UpdateClinicContact(
+    $id: String
+    $contactName: String
+    $contactEmail: String
+    $contactPhone: String
+  ) {
+    updateClinicContact(
+      input: {
+        id: $id
+        contactName: $contactName
+        contactEmail: $contactEmail
+        contactPhone: $contactPhone
+      }
+    ) {
+      id
+    }
+  }
+`

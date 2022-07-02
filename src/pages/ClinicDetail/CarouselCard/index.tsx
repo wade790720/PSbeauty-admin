@@ -8,8 +8,13 @@ import { FileType } from "types"
 import { Uploader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import CarouselTable from "components/CarouselTable"
+import { GetClinicQuery } from "../ClinicDetail.graphql.generated"
 
-const CarouselCard = () => {
+type CarouselCardProps = {
+  data: GetClinicQuery["clinicImages"]
+}
+
+const CarouselCard = ({ data }: CarouselCardProps) => {
   const [openCarousel, setOpenCarousel] = useState(false)
   const [carouselList, setCarouselList] = useState<FileType[]>([])
 

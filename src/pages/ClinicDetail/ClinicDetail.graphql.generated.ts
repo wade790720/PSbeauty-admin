@@ -145,6 +145,17 @@ export type DeleteClinicImageMutation = {
   deleteClinicImage: { __typename: "DeleteClinicImagePayload"; id: string | null } | null
 }
 
+export type UpdateClinicContactMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+  contactName: Types.InputMaybe<Types.Scalars["String"]>
+  contactEmail: Types.InputMaybe<Types.Scalars["String"]>
+  contactPhone: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type UpdateClinicContactMutation = {
+  updateClinicContact: { __typename: "UpdateClinicContactPayload"; id: string | null } | null
+}
+
 export const GetClinicDocument = gql`
   query GetClinic($id: String) {
     myClinic {
@@ -600,4 +611,68 @@ export type DeleteClinicImageMutationResult = Apollo.MutationResult<DeleteClinic
 export type DeleteClinicImageMutationOptions = Apollo.BaseMutationOptions<
   DeleteClinicImageMutation,
   DeleteClinicImageMutationVariables
+>
+export const UpdateClinicContactDocument = gql`
+  mutation UpdateClinicContact(
+    $id: String
+    $contactName: String
+    $contactEmail: String
+    $contactPhone: String
+  ) {
+    updateClinicContact(
+      input: {
+        id: $id
+        contactName: $contactName
+        contactEmail: $contactEmail
+        contactPhone: $contactPhone
+      }
+    ) {
+      id
+    }
+  }
+`
+export type UpdateClinicContactMutationFn = Apollo.MutationFunction<
+  UpdateClinicContactMutation,
+  UpdateClinicContactMutationVariables
+>
+
+/**
+ * __useUpdateClinicContactMutation__
+ *
+ * To run a mutation, you first call `useUpdateClinicContactMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClinicContactMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClinicContactMutation, { data, loading, error }] = useUpdateClinicContactMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      contactName: // value for 'contactName'
+ *      contactEmail: // value for 'contactEmail'
+ *      contactPhone: // value for 'contactPhone'
+ *   },
+ * });
+ */
+export function useUpdateClinicContactMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateClinicContactMutation,
+    UpdateClinicContactMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateClinicContactMutation, UpdateClinicContactMutationVariables>(
+    UpdateClinicContactDocument,
+    options,
+  )
+}
+export type UpdateClinicContactMutationHookResult = ReturnType<
+  typeof useUpdateClinicContactMutation
+>
+export type UpdateClinicContactMutationResult = Apollo.MutationResult<UpdateClinicContactMutation>
+export type UpdateClinicContactMutationOptions = Apollo.BaseMutationOptions<
+  UpdateClinicContactMutation,
+  UpdateClinicContactMutationVariables
 >

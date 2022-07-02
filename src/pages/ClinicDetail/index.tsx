@@ -28,8 +28,8 @@ const CosmeticClinicDetail = () => {
       {data && (
         <>
           <InfoCard data={data.clinic} />
-          <ContactCard />
-          <CarouselCard />
+          <ContactCard id={match?.params.id} data={data.myClinic} />
+          <CarouselCard data={data.clinicImages} />
           <CaseCard data={data.caseByClinicId} />
           <TeamCard />
         </>
