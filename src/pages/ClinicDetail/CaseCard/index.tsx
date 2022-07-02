@@ -30,7 +30,8 @@ type Case = {
 
 const CaseCard = ({ data }: CaseCardProps) => {
   const { Column, HeaderCell, Cell } = Table
-  const [openCase, setOpenCase] = useState(false)
+  const [openAdd, setOpenAdd] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
   const [carouselList, setCarouselList] = useState<FileType[]>([])
 
   const [page, setPage] = useState(1)
@@ -109,18 +110,18 @@ const CaseCard = ({ data }: CaseCardProps) => {
   return (
     <Card>
       <Card.Header title="案例列表">
-        <Button variant="secondary" onClick={() => setOpenCase(true)}>
+        <Button variant="secondary" onClick={() => setOpenAdd(true)}>
           新增
         </Button>
         <Modal
           title="新增案例"
-          open={openCase}
+          open={openAdd}
           confirmText="新增"
           cancelText="取消"
           onConfirm={() => {
             console.log("onConfirm")
           }}
-          onClose={() => setOpenCase(false)}>
+          onClose={() => setOpenAdd(false)}>
           <Form>
             <Form.Group layout="vertical">
               <Form.Label>預覽圖 (700 x 800px)</Form.Label>
@@ -205,7 +206,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
                   <span>
                     <LinkButton
                       onClick={() => {
-                        setOpenCase(true)
+                        setOpenEdit(true)
                         setEditCase({
                           id: rowData.id,
                           index: rowData.index,
@@ -257,13 +258,13 @@ const CaseCard = ({ data }: CaseCardProps) => {
         />
         <Modal
           title="編輯案例"
-          open={openCase}
+          open={openEdit}
           confirmText="修改"
           cancelText="取消"
           onConfirm={() => {
             console.log("onConfirm")
           }}
-          onClose={() => setOpenCase(false)}>
+          onClose={() => setOpenEdit(false)}>
           <Form>
             <Form.Group layout="vertical">
               <Form.Label>預覽圖 (700 x 800px)</Form.Label>
@@ -295,6 +296,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
               <Editor
+                height={400}
                 value={editCase.description}
                 onEdit={newValue => {
                   setEditCase({ ...editCase, description: newValue })
