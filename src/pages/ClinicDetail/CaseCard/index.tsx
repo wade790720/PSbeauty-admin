@@ -9,21 +9,24 @@ import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import { FileType } from "rsuite/Uploader"
 import categoryData from "../category.json"
 import styled from "./CaseCard.module.scss"
-
-import { useMatch } from "react-router-dom"
 import { GetClinicQuery } from "../ClinicDetail.graphql.generated"
+import { storage } from "../../../firebase"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import uuid from "utils/uuid"
 
 type CaseCardProps = {
   data: GetClinicQuery["caseByClinicId"]
 }
 
-const fakeData = [
-  {
-    id: 1,
-    title: "音波拉提比對圖",
-    category: "顏面疤痕 / 雙眼皮手術 / 眼袋",
-  },
-]
+type Case = {
+  id: string
+  index: number
+  title: string
+  category: string
+  categories: string[]
+  description: string
+  imageList: FileType[]
+}
 
 const CaseCard = ({ data }: CaseCardProps) => {
   const { Column, HeaderCell, Cell } = Table
@@ -32,8 +35,6 @@ const CaseCard = ({ data }: CaseCardProps) => {
 
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
-
-  const match = useMatch("/cms/cosmetic-clinic/:id")
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -46,13 +47,64 @@ const CaseCard = ({ data }: CaseCardProps) => {
           id: item?.id,
           index: index + 1,
           title: item?.title,
-          categories: (item?.categories || []).map(item => item?.name),
+          category: (item?.categories || []).reduce((acc, current) => {
+            return acc + " / " + current?.name
+          }, ""),
+          categories: (item?.categories || []).map(item => item?.id),
           description: item?.description,
-          beforeImage: item?.beforeImage,
-          afterImage: item?.afterImage,
+          imageList: [
+            {
+              name: "before",
+              fileKey: 1,
+              url: item?.beforeImage,
+            },
+            {
+              name: "after",
+              fileKey: 2,
+              url: item?.afterImage,
+            },
+          ],
         }))
       : []
   })
+
+  const [editCase, setEditCase] = useState<Case>({
+    id: "",
+    index: 0,
+    title: "",
+    category: "",
+    categories: [],
+    description: "",
+    imageList: [],
+  })
+
+  const onChangeUploader = (fileList: FileType[]) => {
+    const fileToUpload = fileList[0].blobFile
+    const fileName = fileList[0].name || ""
+    const newRef = ref(storage, `image/${uuid()}/${fileName}`)
+    const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
+    setEditCase({
+      ...editCase,
+      imageList: fileList,
+    })
+
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        console.log(snapshot.bytesTransferred)
+      },
+      err => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          console.log(url)
+        })
+      },
+    )
+  }
+
+  const handleDelete = (id: string) => {
+    console.log(id)
+  }
 
   return (
     <Card>
@@ -126,7 +178,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
         </div>
         <Table
           height={400}
-          data={fakeData}
+          data={cases}
           onRowClick={data => {
             console.log(data)
           }}>
@@ -142,20 +194,43 @@ const CaseCard = ({ data }: CaseCardProps) => {
 
           <Column width={300} flexGrow={1}>
             <HeaderCell>分類</HeaderCell>
-            <Cell dataKey="categories" />
+            <Cell dataKey="category" />
           </Column>
 
           <Column width={120} fixed="right">
             <HeaderCell>動作</HeaderCell>
             <Cell>
               {rowData => {
-                function handleAction() {
-                  alert(`id:${rowData.id}`)
-                }
                 return (
                   <span>
-                    <LinkButton onClick={() => setOpenCase(true)}> 編輯 </LinkButton> |{" "}
-                    <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                    <LinkButton
+                      onClick={() => {
+                        setOpenCase(true)
+                        setEditCase({
+                          id: rowData.id,
+                          index: rowData.index,
+                          title: rowData.title,
+                          category: rowData.category,
+                          categories: rowData.categories,
+                          description: rowData.description,
+                          imageList: [
+                            {
+                              name: "before",
+                              fileKey: 1,
+                              url: rowData?.beforeImage,
+                            },
+                            {
+                              name: "after",
+                              fileKey: 2,
+                              url: rowData?.afterImage,
+                            },
+                          ],
+                        })
+                      }}>
+                      {" "}
+                      編輯{" "}
+                    </LinkButton>{" "}
+                    | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                   </span>
                 )
               }}
@@ -195,10 +270,9 @@ const CaseCard = ({ data }: CaseCardProps) => {
               <Uploader
                 listType="picture"
                 action=""
-                disabled={carouselList.length > 0}
-                onChange={(fileList: FileType[]) => {
-                  setCarouselList(fileList)
-                }}>
+                disabled={editCase.imageList.length > 1}
+                defaultFileList={editCase.imageList}
+                onChange={onChangeUploader}>
                 <button>
                   <CameraRetro />
                 </button>
@@ -206,7 +280,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" />
+              <Form.Input type="text" value={editCase.title} />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>分類</Form.Label>
@@ -220,7 +294,12 @@ const CaseCard = ({ data }: CaseCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
-              <Editor />
+              <Editor
+                value={editCase.description}
+                onEdit={newValue => {
+                  setEditCase({ ...editCase, description: newValue })
+                }}
+              />
             </Form.Group>
           </Form>
         </Modal>

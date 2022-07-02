@@ -74,7 +74,6 @@ const InfoCard = ({ data }: InfoCardProps) => {
     <Card>
       <Card.Header title={clinic?.name || ""} />
       <Card.Body>
-        (
         <Form>
           <Form.Group layout="vertical">
             <Form.Label required>診所名稱</Form.Label>
@@ -143,6 +142,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
             <Editor
               value={clinic.description}
               onEdit={newValue => {
+                console.log(newValue)
                 setClinic({ ...clinic, description: newValue })
               }}
             />
@@ -156,7 +156,6 @@ const InfoCard = ({ data }: InfoCardProps) => {
             </Button>
           </div>
         </Form>
-        )
       </Card.Body>
     </Card>
   )

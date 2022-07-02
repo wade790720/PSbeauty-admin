@@ -86,7 +86,6 @@ const AdListCard = ({ data }: AdListCardProps) => {
     const fileName = fileList[0].name || ""
     const newRef = ref(storage, `image/${uuid()}/${fileName}`)
     const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
-    setFileList(fileList)
 
     uploadTask.on(
       "state_changed",
@@ -96,6 +95,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
       err => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          setFileList(fileList)
           setNewPost({ ...newPost, image: url + "" })
         })
       },

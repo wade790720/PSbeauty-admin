@@ -5,3 +5,7 @@
     display: none !important;
   }
 }
+
+:global(.tox-notifications-container) {
+  display: none !important;
+}
