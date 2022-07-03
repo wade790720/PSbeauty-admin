@@ -8,7 +8,6 @@ import { Table, Pagination, Uploader, MultiCascader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import { FileType } from "rsuite/Uploader"
 import categoryData from "../category.json"
-import styled from "./CaseCard.module.scss"
 import { CasesFragment } from "../ClinicDetail.graphql.generated"
 import { storage } from "../../../firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
@@ -163,20 +162,6 @@ const CaseCard = ({ data }: CaseCardProps) => {
         </Modal>
       </Card.Header>
       <Card.Body>
-        <div className={styled.info}>
-          <div className={styled.block}>
-            <div className={styled.title}>回覆數</div>
-            <div className={styled.content}>38筆</div>
-          </div>
-          <div className={styled.block}>
-            <div className={styled.title}>上傳組數/付費組數</div>
-            <div className={styled.content}>10/30</div>
-          </div>
-          <div className={styled.block}>
-            <div className={styled.title}>最後付款日期</div>
-            <div className={styled.content}>2022/04/17</div>
-          </div>
-        </div>
         <Table
           height={400}
           data={cases}

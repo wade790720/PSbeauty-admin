@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 
@@ -9,26 +9,99 @@ import Editor from "components/Editor"
 import { FileType } from "rsuite/Uploader"
 import { Table, Uploader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import { DoctorsFragment } from "../ClinicDetail.graphql.generated"
+import { useMatch } from "react-router-dom"
+import {
+  DoctorsFragment,
+  useAddDoctorMutation,
+  useDeleteDoctorMutation,
+} from "../ClinicDetail.graphql.generated"
 
 type DoctorsCardProps = {
   data: DoctorsFragment["doctors"]
 }
 
-const fakeData = [
-  {
-    id: 1,
-    name: "楊效誠",
-    title: "院長",
-    skill: "顏面疤痕 / 雙眼皮手術 / 眼袋 / 眼瞼下垂 / 醫學美容光療雷射 / 微整形注射美容",
-  },
-]
+type Doctor = {
+  id?: string
+  index?: number
+  title: string
+  name: string
+  expertise: string
+  resumes: string[]
+  photo: string
+}
 
 const DoctorsCard = ({ data }: DoctorsCardProps) => {
   const { Column, HeaderCell, Cell } = Table
+  const match = useMatch("/cms/cosmetic-clinic/:id")
   const [openAdd, setOpenAdd] = useState(false)
   const [openReview, setOpenReview] = useState(false)
   const [carouselList, setCarouselList] = useState<FileType[]>([])
+
+  const currentDoctor = useRef<Doctor | null>(null)
+  const [newDoctor, setNewDoctor] = useState<Doctor>({
+    name: "",
+    expertise: "",
+    photo: "",
+    resumes: [],
+    title: "",
+  })
+
+  const [doctors, setDoctors] = useState(() => {
+    return data
+      ? data.map((item, index) => ({
+          id: item?.id,
+          index: index + 1,
+          name: item?.name,
+          title: item?.title,
+          expertise: item?.expertise?.[0],
+          resumes: item?.resumes,
+          photo: item?.photo,
+        }))
+      : []
+  })
+
+  console.log("doctors", doctors)
+
+  const [addDoctorMutation] = useAddDoctorMutation({
+    onCompleted: data => {
+      setDoctors([
+        ...doctors,
+        {
+          index: doctors[doctors.length - 1].index + 1,
+          id: data.addDoctor?.id || "",
+          name: newDoctor.name,
+          title: newDoctor.title || "",
+          expertise: newDoctor.expertise || "",
+          resumes: newDoctor?.resumes,
+          photo: newDoctor?.photo,
+        },
+      ])
+    },
+  })
+  const [deleteDoctorMutation] = useDeleteDoctorMutation()
+
+  const handleAdd = () => {
+    addDoctorMutation({
+      variables: {
+        clinicId: match?.params.id || "",
+        name: newDoctor.name,
+        expertise: newDoctor.expertise,
+        photo: newDoctor.photo,
+        resumes: newDoctor.resumes,
+        title: newDoctor.title,
+      },
+    })
+  }
+
+  const handleDelete = (id: string) => {
+    const ask = confirm("確定要刪除嗎?")
+    if (ask)
+      deleteDoctorMutation({
+        variables: {
+          id,
+        },
+      })
+  }
 
   return (
     <>
@@ -39,15 +112,10 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table
-            height={400}
-            data={fakeData}
-            onRowClick={data => {
-              console.log(data)
-            }}>
+          <Table height={400} data={doctors}>
             <Column width={70} align="center" fixed>
               <HeaderCell>序號</HeaderCell>
-              <Cell dataKey="id" />
+              <Cell dataKey="index" />
             </Column>
 
             <Column width={160} fixed>
@@ -62,20 +130,32 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
 
             <Column width={300} flexGrow={1}>
               <HeaderCell>專長</HeaderCell>
-              <Cell dataKey="skill" />
+              <Cell dataKey="expertise" />
             </Column>
 
             <Column width={120} fixed="right">
               <HeaderCell>動作</HeaderCell>
               <Cell>
                 {rowData => {
-                  function handleAction() {
-                    alert(`id:${rowData.id}`)
-                  }
                   return (
                     <span>
-                      <LinkButton onClick={() => setOpenReview(true)}> 檢視 </LinkButton> |{" "}
-                      <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                      <LinkButton
+                        onClick={() => {
+                          setOpenReview(true)
+                          currentDoctor.current = {
+                            id: rowData.id,
+                            index: rowData.index,
+                            name: rowData.name,
+                            title: rowData.title,
+                            expertise: rowData.expertise,
+                            photo: rowData.photo,
+                            resumes: rowData.resumes,
+                          }
+                        }}>
+                        {" "}
+                        檢視{" "}
+                      </LinkButton>{" "}
+                      | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
                   )
                 }}
@@ -89,7 +169,8 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         open={openAdd}
         confirmText="建立"
         cancelText="取消"
-        onClose={() => setOpenAdd(false)}>
+        onClose={() => setOpenAdd(false)}
+        style={{ overflow: "auto", maxHeight: "600px" }}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>照片 (100 x 100px)</Form.Label>
@@ -107,30 +188,41 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>姓名</Form.Label>
-            <Form.Input type="text" />
+            <Form.Input
+              type="text"
+              onChange={e => setNewDoctor({ ...newDoctor, name: e.target.value + "" })}
+            />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>職稱</Form.Label>
+            <Form.Input
+              type="text"
+              onChange={e => setNewDoctor({ ...newDoctor, title: e.target.value + "" })}
+            />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>專長</Form.Label>
-            <Form.Input type="text" />
+            <Form.Input
+              type="text"
+              onChange={e => setNewDoctor({ ...newDoctor, expertise: e.target.value + "" })}
+            />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>經歷</Form.Label>
             <Editor
+              height={400}
               onEdit={newValue => {
-                console.log(newValue)
+                setNewDoctor({ ...newDoctor, resumes: [newValue] })
               }}
             />
           </Form.Group>
         </Form>
       </Modal>
       <Modal
-        title="醫師資訊"
+        title="檢視醫師"
         open={openReview}
         confirmText="確定"
         cancelText="取消"
-        onConfirm={() => {
-          console.log("onConfirm")
-        }}
         onClose={() => setOpenReview(false)}
         style={{ maxWidth: "450px" }}>
         <Form>
@@ -142,19 +234,19 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>姓名</Form.Label>
-            <p>楊效誠</p>
+            <p>{currentDoctor.current?.name}</p>
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>職稱</Form.Label>
-            <p>院長</p>
+            <p>{currentDoctor.current?.title}</p>
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>專長</Form.Label>
-            <p>顏面疤痕 / 雙眼皮手術 / 眼袋 / 眼瞼下垂 / 醫學美容光療雷射 / 微整形注射美容</p>
+            <p>{currentDoctor.current?.expertise}</p>
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>經歷</Form.Label>
-            <p>內容..</p>
+            {/* <div dangerouslySetInnerHTML={{ __html: currentDoctor.current?.resumes || "" }} /> */}
           </Form.Group>
         </Form>
       </Modal>

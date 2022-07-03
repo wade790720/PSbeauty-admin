@@ -1,10 +1,9 @@
 import { useRef } from "react"
 import { Editor as TinyMCEEditor } from "tinymce"
 import { Editor as TinyMceReactEditor } from "@tinymce/tinymce-react"
-import { EventHandler } from "@tinymce/tinymce-react/lib/cjs/main/ts/Events"
 import styled from "./Editor.module.scss"
 interface EditorProps {
-  onEdit?: EventHandler<any>
+  onEdit?: ((a: string, editor: TinyMCEEditor) => void) | undefined
   height?: number
   value?: string
 }

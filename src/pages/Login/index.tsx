@@ -1,4 +1,3 @@
-import { useState } from "react"
 import styled from "./Login.module.scss"
 import { ReactComponent as Logo } from "./images/logo.svg"
 import Form, { InputGroup, Append } from "components/Form"
@@ -11,6 +10,7 @@ import { endpoint, headers } from "utils/apiConfig"
 import axios from "axios"
 import { gql } from "@apollo/client"
 import { print } from "graphql"
+import { useForm } from "react-hook-form"
 
 const CUSTOM_TOKEN = gql`
   query {
@@ -21,13 +21,23 @@ const CUSTOM_TOKEN = gql`
   }
 `
 
+type Inputs = {
+  email: string
+  password: string
+}
+
 export default function Login() {
   const go = useGo()
-  const [user, setUser] = useState({ email: "", password: "" })
+  const { register, watch, formState } = useForm<Inputs>()
+  const watchFields = watch()
 
   const login = async () => {
     // Get firebase token
-    const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password)
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      watchFields.email,
+      watchFields.password,
+    )
     const idToken = await userCredential.user.getIdToken(true)
 
     // Get customToken for graphql
@@ -56,8 +66,19 @@ export default function Login() {
                 <InputGroup className={styled["enter-input"]}>
                   <Form.Input
                     placeholder="Enter your email"
-                    onChange={e => setUser({ ...user, email: e.target.value + "" })}
+                    {...register("email", {
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Please enter a valid email",
+                      },
+                    })}
+                    {...(formState.errors.email && { variant: "invalid" })}
                   />
+                  {formState.errors?.email?.message && (
+                    <Form.ErrorMessage className={styled["error-message"]}>
+                      {formState.errors?.email?.message}
+                    </Form.ErrorMessage>
+                  )}
                 </InputGroup>
               </div>
               <div className={styled.password}>
@@ -68,17 +89,18 @@ export default function Login() {
                 <InputGroup className={styled["enter-input"]}>
                   <Form.Input
                     placeholder="Enter your password"
-                    onChange={e => setUser({ ...user, password: e.target.value + "" })}
+                    {...register("password", {
+                      pattern: {
+                        value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                        message: "錯誤！請包含至少8個字符、1個數字、1個大寫和1個小寫",
+                      },
+                    })}
                   />
                   <Append className={styled.append}>
                     <i className="bx bx-hide" />
                   </Append>
                 </InputGroup>
               </div>
-              {/* <div className={styled.remember}>
-                <input type="checkbox" />
-                <div className={styled.label}> Remember Me</div>
-              </div> */}
               <Button className={styled.action} onClick={login}>
                 登入
               </Button>

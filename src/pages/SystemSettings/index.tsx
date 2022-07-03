@@ -10,7 +10,6 @@ import MemberTable from "./MemberTable"
 import KeywordTable from "./KeywordTable"
 
 const SystemSettings = () => {
-  const [open, setOpen] = useState(false)
   const [keywordOpen, setKeywordOpen] = useState(false)
 
   const bigCategory = [

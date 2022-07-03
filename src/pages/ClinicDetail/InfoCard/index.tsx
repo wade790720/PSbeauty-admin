@@ -4,13 +4,13 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Editor from "components/Editor"
 import { MultiCascader } from "rsuite"
-import { useMatch } from "react-router-dom"
 
 import fakeData from "../category.json"
 
 import { GetClinicQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
 
 type Clinic = {
+  id: string
   name: string
   county: string
   town: string
@@ -26,9 +26,8 @@ type InfoCardProps = {
 }
 
 const InfoCard = ({ data }: InfoCardProps) => {
-  const match = useMatch("/cms/cosmetic-clinic/:id")
-
   const [clinic, setClinic] = useState<Clinic>({
+    id: data?.id || "",
     name: data?.name || "",
     county: data?.county || "",
     town: data?.town || "",
@@ -41,7 +40,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
 
   const [updateClinicMutation] = useUpdateClinicMutation({
     variables: {
-      id: match?.params.id || "",
+      id: data?.id || "",
       name: clinic.name || "",
       phone: clinic.phone || "",
       county: clinic.county || "",
@@ -59,6 +58,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
 
   const handleClear = () => {
     setClinic({
+      ...clinic,
       name: "",
       county: "",
       town: "",
