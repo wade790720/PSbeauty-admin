@@ -1,40 +1,8 @@
 import { gql } from "@apollo/client"
 
-export const GetClinic = gql`
-  query GetClinic($id: String) {
-    myClinic {
-      id
-      name
-      paid
-      latestPayAt
-      paySets
-      contactEmail
-      contactName
-      contactPhone
-    }
-    clinic(id: $id) {
-      id
-      name
-      phone
-      county
-      town
-      address
-      web
-      description
-      categories {
-        id
-        name
-      }
-    }
-    clinicImages(clinicId: $id) {
-      id
-      image
-      sort
-      title
-      redirectType
-      targetId
-    }
-    caseByClinicId(clinicId: $id) {
+gql`
+  fragment Cases on Clinic {
+    cases {
       id
       title
       beforeImage
@@ -45,13 +13,84 @@ export const GetClinic = gql`
         name
       }
     }
-    doctorByClinicId(clinicId: $id) {
+  }
+`
+
+gql`
+  fragment Images on Clinic {
+    images {
+      id
+      image
+      sort
+      title
+      redirectType
+      targetId
+    }
+  }
+`
+
+gql`
+  fragment Doctors on Clinic {
+    doctors {
       id
       name
       resumes
       photo
       title
       expertise
+    }
+  }
+`
+
+export const GetClinic = gql`
+  query GetClinic($id: String) {
+    clinic(id: $id) {
+      id
+      name
+      phone
+      county
+      town
+      address
+      web
+      description
+      paid
+      latestPayAt
+      paySets
+      contactEmail
+      contactName
+      contactPhone
+      consultReplyCount
+      cases {
+        id
+        title
+        beforeImage
+        afterImage
+        description
+        categories {
+          id
+          name
+        }
+      }
+      categories {
+        id
+        name
+      }
+      images {
+        id
+        image
+        sort
+        title
+        redirectType
+        targetId
+      }
+      doctors {
+        id
+        name
+        resumes
+        photo
+        title
+        expertise
+      }
     }
   }
 `

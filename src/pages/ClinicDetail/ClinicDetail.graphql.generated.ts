@@ -3,48 +3,9 @@ import * as Types from "../../types/schema"
 import { gql } from "@apollo/client"
 import * as Apollo from "@apollo/client"
 const defaultOptions = {} as const
-export type GetClinicQueryVariables = Types.Exact<{
-  id: Types.InputMaybe<Types.Scalars["String"]>
-}>
-
-export type GetClinicQuery = {
-  myClinic: {
-    __typename: "Clinic"
-    id: string | null
-    name: string | null
-    paid: boolean
-    latestPayAt: number
-    paySets: number
-    contactEmail: string | null
-    contactName: string | null
-    contactPhone: string | null
-  } | null
-  clinic: {
-    __typename: "Clinic"
-    id: string | null
-    name: string | null
-    phone: string | null
-    county: string | null
-    town: string | null
-    address: string | null
-    web: string | null
-    description: string | null
-    categories: Array<{
-      __typename: "Category"
-      id: string | null
-      name: string | null
-    } | null> | null
-  } | null
-  clinicImages: Array<{
-    __typename: "ClinicImage"
-    id: string | null
-    image: string | null
-    sort: number
-    title: string | null
-    redirectType: string | null
-    targetId: string | null
-  } | null> | null
-  caseByClinicId: Array<{
+export type CasesFragment = {
+  __typename: "Clinic"
+  cases: Array<{
     __typename: "ClinicCase"
     id: string | null
     title: string | null
@@ -57,7 +18,24 @@ export type GetClinicQuery = {
       name: string | null
     } | null> | null
   } | null> | null
-  doctorByClinicId: Array<{
+}
+
+export type ImagesFragment = {
+  __typename: "Clinic"
+  images: Array<{
+    __typename: "ClinicImage"
+    id: string | null
+    image: string | null
+    sort: number
+    title: string | null
+    redirectType: string | null
+    targetId: string | null
+  } | null> | null
+}
+
+export type DoctorsFragment = {
+  __typename: "Clinic"
+  doctors: Array<{
     __typename: "ClinicDoctor"
     id: string | null
     name: string | null
@@ -66,6 +44,67 @@ export type GetClinicQuery = {
     title: string | null
     expertise: Array<string | null> | null
   } | null> | null
+}
+
+export type GetClinicQueryVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type GetClinicQuery = {
+  clinic: {
+    __typename: "Clinic"
+    id: string | null
+    name: string | null
+    phone: string | null
+    county: string | null
+    town: string | null
+    address: string | null
+    web: string | null
+    description: string | null
+    paid: boolean
+    latestPayAt: number
+    paySets: number
+    contactEmail: string | null
+    contactName: string | null
+    contactPhone: string | null
+    consultReplyCount: number
+    cases: Array<{
+      __typename: "ClinicCase"
+      id: string | null
+      title: string | null
+      beforeImage: string | null
+      afterImage: string | null
+      description: string | null
+      categories: Array<{
+        __typename: "Category"
+        id: string | null
+        name: string | null
+      } | null> | null
+    } | null> | null
+    categories: Array<{
+      __typename: "Category"
+      id: string | null
+      name: string | null
+    } | null> | null
+    images: Array<{
+      __typename: "ClinicImage"
+      id: string | null
+      image: string | null
+      sort: number
+      title: string | null
+      redirectType: string | null
+      targetId: string | null
+    } | null> | null
+    doctors: Array<{
+      __typename: "ClinicDoctor"
+      id: string | null
+      name: string | null
+      resumes: Array<string | null> | null
+      photo: string | null
+      title: string | null
+      expertise: Array<string | null> | null
+    } | null> | null
+  } | null
 }
 
 export type UpdateClinicMutationVariables = Types.Exact<{
@@ -156,41 +195,9 @@ export type UpdateClinicContactMutation = {
   updateClinicContact: { __typename: "UpdateClinicContactPayload"; id: string | null } | null
 }
 
-export const GetClinicDocument = gql`
-  query GetClinic($id: String) {
-    myClinic {
-      id
-      name
-      paid
-      latestPayAt
-      paySets
-      contactEmail
-      contactName
-      contactPhone
-    }
-    clinic(id: $id) {
-      id
-      name
-      phone
-      county
-      town
-      address
-      web
-      description
-      categories {
-        id
-        name
-      }
-    }
-    clinicImages(clinicId: $id) {
-      id
-      image
-      sort
-      title
-      redirectType
-      targetId
-    }
-    caseByClinicId(clinicId: $id) {
+export const CasesFragmentDoc = gql`
+  fragment Cases on Clinic {
+    cases {
       id
       title
       beforeImage
@@ -201,13 +208,81 @@ export const GetClinicDocument = gql`
         name
       }
     }
-    doctorByClinicId(clinicId: $id) {
+  }
+`
+export const ImagesFragmentDoc = gql`
+  fragment Images on Clinic {
+    images {
+      id
+      image
+      sort
+      title
+      redirectType
+      targetId
+    }
+  }
+`
+export const DoctorsFragmentDoc = gql`
+  fragment Doctors on Clinic {
+    doctors {
       id
       name
       resumes
       photo
       title
       expertise
+    }
+  }
+`
+export const GetClinicDocument = gql`
+  query GetClinic($id: String) {
+    clinic(id: $id) {
+      id
+      name
+      phone
+      county
+      town
+      address
+      web
+      description
+      paid
+      latestPayAt
+      paySets
+      contactEmail
+      contactName
+      contactPhone
+      consultReplyCount
+      cases {
+        id
+        title
+        beforeImage
+        afterImage
+        description
+        categories {
+          id
+          name
+        }
+      }
+      categories {
+        id
+        name
+      }
+      images {
+        id
+        image
+        sort
+        title
+        redirectType
+        targetId
+      }
+      doctors {
+        id
+        name
+        resumes
+        photo
+        title
+        expertise
+      }
     }
   }
 `

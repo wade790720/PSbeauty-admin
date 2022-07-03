@@ -9,6 +9,11 @@ import Editor from "components/Editor"
 import { FileType } from "rsuite/Uploader"
 import { Table, Uploader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
+import { DoctorsFragment } from "../ClinicDetail.graphql.generated"
+
+type DoctorsCardProps = {
+  data: DoctorsFragment["doctors"]
+}
 
 const fakeData = [
   {
@@ -19,7 +24,7 @@ const fakeData = [
   },
 ]
 
-const TeamCard = () => {
+const DoctorsCard = ({ data }: DoctorsCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const [openAdd, setOpenAdd] = useState(false)
   const [openReview, setOpenReview] = useState(false)
@@ -157,4 +162,4 @@ const TeamCard = () => {
   )
 }
 
-export default TeamCard
+export default DoctorsCard

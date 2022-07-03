@@ -31,8 +31,8 @@ function App() {
   const NotFound = lazy(() => import("pages/NotFound"))
   const Login = lazy(() => import("pages/Login"))
   const Home = lazy(() => import("pages/Home"))
-  const CosmeticClinic = lazy(() => import("pages/CosmeticClinic"))
-  const CosmeticClinicDetail = lazy(() => import("pages/ClinicDetail"))
+  const Clinic = lazy(() => import("pages/Clinic"))
+  const ClinicDetail = lazy(() => import("pages/ClinicDetail"))
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
 
   return (
@@ -47,8 +47,8 @@ function App() {
             <Route path="cms" element={<CmsLayout />}>
               <Route index element={<Navigate to="/cms/home" />} />
               <Route path="home" element={<Home />} />
-              <Route path="cosmetic-clinic" element={<CosmeticClinic />} />
-              <Route path="cosmetic-clinic/:id" element={<CosmeticClinicDetail />} />
+              <Route path="cosmetic-clinic" element={<Clinic />} />
+              <Route path="cosmetic-clinic/:id" element={<ClinicDetail />} />
               <Route path="system-settings" element={<SystemSettings />} />
             </Route>
             <Route path="*" element={<NotFound />} />

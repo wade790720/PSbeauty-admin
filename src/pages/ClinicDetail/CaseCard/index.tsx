@@ -9,13 +9,13 @@ import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import { FileType } from "rsuite/Uploader"
 import categoryData from "../category.json"
 import styled from "./CaseCard.module.scss"
-import { GetClinicQuery } from "../ClinicDetail.graphql.generated"
+import { CasesFragment } from "../ClinicDetail.graphql.generated"
 import { storage } from "../../../firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import uuid from "utils/uuid"
 
 type CaseCardProps = {
-  data: GetClinicQuery["caseByClinicId"]
+  data: CasesFragment["cases"]
 }
 
 type Case = {

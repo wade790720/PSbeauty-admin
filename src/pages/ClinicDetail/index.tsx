@@ -2,7 +2,7 @@ import InfoCard from "./InfoCard"
 import ContactCard from "./ContactCard"
 import CarouselCard from "./CarouselCard"
 import CaseCard from "./CaseCard"
-import TeamCard from "./TeamCard"
+import DoctorsCard from "./DoctorsCard"
 import Layout from "components/Layout"
 import QueryStatus from "components/QueryStatus"
 import { useMatch } from "react-router-dom"
@@ -28,10 +28,10 @@ const CosmeticClinicDetail = () => {
       {data && (
         <>
           <InfoCard data={data.clinic} />
-          <ContactCard id={match?.params.id} data={data.myClinic} />
-          <CarouselCard data={data.clinicImages} />
-          <CaseCard data={data.caseByClinicId} />
-          <TeamCard />
+          <ContactCard data={data.clinic} />
+          <CarouselCard data={data.clinic?.images || []} />
+          <CaseCard data={data.clinic?.cases || []} />
+          <DoctorsCard data={data.clinic?.doctors || []} />
         </>
       )}
     </>

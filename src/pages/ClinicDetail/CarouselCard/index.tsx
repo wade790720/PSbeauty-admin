@@ -8,10 +8,10 @@ import { FileType } from "types"
 import { Uploader } from "rsuite"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import CarouselTable from "components/CarouselTable"
-import { GetClinicQuery } from "../ClinicDetail.graphql.generated"
+import { ImagesFragment } from "../ClinicDetail.graphql.generated"
 
 type CarouselCardProps = {
-  data: GetClinicQuery["clinicImages"]
+  data: ImagesFragment["images"]
 }
 
 const CarouselCard = ({ data }: CarouselCardProps) => {
