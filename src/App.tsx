@@ -30,6 +30,8 @@ const CmsLayout = () => (
 function App() {
   const NotFound = lazy(() => import("pages/NotFound"))
   const Login = lazy(() => import("pages/Login"))
+  const Register = lazy(() => import("pages/Register"))
+  const ForgetPassword = lazy(() => import("pages/ForgetPassword"))
   const Home = lazy(() => import("pages/Home"))
   const Clinic = lazy(() => import("pages/Clinic"))
   const ClinicDetail = lazy(() => import("pages/ClinicDetail"))
@@ -43,6 +45,12 @@ function App() {
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="login" element={<BasicLayout />}>
               <Route index element={<Login />} />
+            </Route>
+            <Route path="register" element={<BasicLayout />}>
+              <Route index element={<Register />} />
+            </Route>
+            <Route path="forget-password" element={<BasicLayout />}>
+              <Route index element={<ForgetPassword />} />
             </Route>
             <Route path="cms" element={<CmsLayout />}>
               <Route index element={<Navigate to="/cms/home" />} />
