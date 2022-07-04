@@ -4,28 +4,32 @@ import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import { Table, Pagination } from "rsuite"
+import { GetSettingQuery } from "../SystemSettings.graphql.generated"
 
-const fakeData = [
-  {
-    id: 1,
-    account: "減齡回春計畫",
-  },
-  {
-    id: 2,
-    account: "金藝珍臉部拉提計畫",
-  },
-  {
-    id: 3,
-    account: "白冰冰瘦臉計畫",
-  },
-]
+type KeywordCardProps = {
+  data: GetSettingQuery["popularKeywords"]
+}
 
-const KeywordCard = () => {
+type Keyword = {
+  id: number
+  name: string
+}
+
+const KeywordCard = ({ data }: KeywordCardProps) => {
   const [keywordOpen, setKeywordOpen] = useState(false)
   const { Column, HeaderCell, Cell } = Table
   const [open, setOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
+
+  const [keywords, setKeywords] = useState(() => {
+    if (!data?.keywords) return []
+
+    return data?.keywords?.map((word, index) => ({
+      id: index + 1,
+      name: word,
+    }))
+  })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -43,7 +47,7 @@ const KeywordCard = () => {
         <Card.Body>
           <Table
             height={400}
-            data={fakeData}
+            data={keywords}
             onRowClick={data => {
               console.log(data)
             }}>
@@ -54,7 +58,7 @@ const KeywordCard = () => {
 
             <Column width={200} flexGrow={1}>
               <HeaderCell>關鍵詞</HeaderCell>
-              <Cell dataKey="account" />
+              <Cell dataKey="name" />
             </Column>
 
             <Column width={120} fixed="right">
@@ -84,7 +88,7 @@ const KeywordCard = () => {
             maxButtons={5}
             size="xs"
             layout={["-", "limit", "|", "pager", "skip"]}
-            total={fakeData.length}
+            total={keywords.length}
             limitOptions={[10, 20]}
             limit={limit}
             activePage={page}

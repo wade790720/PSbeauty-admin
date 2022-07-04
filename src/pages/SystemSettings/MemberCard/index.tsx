@@ -2,19 +2,41 @@ import { useState } from "react"
 import { Table, Pagination } from "rsuite"
 import Card from "components/Card"
 import { LinkButton } from "components/Button"
+import { GetSettingQuery, useDeleteMemberMutation } from "../SystemSettings.graphql.generated"
 
-const fakeData = [
-  {
-    id: 1,
-    account: "WadeZhu",
-    email: "wade790720@gmail.com",
-  },
-]
+type MemberCardProps = {
+  data: GetSettingQuery["users"]
+}
 
-const MemberCard = () => {
+const MemberCard = ({ data }: MemberCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
+
+  const [members, setMembers] = useState(() => {
+    if (!data?.edges) return []
+
+    return data?.edges?.map((member, index) => ({
+      index: index + 1,
+      id: member.node?.id || "",
+      name: member.node?.name || "",
+      email: member.node?.email || "",
+    }))
+  })
+
+  const [deleteMemberMutation] = useDeleteMemberMutation({
+    onCompleted: data => {
+      setMembers(members.filter(member => member.id !== data.deleteUser?.id))
+    },
+  })
+
+  const handleDelete = (id: string) => {
+    deleteMemberMutation({
+      variables: {
+        id,
+      },
+    })
+  }
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -25,20 +47,15 @@ const MemberCard = () => {
     <Card>
       <Card.Header title="會員列表" />
       <Card.Body>
-        <Table
-          height={400}
-          data={fakeData}
-          onRowClick={data => {
-            console.log(data)
-          }}>
+        <Table height={400} data={members}>
           <Column width={70} align="center" fixed>
             <HeaderCell>序號</HeaderCell>
-            <Cell dataKey="id" />
+            <Cell dataKey="index" />
           </Column>
 
           <Column width={200} fixed>
-            <HeaderCell>帳號</HeaderCell>
-            <Cell dataKey="account" />
+            <HeaderCell>名稱</HeaderCell>
+            <Cell dataKey="name" />
           </Column>
 
           <Column width={200} flexGrow={1}>
@@ -50,12 +67,9 @@ const MemberCard = () => {
             <HeaderCell>動作</HeaderCell>
             <Cell>
               {rowData => {
-                function handleAction() {
-                  alert(`id:${rowData.id}`)
-                }
                 return (
                   <span>
-                    <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                    <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                   </span>
                 )
               }}
@@ -73,7 +87,7 @@ const MemberCard = () => {
           maxButtons={5}
           size="xs"
           layout={["-", "limit", "|", "pager", "skip"]}
-          total={fakeData.length}
+          total={members.length}
           limitOptions={[10, 20]}
           limit={limit}
           activePage={page}

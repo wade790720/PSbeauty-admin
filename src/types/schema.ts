@@ -424,6 +424,19 @@ export type AddDoctorPayload = {
   name: Maybe<Scalars["String"]>
 }
 
+/** 關鍵字輸入 */
+export type AddPopularKeywordInput = {
+  /** 關鍵字 */
+  keyword: InputMaybe<Scalars["String"]>
+}
+
+/** 關鍵字回覆 */
+export type AddPopularKeywordPayload = {
+  __typename: "AddPopularKeywordPayload"
+  /** 新增關鍵字 */
+  keyword: Maybe<Scalars["String"]>
+}
+
 /** 新增貼文內容 */
 export type AddPostInput = {
   /** 發文內容 */
@@ -1282,6 +1295,19 @@ export type DeleteDoctorPayload = {
   id: Maybe<Scalars["String"]>
 }
 
+/** 關鍵字輸入 */
+export type DeletePopularKeywordInput = {
+  /** 刪除關鍵字 */
+  keyword: InputMaybe<Scalars["String"]>
+}
+
+/** 關鍵字回覆 */
+export type DeletePopularKeywordPayload = {
+  __typename: "DeletePopularKeywordPayload"
+  /** 已刪除關鍵字尸 */
+  keyword: Maybe<Scalars["String"]>
+}
+
 /** 刪除貼文內容 */
 export type DeletePostInput = {
   id: InputMaybe<Scalars["String"]>
@@ -1370,6 +1396,8 @@ export type Mutation = {
   addConsultTopic: Maybe<AddConsultTopicPayload>
   /** [廠商]新增診所醫生 */
   addDoctor: Maybe<AddDoctorPayload>
+  /** 新增熱門關鍵字 */
+  addPopularKeyword: Maybe<AddPopularKeywordPayload>
   /** [廠商]新增發文 */
   addPost: Maybe<AddPostPayload>
   /** [廠商]新增問卷 */
@@ -1400,6 +1428,8 @@ export type Mutation = {
   deleteConsult: Maybe<DeleteConsultPayload>
   /** [廠商]刪除診所醫生 */
   deleteDoctor: Maybe<DeleteDoctorPayload>
+  /** 刪除熱門關鍵字 */
+  deletePopularKeyword: Maybe<DeletePopularKeywordPayload>
   /** [廠商]刪除貼文 */
   deletePost: Maybe<DeletePostPayload>
   /** [會員]刪除使用者 */
@@ -1492,6 +1522,10 @@ export type MutationAddDoctorArgs = {
   input: InputMaybe<AddDoctorInput>
 }
 
+export type MutationAddPopularKeywordArgs = {
+  input: InputMaybe<AddPopularKeywordInput>
+}
+
 export type MutationAddPostArgs = {
   input: InputMaybe<AddPostInput>
 }
@@ -1550,6 +1584,10 @@ export type MutationDeleteConsultArgs = {
 
 export type MutationDeleteDoctorArgs = {
   input: InputMaybe<DeleteDoctorInput>
+}
+
+export type MutationDeletePopularKeywordArgs = {
+  input: InputMaybe<DeletePopularKeywordInput>
 }
 
 export type MutationDeletePostArgs = {
