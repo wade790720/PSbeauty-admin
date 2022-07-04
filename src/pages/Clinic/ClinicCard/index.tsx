@@ -83,15 +83,13 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
 
     if (categories?.data?.topCategories) {
       return categories.data?.topCategories.map((firstOption, firstIdx) => {
-        const firstValue = firstIdx + 1
         return {
           label: firstOption?.name,
-          value: firstValue,
+          value: `${firstIdx + 1}`,
           children: firstOption?.secondCategories?.map((secondOption, secondIdx) => {
-            const secondValue = firstValue + secondIdx + 1
             return {
               label: secondOption?.name,
-              value: secondValue,
+              value: `${firstIdx + 1}-${secondIdx + 1}`,
               children: secondOption?.categories?.map(thirdOption => ({
                 id: thirdOption?.id,
                 value: thirdOption?.id || "",
@@ -135,6 +133,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
       })
   }
 
+  console.info("options", options)
   return (
     <>
       <Card>
@@ -163,9 +162,9 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
                   <MultiCascader
                     data={options || []}
                     style={{ width: 280 }}
-                    onChange={value => {
-                      setNewClinic({ ...newClinic, categories: value as string[] })
-                    }}
+                    // onChange={value => {
+                    //   setNewClinic({ ...newClinic, categories: value as string[] })
+                    // }}
                   />
                 </Form.Group>
                 <Form.Group layout="vertical">
