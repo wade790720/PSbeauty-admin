@@ -49,8 +49,6 @@ export default function Login() {
     if (customToken) go.toHome()
   }
 
-  console.log(formState.errors)
-
   return (
     <div className={styled.wrapper}>
       <div className={styled.outer}>
@@ -94,10 +92,11 @@ export default function Login() {
                   <Form.Input
                     placeholder="請輸入你的密碼"
                     {...register("password", {
-                      pattern: {
-                        value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
-                        message: "請包含至少8個字符、1個數字、1個大寫和1個小寫",
-                      },
+                      maxLength: 8,
+                      // pattern: {
+                      //   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
+                      //   message: "請包含至少8個字符、1個數字、1個大寫和1個小寫",
+                      // },
                     })}
                     {...(formState.errors.email && { variant: "invalid" })}
                   />
@@ -115,12 +114,6 @@ export default function Login() {
                 登入
               </Button>
             </Form>
-            <div className={styled["create-new-count"]}>
-              <span>還沒有屬於自己的帳號嗎?</span>
-              <a onClick={go.toRegister}>
-                <span>開始創建帳號</span>
-              </a>
-            </div>
           </div>
         </div>
       </div>

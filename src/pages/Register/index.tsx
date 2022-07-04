@@ -3,7 +3,7 @@ import { ReactComponent as Logo } from "./images/logo.svg"
 import Form, { InputGroup, Append } from "components/Form"
 import Button from "components/Button"
 import { auth } from "../../firebase"
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { setStorageValue } from "hooks/useLocalStorage"
 import { useGo } from "components/Router"
 import { endpoint, headers } from "utils/apiConfig"
@@ -35,7 +35,7 @@ export default function Register() {
 
   const create = async () => {
     // Get firebase token
-    const userCredential = await signInWithEmailAndPassword(
+    const userCredential = await createUserWithEmailAndPassword(
       auth,
       watchFields.email,
       watchFields.password,
