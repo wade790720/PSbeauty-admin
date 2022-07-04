@@ -61,15 +61,18 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const [addAdImageMutation] = useAddAdImageMutation({
     onCompleted: data => {
       setSlides([
-        ...slides,
         {
-          index: slides[slides.length - 1].index + 1,
+          index: 1,
           id: data.addAdImage?.id || "",
           title: newSlide.title || "",
           url: newSlide.url || "",
           image: newSlide.image || "",
           status: newSlide.status === true ? "開啟" : "關閉",
         },
+        ...slides.map(slide => ({
+          ...slide,
+          index: slide.index + 1,
+        })),
       ])
     },
   })

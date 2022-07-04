@@ -6,17 +6,16 @@ export type ModalPopupProps = {
    * Should the modal appear on screen or not
    */
   open?: boolean
-  backdrop?: boolean
 } & Partial<Pick<PopupProps, "open" | "closeOnDocumentClick" | "onClose" | "children">>
 
-const ModalPopup = ({ open = false, backdrop = true, ...props }: ModalPopupProps) => {
+const ModalPopup = ({ open = false, closeOnDocumentClick = true, ...props }: ModalPopupProps) => {
   return (
     <Popup
       modal
       nested
       lockScroll
       open={open}
-      closeOnDocumentClick={backdrop}
+      closeOnDocumentClick={closeOnDocumentClick}
       closeOnEscape
       onClose={props.onClose}
       contentStyle={{

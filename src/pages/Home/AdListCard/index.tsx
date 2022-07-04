@@ -58,14 +58,17 @@ const AdListCard = ({ data }: AdListCardProps) => {
   const [addAdCardMutation] = useAddAdCardMutation({
     onCompleted: data => {
       setAdCardsList([
-        ...adCardsList,
         {
-          index: adCardsList[adCardsList.length - 1].index + 1,
+          index: 1,
           id: data.addAdCard?.id || "",
           title: newPost.title || "",
           content: newPost.content || "",
           image: newPost.image || "",
         },
+        ...adCardsList.map(adCard => ({
+          ...adCard,
+          index: adCard.index + 1,
+        })),
       ])
     },
   })
@@ -198,6 +201,8 @@ const AdListCard = ({ data }: AdListCardProps) => {
           confirmText="建立"
           cancelText="取消"
           onConfirm={create}
+          closeOnDocumentClick={false}
+          style={{ overflow: "auto", maxHeight: "600px" }}
           onClose={() => setOpen(false)}>
           <Form>
             <Form.Group layout="vertical">

@@ -17,7 +17,10 @@ export type ModalProps = ModalPopupProps &
 
 const Modal = (props: ModalProps) => {
   return (
-    <ModalPopup open={props.open} closeOnDocumentClick={props.backdrop} onClose={props.onClose}>
+    <ModalPopup
+      open={props.open}
+      closeOnDocumentClick={props.closeOnDocumentClick}
+      onClose={props.onClose}>
       <ModalDialog style={props.style}>
         <Header title={props.title} />
         <Body content={props.content}>{props.children}</Body>
