@@ -63,6 +63,12 @@ export type GetClinicQuery = {
   } | null
 }
 
+export type GetAllClinicsQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetAllClinicsQuery = {
+  allClinics: Array<{ __typename: "Clinic"; id: string | null; name: string | null } | null> | null
+}
+
 export type AddClinicMutationVariables = Types.Exact<{
   name: Types.InputMaybe<Types.Scalars["String"]>
   categories: Types.InputMaybe<
@@ -198,6 +204,54 @@ export function useGetClinicLazyQuery(
 export type GetClinicQueryHookResult = ReturnType<typeof useGetClinicQuery>
 export type GetClinicLazyQueryHookResult = ReturnType<typeof useGetClinicLazyQuery>
 export type GetClinicQueryResult = Apollo.QueryResult<GetClinicQuery, GetClinicQueryVariables>
+export const GetAllClinicsDocument = gql`
+  query GetAllClinics {
+    allClinics {
+      id
+      name
+    }
+  }
+`
+
+/**
+ * __useGetAllClinicsQuery__
+ *
+ * To run a query within a React component, call `useGetAllClinicsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllClinicsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllClinicsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllClinicsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetAllClinicsQuery, GetAllClinicsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetAllClinicsQuery, GetAllClinicsQueryVariables>(
+    GetAllClinicsDocument,
+    options,
+  )
+}
+export function useGetAllClinicsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllClinicsQuery, GetAllClinicsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetAllClinicsQuery, GetAllClinicsQueryVariables>(
+    GetAllClinicsDocument,
+    options,
+  )
+}
+export type GetAllClinicsQueryHookResult = ReturnType<typeof useGetAllClinicsQuery>
+export type GetAllClinicsLazyQueryHookResult = ReturnType<typeof useGetAllClinicsLazyQuery>
+export type GetAllClinicsQueryResult = Apollo.QueryResult<
+  GetAllClinicsQuery,
+  GetAllClinicsQueryVariables
+>
 export const AddClinicDocument = gql`
   mutation AddClinic(
     $name: String

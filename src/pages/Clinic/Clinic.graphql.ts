@@ -55,6 +55,16 @@ export const GetClinic = gql`
     }
   }
 `
+
+export const GetAllClinics = gql`
+  query GetAllClinics {
+    allClinics {
+      id
+      name
+    }
+  }
+`
+
 export const AddClinic = gql`
   mutation AddClinic(
     $name: String

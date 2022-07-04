@@ -1,5 +1,6 @@
 import cx from "classnames"
 import styled from "./FormRadio.module.scss"
+import React from "react"
 
 export type FormRadioProps = {
   /**
@@ -10,7 +11,10 @@ export type FormRadioProps = {
   ReactProps.WithChildren &
   Omit<JSX.IntrinsicElements["input"], "type">
 
-const FormRadio = ({ children, inline, ...props }: FormRadioProps) => {
+const FormRadio = React.forwardRef(function FormRadio(
+  { children, inline, ...props }: FormRadioProps,
+  ref: React.Ref<HTMLInputElement> = null,
+) {
   return (
     <div
       className={cx(
@@ -20,11 +24,11 @@ const FormRadio = ({ children, inline, ...props }: FormRadioProps) => {
         props.className,
       )}>
       <label className={styled.label}>
-        <input type="radio" {...props} />
+        <input ref={ref} type="radio" {...props} />
         <span className={styled.content}>{children}</span>
       </label>
     </div>
   )
-}
+})
 
 export default FormRadio

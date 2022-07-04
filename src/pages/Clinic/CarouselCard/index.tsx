@@ -5,10 +5,8 @@ import Button, { LinkButton } from "components/Button"
 import { Table, Pagination, Toggle } from "rsuite"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
 import Card from "components/Card"
-import { Uploader } from "rsuite"
-import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import { FileType } from "rsuite/Uploader"
 import { GetClinicQuery } from "../Clinic.graphql.generated"
+import AddCarouselModal from "components/AddCarouselModal"
 
 const fakeData = [
   {
@@ -24,14 +22,12 @@ type CarouselCardProps = {
   data: GetClinicQuery["adImages"]
 }
 
+const { Column, HeaderCell, Cell } = Table
 const CarouselCard = ({ data }: CarouselCardProps) => {
-  const { Column, HeaderCell, Cell } = Table
-
+  const [openCarousel, setOpenCarousel] = useState(false)
   const [limit, setLimit] = useState(10)
   const [page, setPage] = useState(1)
   const [open, setOpen] = useState(false)
-  const [carouselList, setCarouselList] = useState<FileType[]>([])
-  const [openCarousel, setOpenCarousel] = useState(false)
 
   const imageList = useMemo(() => {
     if (!data?.edges) return []
@@ -121,40 +117,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <Modal
-        title="新增輪播圖"
-        open={openCarousel}
-        confirmText="新增"
-        cancelText="取消"
-        onConfirm={() => {
-          console.log("onConfirm")
-        }}
-        onClose={() => setOpenCarousel(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>預覽圖 (350 x 135px)</Form.Label>
-            <Uploader
-              listType="picture"
-              action=""
-              disabled={carouselList.length > 0}
-              onChange={(fileList: FileType[]) => {
-                setCarouselList(fileList)
-              }}>
-              <button>
-                <CameraRetro />
-              </button>
-            </Uploader>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>標題</Form.Label>
-            <Form.Input type="text" />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>超連結</Form.Label>
-            <Form.Input type="text" />
-          </Form.Group>
-        </Form>
-      </Modal>
+      <AddCarouselModal open={openCarousel} onClose={() => setOpenCarousel(false)} />
 
       <Modal
         title="編輯"

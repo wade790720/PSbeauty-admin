@@ -101,7 +101,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
       })
     }
   }, [categories])
-  console.log(options)
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -133,7 +132,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
       })
   }
 
-  console.info("options", options)
   return (
     <>
       <Card>

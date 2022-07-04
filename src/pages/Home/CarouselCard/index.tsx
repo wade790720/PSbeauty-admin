@@ -9,6 +9,7 @@ import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import uuid from "utils/uuid"
 import { storage } from "../../../firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import AddCarouselModal from "components/AddCarouselModal"
 import {
   GetHomeQuery,
   useAddAdImageMutation,
@@ -244,44 +245,11 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <Modal
-        title="新增輪播圖"
+      <AddCarouselModal
         open={openAddModal}
-        confirmText="新增"
-        cancelText="取消"
-        onConfirm={handleCreate}
-        onClose={() => setOpenAddModal(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-            <Uploader
-              listType="picture"
-              action=""
-              fileList={fileList}
-              autoUpload={false}
-              disabled={fileList.length > 0}
-              onChange={onChangeUploader}>
-              <button>
-                <CameraRetro />
-              </button>
-            </Uploader>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>標題</Form.Label>
-            <Form.Input
-              type="text"
-              onChange={e => setNewSlide({ ...newSlide, title: e.target.value + "" })}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>超連結</Form.Label>
-            <Form.Input
-              type="text"
-              onChange={e => setNewSlide({ ...newSlide, url: e.target.value + "" })}
-            />
-          </Form.Group>
-        </Form>
-      </Modal>
+        onClose={() => setOpenAddModal(false)}
+        onSubmit={handleCreate}
+      />
 
       <Modal
         title="編輯"
