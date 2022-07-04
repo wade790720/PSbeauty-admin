@@ -24,6 +24,22 @@ export const GetSetting = gql`
   }
 `
 
+export const AddKeyword = gql`
+  mutation AddKeyword($keyword: String) {
+    addPopularKeyword(input: { keyword: $keyword }) {
+      keyword
+    }
+  }
+`
+
+export const DeleteKeyword = gql`
+  mutation DeleteKeyword($keyword: String) {
+    deletePopularKeyword(input: { keyword: $keyword }) {
+      keyword
+    }
+  }
+`
+
 export const DeleteMember = gql`
   mutation DeleteMember($id: String) {
     deleteUser(input: { id: $id }) {

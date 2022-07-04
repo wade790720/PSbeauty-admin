@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-gql`
+export const Cases = gql`
   fragment Cases on Clinic {
     cases {
       id
@@ -16,7 +16,7 @@ gql`
   }
 `
 
-gql`
+export const Images = gql`
   fragment Images on Clinic {
     images {
       id
@@ -29,7 +29,7 @@ gql`
   }
 `
 
-gql`
+export const Doctors = gql`
   fragment Doctors on Clinic {
     doctors {
       id
@@ -60,37 +60,13 @@ export const GetClinic = gql`
       contactName
       contactPhone
       consultReplyCount
-      cases {
-        id
-        title
-        beforeImage
-        afterImage
-        description
-        categories {
-          id
-          name
-        }
-      }
       categories {
         id
         name
       }
-      images {
-        id
-        image
-        sort
-        title
-        redirectType
-        targetId
-      }
-      doctors {
-        id
-        name
-        resumes
-        photo
-        title
-        expertise
-      }
+      ...Cases
+      ...Doctors
+      ...Images
     }
   }
 `

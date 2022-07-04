@@ -68,6 +68,11 @@ export type GetClinicQuery = {
     contactName: string | null
     contactPhone: string | null
     consultReplyCount: number
+    categories: Array<{
+      __typename: "Category"
+      id: string | null
+      name: string | null
+    } | null> | null
     cases: Array<{
       __typename: "ClinicCase"
       id: string | null
@@ -81,10 +86,14 @@ export type GetClinicQuery = {
         name: string | null
       } | null> | null
     } | null> | null
-    categories: Array<{
-      __typename: "Category"
+    doctors: Array<{
+      __typename: "ClinicDoctor"
       id: string | null
       name: string | null
+      resumes: string | null
+      photo: string | null
+      title: string | null
+      expertise: string | null
     } | null> | null
     images: Array<{
       __typename: "ClinicImage"
@@ -94,15 +103,6 @@ export type GetClinicQuery = {
       title: string | null
       redirectType: string | null
       targetId: string | null
-    } | null> | null
-    doctors: Array<{
-      __typename: "ClinicDoctor"
-      id: string | null
-      name: string | null
-      resumes: string | null
-      photo: string | null
-      title: string | null
-      expertise: string | null
     } | null> | null
   } | null
 }
@@ -252,39 +252,18 @@ export const GetClinicDocument = gql`
       contactName
       contactPhone
       consultReplyCount
-      cases {
-        id
-        title
-        beforeImage
-        afterImage
-        description
-        categories {
-          id
-          name
-        }
-      }
       categories {
         id
         name
       }
-      images {
-        id
-        image
-        sort
-        title
-        redirectType
-        targetId
-      }
-      doctors {
-        id
-        name
-        resumes
-        photo
-        title
-        expertise
-      }
+      ...Cases
+      ...Doctors
+      ...Images
     }
   }
+  ${CasesFragmentDoc}
+  ${DoctorsFragmentDoc}
+  ${ImagesFragmentDoc}
 `
 
 /**

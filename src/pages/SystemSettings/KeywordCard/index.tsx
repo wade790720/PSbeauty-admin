@@ -4,21 +4,25 @@ import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import { Table, Pagination } from "rsuite"
-import { GetSettingQuery } from "../SystemSettings.graphql.generated"
+import { useForm } from "react-hook-form"
+import {
+  GetSettingQuery,
+  useAddKeywordMutation,
+  useDeleteKeywordMutation,
+} from "../SystemSettings.graphql.generated"
 
 type KeywordCardProps = {
   data: GetSettingQuery["popularKeywords"]
 }
 
-type Keyword = {
-  id: number
-  name: string
+type Inputs = {
+  keyword: string
 }
 
 const KeywordCard = ({ data }: KeywordCardProps) => {
+  const { register, watch, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
   const [keywordOpen, setKeywordOpen] = useState(false)
   const { Column, HeaderCell, Cell } = Table
-  const [open, setOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
 
@@ -30,6 +34,43 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
       name: word,
     }))
   })
+
+  const [addKeywordMutation] = useAddKeywordMutation({
+    onCompleted: data => {
+      setKeywords([
+        ...keywords,
+        {
+          id: keywords.length + 1,
+          name: data.addPopularKeyword?.keyword || "",
+        },
+      ])
+    },
+  })
+
+  const [deleteKeywordMutation] = useDeleteKeywordMutation({
+    onCompleted: data => {
+      setKeywords(keywords.filter(word => word.name !== data.deletePopularKeyword?.keyword))
+    },
+  })
+
+  const handleAdd = () => {
+    addKeywordMutation({
+      variables: {
+        keyword: watch().keyword,
+      },
+    })
+  }
+
+  const handleDelete = (keyword: string) => {
+    console.log(keyword)
+    const ask = confirm("確定要刪除嗎?")
+    if (ask)
+      deleteKeywordMutation({
+        variables: {
+          keyword,
+        },
+      })
+  }
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -45,12 +86,7 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table
-            height={400}
-            data={keywords}
-            onRowClick={data => {
-              console.log(data)
-            }}>
+          <Table height={400} data={keywords}>
             <Column width={70} align="center" fixed>
               <HeaderCell>序號</HeaderCell>
               <Cell dataKey="id" />
@@ -65,12 +101,9 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
               <HeaderCell>動作</HeaderCell>
               <Cell>
                 {rowData => {
-                  function handleAction() {
-                    alert(`id:${rowData.id}`)
-                  }
                   return (
                     <>
-                      <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                      <LinkButton onClick={() => handleDelete(rowData.name)}> 刪除 </LinkButton>
                     </>
                   )
                 }}
@@ -97,39 +130,27 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
           />
         </Card.Body>
       </Card>
-      <Modal
-        title="編輯會員"
-        open={open}
-        confirmText="儲存"
-        cancelText="取消"
-        onConfirm={() => {
-          console.log("onConfirm")
-        }}
-        onClose={() => setOpen(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label required>帳號</Form.Label>
-            <Form.Input type="text" value="WadeZhu" />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>信箱</Form.Label>
-            <Form.Input type="text" value="wade790720@gmail.com" />
-          </Form.Group>
-        </Form>
-      </Modal>
+
       <Modal
         title="新增熱門關鍵字"
         open={keywordOpen}
         confirmText="新增"
         cancelText="取消"
-        onConfirm={() => {
-          console.log("onConfirm")
-        }}
+        closeOnDocumentClick={false}
+        onConfirm={handleSubmit(handleAdd)}
         onClose={() => setKeywordOpen(false)}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label required>關鍵詞</Form.Label>
-            <Form.Input type="text" />
+            <Form.Input
+              type="text"
+              {...register("keyword", {
+                validate: value => value.length !== 0 || "輸入框內不能為空值",
+              })}
+            />
+            {formState.errors?.keyword?.message && (
+              <Form.ErrorMessage>{formState.errors?.keyword?.message}</Form.ErrorMessage>
+            )}
           </Form.Group>
         </Form>
       </Modal>
