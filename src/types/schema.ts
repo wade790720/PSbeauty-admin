@@ -805,7 +805,7 @@ export type ClinicDoctor = {
   /** 醫生所屬診所 */
   clinic: Maybe<Clinic>
   /** 醫師專長，自填 */
-  expertise: Maybe<Array<Maybe<Scalars["String"]>>>
+  expertise: Maybe<Scalars["String"]>
   /** 物件識別碼 */
   id: Maybe<Scalars["String"]>
   /** 姓名 */
@@ -813,7 +813,7 @@ export type ClinicDoctor = {
   /** 玉照 */
   photo: Maybe<Scalars["String"]>
   /** 經歷 */
-  resumes: Maybe<Array<Maybe<Scalars["String"]>>>
+  resumes: Maybe<Scalars["String"]>
   /** 醫師頭銜 */
   title: Maybe<Scalars["String"]>
 }
@@ -824,7 +824,7 @@ export type ClinicDoctorFilterInput = {
   /** 所屬診所識別碼 */
   clinicId: InputMaybe<StringOperationFilterInput>
   /** 醫師專長，自填 */
-  expertise: InputMaybe<ListStringOperationFilterInput>
+  expertise: InputMaybe<StringOperationFilterInput>
   /** 物件識別碼 */
   id: InputMaybe<StringOperationFilterInput>
   /** 姓名 */
@@ -835,7 +835,7 @@ export type ClinicDoctorFilterInput = {
   /** 玉照 */
   photo: InputMaybe<StringOperationFilterInput>
   /** 經歷 */
-  resumes: InputMaybe<ListStringOperationFilterInput>
+  resumes: InputMaybe<StringOperationFilterInput>
   /** 醫師頭銜 */
   title: InputMaybe<StringOperationFilterInput>
 }
@@ -844,6 +844,8 @@ export type ClinicDoctorFilterInput = {
 export type ClinicDoctorSortInput = {
   /** 所屬診所識別碼 */
   clinicId: InputMaybe<SortEnumType>
+  /** 醫師專長，自填 */
+  expertise: InputMaybe<SortEnumType>
   /** 物件識別碼 */
   id: InputMaybe<SortEnumType>
   /** 姓名 */
@@ -852,6 +854,8 @@ export type ClinicDoctorSortInput = {
   parentId: InputMaybe<SortEnumType>
   /** 玉照 */
   photo: InputMaybe<SortEnumType>
+  /** 經歷 */
+  resumes: InputMaybe<SortEnumType>
   /** 醫師頭銜 */
   title: InputMaybe<SortEnumType>
 }
@@ -1718,6 +1722,8 @@ export type Query = {
   adCards: Maybe<AdCardsConnection>
   /** 取得所有廣告圖 */
   adImages: Maybe<AdImagesConnection>
+  /** 取得所有診所 */
+  allClinics: Maybe<Array<Maybe<Clinic>>>
   /** 取得指定問卷回答 */
   answersByQuestionId: Maybe<AnswersByQuestionIdConnection>
   /** 依識別碼取得病例 */
@@ -1734,7 +1740,7 @@ export type Query = {
   clinicImages: Maybe<Array<Maybe<ClinicImage>>>
   /** 取得診所信箱 */
   clinicInbox: Maybe<ClinicInboxConnection>
-  /** 取得所有診所 */
+  /** 取得診所列表 */
   clinics: Maybe<ClinicsConnection>
   /** 取得指定的諮詢 */
   consult: Maybe<Consult>
@@ -1808,6 +1814,10 @@ export type QueryAdImagesArgs = {
   last: InputMaybe<Scalars["Int"]>
   order: InputMaybe<Array<AdImageSortInput>>
   where: InputMaybe<AdImageFilterInput>
+}
+
+export type QueryAllClinicsArgs = {
+  order: InputMaybe<Array<ClinicSortInput>>
 }
 
 export type QueryAnswersByQuestionIdArgs = {

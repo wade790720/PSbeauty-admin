@@ -39,10 +39,10 @@ export type DoctorsFragment = {
     __typename: "ClinicDoctor"
     id: string | null
     name: string | null
-    resumes: Array<string | null> | null
+    resumes: string | null
     photo: string | null
     title: string | null
-    expertise: Array<string | null> | null
+    expertise: string | null
   } | null> | null
 }
 
@@ -99,10 +99,10 @@ export type GetClinicQuery = {
       __typename: "ClinicDoctor"
       id: string | null
       name: string | null
-      resumes: Array<string | null> | null
+      resumes: string | null
       photo: string | null
       title: string | null
-      expertise: Array<string | null> | null
+      expertise: string | null
     } | null> | null
   } | null
 }

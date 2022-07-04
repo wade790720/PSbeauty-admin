@@ -26,7 +26,7 @@ type Doctor = {
   title: string
   name: string
   expertise: string
-  resumes: string[]
+  resumes: string
   photo: string
 }
 
@@ -42,7 +42,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
     name: "",
     expertise: "",
     photo: "",
-    resumes: [],
+    resumes: "",
     title: "",
   })
 
@@ -53,7 +53,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           index: index + 1,
           name: item?.name,
           title: item?.title,
-          expertise: item?.expertise?.[0],
+          expertise: item?.expertise,
           resumes: item?.resumes,
           photo: item?.photo,
         }))
@@ -212,7 +212,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
             <Editor
               height={400}
               onEdit={newValue => {
-                setNewDoctor({ ...newDoctor, resumes: [newValue] })
+                setNewDoctor({ ...newDoctor, resumes: newValue })
               }}
             />
           </Form.Group>
