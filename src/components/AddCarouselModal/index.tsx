@@ -161,7 +161,7 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
         </Button>
         <Button
           onClick={() => {
-            handleSubmit(onSubmit)
+            handleSubmit(onSubmit)()
             props.onClose()
           }}>
           新增

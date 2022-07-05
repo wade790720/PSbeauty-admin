@@ -203,7 +203,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(handleAdd)
+              handleSubmit(handleAdd)()
               setOpenAdd(false)
             }}>
             建立

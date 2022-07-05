@@ -201,7 +201,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
             </Button>
             <Button
               onClick={() => {
-                handleSubmit(create)
+                handleSubmit(create)()
                 setOpen(false)
               }}>
               建立

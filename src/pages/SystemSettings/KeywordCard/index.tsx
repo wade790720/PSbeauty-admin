@@ -141,7 +141,7 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(handleAdd)
+              handleSubmit(handleAdd)()
               setKeywordOpen(false)
             }}>
             新增
