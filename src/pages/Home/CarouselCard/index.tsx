@@ -180,56 +180,67 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         onSubmit={handleCreate}
       />
 
-      <Modal
-        title="編輯"
-        open={openEditModal}
-        confirmText="儲存"
-        cancelText="取消"
-        onConfirm={handleUpdate}
-        onClose={() => setOpenEditModal(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>預覽圖</Form.Label>
-            <img
-              src={prepareUpdate?.image}
-              alt="preview"
-              style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>標題</Form.Label>
-            <Form.Input
-              type="text"
-              value={prepareUpdate?.title}
-              onChange={e => setPrepareUpdate({ ...prepareUpdate, title: e.target.value + "" })}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>順序</Form.Label>
-            <Form.Input
-              type="number"
-              value={prepareUpdate?.index}
-              onChange={e =>
-                setPrepareUpdate({ ...prepareUpdate, index: parseInt(e.target.value) })
-              }
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>超連結</Form.Label>
-            <Form.Input
-              type="text"
-              value={prepareUpdate?.url}
-              onChange={e => setPrepareUpdate({ ...prepareUpdate, url: e.target.value + "" })}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>狀態</Form.Label>
-            <Toggle
-              defaultChecked={prepareUpdate?.status}
-              onChange={checked => setPrepareUpdate({ ...prepareUpdate, status: checked })}
-            />
-          </Form.Group>
-        </Form>
+      <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
+        <Modal.Header>
+          <Modal.Title>編輯</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label>預覽圖</Form.Label>
+              <img
+                src={prepareUpdate?.image}
+                alt="preview"
+                style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>標題</Form.Label>
+              <Form.Input
+                type="text"
+                value={prepareUpdate?.title}
+                onChange={e => setPrepareUpdate({ ...prepareUpdate, title: e.target.value + "" })}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>順序</Form.Label>
+              <Form.Input
+                type="number"
+                value={prepareUpdate?.index}
+                onChange={e =>
+                  setPrepareUpdate({ ...prepareUpdate, index: parseInt(e.target.value) })
+                }
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>超連結</Form.Label>
+              <Form.Input
+                type="text"
+                value={prepareUpdate?.url}
+                onChange={e => setPrepareUpdate({ ...prepareUpdate, url: e.target.value + "" })}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>狀態</Form.Label>
+              <Toggle
+                defaultChecked={prepareUpdate?.status}
+                onChange={checked => setPrepareUpdate({ ...prepareUpdate, status: checked })}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpenEditModal(false)}>
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              handleUpdate()
+              setOpenEditModal(false)
+            }}>
+            儲存
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   )

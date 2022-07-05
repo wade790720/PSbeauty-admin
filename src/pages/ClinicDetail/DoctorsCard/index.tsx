@@ -149,87 +149,106 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         </Card.Body>
       </Card>
       <Modal
-        title="新增醫師"
         open={openAdd}
-        confirmText="建立"
-        cancelText="取消"
-        onConfirm={handleSubmit(handleAdd)}
         onClose={() => setOpenAdd(false)}
         style={{ overflow: "auto", maxHeight: "600px" }}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>照片 (100 x 100px)</Form.Label>
-            <ImageUploader
-              onChange={url => {
-                setValue("photo", url)
-              }}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>姓名</Form.Label>
-            <Form.Input
-              type="text"
-              {...register("name", {
-                required: "此欄位為必填",
-                validate: value => value.length !== 0 || "輸入框內不能為空值",
-              })}
-            />
-            {formState.errors?.name?.message && (
-              <Form.ErrorMessage>{formState.errors?.name?.message}</Form.ErrorMessage>
-            )}
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>職稱</Form.Label>
-            <Form.Input type="text" {...register("title")} />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>專長</Form.Label>
-            <Form.Input type="text" {...register("expertise")} />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>經歷</Form.Label>
-            <Editor
-              height={400}
-              onEdit={newValue => {
-                setValue("resumes", newValue)
-              }}
-            />
-          </Form.Group>
-        </Form>
+        <Modal.Header>
+          <Modal.Title>新增醫師</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label>照片 (100 x 100px)</Form.Label>
+              <ImageUploader
+                onChange={url => {
+                  setValue("photo", url)
+                }}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>姓名</Form.Label>
+              <Form.Input
+                type="text"
+                {...register("name", {
+                  required: "此欄位為必填",
+                  validate: value => value.length !== 0 || "輸入框內不能為空值",
+                })}
+              />
+              {formState.errors?.name?.message && (
+                <Form.ErrorMessage>{formState.errors?.name?.message}</Form.ErrorMessage>
+              )}
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>職稱</Form.Label>
+              <Form.Input type="text" {...register("title")} />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>專長</Form.Label>
+              <Form.Input type="text" {...register("expertise")} />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>經歷</Form.Label>
+              <Editor
+                height={400}
+                onEdit={newValue => {
+                  setValue("resumes", newValue)
+                }}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpenAdd(false)}>
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              handleSubmit(handleAdd)
+              setOpenAdd(false)
+            }}>
+            建立
+          </Button>
+        </Modal.Footer>
       </Modal>
-      <Modal
-        title="檢視醫師"
-        open={openReview}
-        confirmText="確定"
-        cancelText="取消"
-        onClose={() => setOpenReview(false)}
-        style={{ maxWidth: "450px" }}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>預覽圖 (100 x 100px)</Form.Label>
-            <img
-              src={reviewDoctor.current?.photo}
-              alt="preview"
-              style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>姓名</Form.Label>
-            <p>{reviewDoctor.current?.name}</p>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>職稱</Form.Label>
-            <p>{reviewDoctor.current?.title}</p>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>專長</Form.Label>
-            <p>{reviewDoctor.current?.expertise}</p>
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>經歷</Form.Label>
-            <div dangerouslySetInnerHTML={{ __html: reviewDoctor.current?.resumes || "" }} />
-          </Form.Group>
-        </Form>
+
+      <Modal open={openReview} onClose={() => setOpenReview(false)} style={{ maxWidth: "450px" }}>
+        <Modal.Header>
+          <Modal.Title>檢視醫師</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label>預覽圖 (100 x 100px)</Form.Label>
+              <img
+                src={reviewDoctor.current?.photo}
+                alt="preview"
+                style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>姓名</Form.Label>
+              <p>{reviewDoctor.current?.name}</p>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>職稱</Form.Label>
+              <p>{reviewDoctor.current?.title}</p>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>專長</Form.Label>
+              <p>{reviewDoctor.current?.expertise}</p>
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>經歷</Form.Label>
+              <div dangerouslySetInnerHTML={{ __html: reviewDoctor.current?.resumes || "" }} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpenReview(false)}>
+            取消
+          </Button>
+          <Button onClick={() => setOpenReview(false)}>確定</Button>
+        </Modal.Footer>
       </Modal>
     </>
   )

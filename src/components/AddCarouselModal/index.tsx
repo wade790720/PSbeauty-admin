@@ -2,6 +2,7 @@ import { useMemo, useEffect } from "react"
 import Form from "components/Form"
 import { InputPicker } from "rsuite"
 import Modal from "components/Modal"
+import Button from "components/Button"
 import {
   useGetClinicByIdLazyQuery,
   useGetAllClinicsQuery,
@@ -77,81 +78,95 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
   }
 
   return (
-    <Modal
-      title="新增輪播圖"
-      open={props.open}
-      confirmText="新增"
-      cancelText="取消"
-      onConfirm={handleSubmit(onSubmit)}
-      onClose={props.onClose}>
-      <Form>
-        <Form.Group layout="vertical">
-          <Form.Label>預覽圖 (350 x 135px)</Form.Label>
-          <ImageUploader
-            onChange={url => {
-              setValue("image", url)
-            }}
-          />
-        </Form.Group>
-        <Form.Group layout="vertical">
-          <Form.Label required>標題</Form.Label>
-          <Form.Input placeholder="請輸入輪播標題" {...register("title")} />
-        </Form.Group>
-        <Form.Group layout="vertical">
-          <Form.Label>診所</Form.Label>
-          {
-            <Controller
-              render={({ field: { onChange } }) => (
-                <InputPicker data={allClinics} onChange={value => onChange(value)} />
-              )}
-              name="clinic"
-              control={control}
-            />
-          }
-        </Form.Group>
-        {watchClinic && (
+    <Modal open={props.open} onClose={props.onClose}>
+      <Modal.Header>
+        <Modal.Title>新增輪播圖</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
           <Form.Group layout="vertical">
-            <Form.Label>進階篩選</Form.Label>
-            <Form.Radio {...register("advancedOption")} value="none">
-              無
-            </Form.Radio>
-            <Form.Radio {...register("advancedOption")} value="doctor">
-              醫生
-            </Form.Radio>
-            <Form.Radio {...register("advancedOption")} value="case">
-              案例
-            </Form.Radio>
+            <Form.Label>預覽圖 (350 x 135px)</Form.Label>
+            <ImageUploader
+              onChange={url => {
+                setValue("image", url)
+              }}
+            />
           </Form.Group>
-        )}
-        {watchAdvancedOption === "doctor" && (
-          <Form.Group>
-            <Form.Label>診所醫生</Form.Label>
+          <Form.Group layout="vertical">
+            <Form.Label required>標題</Form.Label>
+            <Form.Input placeholder="請輸入輪播標題" {...register("title")} />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>診所</Form.Label>
             {
               <Controller
                 render={({ field: { onChange } }) => (
-                  <InputPicker data={selectedClinic.doctors} onChange={value => onChange(value)} />
+                  <InputPicker data={allClinics} onChange={value => onChange(value)} />
                 )}
-                name="doctor"
+                name="clinic"
                 control={control}
               />
             }
           </Form.Group>
-        )}
-        {watchAdvancedOption === "case" && (
-          <Form.Group>
-            <Form.Label>診所案例</Form.Label>
-            {
-              <Controller
-                render={({ field: { onChange } }) => (
-                  <InputPicker data={selectedClinic.cases} onChange={value => onChange(value)} />
-                )}
-                name="case"
-                control={control}
-              />
-            }
-          </Form.Group>
-        )}
-      </Form>
+          {watchClinic && (
+            <Form.Group layout="vertical">
+              <Form.Label>進階篩選</Form.Label>
+              <Form.Radio {...register("advancedOption")} value="none">
+                無
+              </Form.Radio>
+              <Form.Radio {...register("advancedOption")} value="doctor">
+                醫生
+              </Form.Radio>
+              <Form.Radio {...register("advancedOption")} value="case">
+                案例
+              </Form.Radio>
+            </Form.Group>
+          )}
+          {watchAdvancedOption === "doctor" && (
+            <Form.Group>
+              <Form.Label>診所醫生</Form.Label>
+              {
+                <Controller
+                  render={({ field: { onChange } }) => (
+                    <InputPicker
+                      data={selectedClinic.doctors}
+                      onChange={value => onChange(value)}
+                    />
+                  )}
+                  name="doctor"
+                  control={control}
+                />
+              }
+            </Form.Group>
+          )}
+          {watchAdvancedOption === "case" && (
+            <Form.Group>
+              <Form.Label>診所案例</Form.Label>
+              {
+                <Controller
+                  render={({ field: { onChange } }) => (
+                    <InputPicker data={selectedClinic.cases} onChange={value => onChange(value)} />
+                  )}
+                  name="case"
+                  control={control}
+                />
+              }
+            </Form.Group>
+          )}
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={() => props.onClose()}>
+          取消
+        </Button>
+        <Button
+          onClick={() => {
+            handleSubmit(onSubmit)
+            props.onClose()
+          }}>
+          新增
+        </Button>
+      </Modal.Footer>
     </Modal>
   )
 }

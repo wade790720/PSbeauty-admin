@@ -156,72 +156,90 @@ const AdListCard = ({ data }: AdListCardProps) => {
 
         {/* 新增廣告卡 */}
         <Modal
-          title="新增廣告卡"
           open={open}
-          confirmText="建立"
-          cancelText="取消"
-          onConfirm={handleSubmit(create)}
           closeOnDocumentClick={false}
           style={{ overflow: "auto", maxHeight: "600px" }}
           onClose={() => setOpen(false)}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label required>預覽圖</Form.Label>
-              <ImageUploader
-                onChange={url => {
-                  setValue("image", url)
-                }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input
-                type="text"
-                {...register("title", {
-                  validate: value => value.length !== 0 || "輸入框內不能為空值",
-                })}
-              />
-              {formState.errors?.title?.message && (
-                <Form.ErrorMessage>{formState.errors?.title?.message}</Form.ErrorMessage>
-              )}
-            </Form.Group>
-            <Form.Group layout="vertical" style={{ height: "200px" }}>
-              <Form.Label required>內容</Form.Label>
-              <Editor
-                onEdit={newValue => {
-                  setValue("content", newValue)
-                }}
-              />
-            </Form.Group>
-          </Form>
+          <Modal.Header>
+            <Modal.Title>新增廣告卡</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label required>預覽圖</Form.Label>
+                <ImageUploader
+                  onChange={url => {
+                    setValue("image", url)
+                  }}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...register("title", {
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+                {formState.errors?.title?.message && (
+                  <Form.ErrorMessage>{formState.errors?.title?.message}</Form.ErrorMessage>
+                )}
+              </Form.Group>
+              <Form.Group layout="vertical" style={{ height: "200px" }}>
+                <Form.Label required>內容</Form.Label>
+                <Editor
+                  onEdit={newValue => {
+                    setValue("content", newValue)
+                  }}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                handleSubmit(create)
+                setOpen(false)
+              }}>
+              建立
+            </Button>
+          </Modal.Footer>
         </Modal>
 
         {/* 檢視廣告卡資訊 */}
-        <Modal
-          title="廣告卡資訊"
-          open={reviewOpen}
-          confirmText="確定"
-          cancelText="取消"
-          onClose={() => setReviewOpen(false)}
-          style={{ maxWidth: "450px" }}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (390 x 240px)</Form.Label>
-              <img
-                src={reviewCard.current?.image}
-                alt="preview"
-                style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>標題</Form.Label>
-              <p>{reviewCard.current?.title}</p>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <div dangerouslySetInnerHTML={{ __html: reviewCard.current?.content || "" }} />
-            </Form.Group>
-          </Form>
+        <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} style={{ maxWidth: "450px" }}>
+          <Modal.Header>
+            <Modal.Title>廣告卡資訊</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (390 x 240px)</Form.Label>
+                <img
+                  src={reviewCard.current?.image}
+                  alt="preview"
+                  style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>標題</Form.Label>
+                <p>{reviewCard.current?.title}</p>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <div dangerouslySetInnerHTML={{ __html: reviewCard.current?.content || "" }} />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setReviewOpen(false)}>
+              取消
+            </Button>
+            <Button onClick={() => setReviewOpen(false)}>確定</Button>
+          </Modal.Footer>
         </Modal>
       </Card.Body>
     </Card>

@@ -115,28 +115,38 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
         </Card.Body>
       </Card>
 
-      <Modal
-        title="新增熱門關鍵字"
-        open={keywordOpen}
-        confirmText="新增"
-        cancelText="取消"
-        closeOnDocumentClick={false}
-        onConfirm={handleSubmit(handleAdd)}
-        onClose={() => setKeywordOpen(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label required>關鍵詞</Form.Label>
-            <Form.Input
-              type="text"
-              {...register("keyword", {
-                validate: value => value.length !== 0 || "輸入框內不能為空值",
-              })}
-            />
-            {formState.errors?.keyword?.message && (
-              <Form.ErrorMessage>{formState.errors?.keyword?.message}</Form.ErrorMessage>
-            )}
-          </Form.Group>
-        </Form>
+      <Modal open={keywordOpen} closeOnDocumentClick={false} onClose={() => setKeywordOpen(false)}>
+        <Modal.Header>
+          <Modal.Title>新增熱門關鍵字</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label required>關鍵詞</Form.Label>
+              <Form.Input
+                type="text"
+                {...register("keyword", {
+                  validate: value => value.length !== 0 || "輸入框內不能為空值",
+                })}
+              />
+              {formState.errors?.keyword?.message && (
+                <Form.ErrorMessage>{formState.errors?.keyword?.message}</Form.ErrorMessage>
+              )}
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setKeywordOpen(false)}>
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              handleSubmit(handleAdd)
+              setKeywordOpen(false)
+            }}>
+            新增
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   )

@@ -1,39 +1,20 @@
 import ModalPopup from "../ModalPopup"
 import ModalDialog from "../ModalDialog"
-import Header from "../ModalHeader"
-import Body from "../ModalBody"
-import Footer from "../ModalFooter"
 import { ModalPopupProps } from "../ModalPopup"
-import { ModalBodyProps } from "../ModalBody"
-import { ModalHeaderProps } from "../ModalHeader"
-import { ModalFooterProps } from "../ModalFooter"
 import { PopupProps } from "reactjs-popup/dist/types"
 
 export type ModalProps = ModalPopupProps &
-  ModalBodyProps &
-  ModalHeaderProps &
-  ModalFooterProps &
-  Partial<Pick<PopupProps, "open" | "closeOnDocumentClick" | "onClose" | "children">>
+  ReactProps.WithStyle &
+  Partial<Pick<PopupProps, "open" | "lockScroll" | "onClose" | "children">>
 
 const Modal = (props: ModalProps) => {
   return (
     <ModalPopup
       open={props.open}
-      closeOnDocumentClick={props.closeOnDocumentClick}
+      closeOnDocumentClick={props.backdrop}
+      lockScroll={props.lockScroll}
       onClose={props.onClose}>
-      <ModalDialog style={props.style}>
-        <Header title={props.title} />
-        <Body content={props.content}>{props.children}</Body>
-        <Footer
-          confirmText={props.confirmText}
-          confirmButtonProps={props.confirmButtonProps}
-          cancelText={props.cancelText}
-          cancelButtonProps={props.cancelButtonProps}
-          onConfirm={props.onConfirm}
-          onCancel={props.onCancel}
-          onClose={props.onClose}
-        />
-      </ModalDialog>
+      <ModalDialog style={props.style}>{props.children}</ModalDialog>
     </ModalPopup>
   )
 }

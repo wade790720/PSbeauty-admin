@@ -112,53 +112,62 @@ const CaseCard = ({ data }: CaseCardProps) => {
         <Button variant="secondary" onClick={() => setOpenAdd(true)}>
           新增
         </Button>
-        <Modal
-          title="新增案例"
-          open={openAdd}
-          confirmText="新增"
-          cancelText="取消"
-          onConfirm={() => {
-            console.log("onConfirm")
-          }}
-          onClose={() => setOpenAdd(false)}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-              <Uploader
-                listType="picture"
-                action=""
-                disabled={carouselList.length > 0}
-                onChange={(fileList: FileType[]) => {
-                  setCarouselList(fileList)
-                }}>
-                <button>
-                  <CameraRetro />
-                </button>
-              </Uploader>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>分類</Form.Label>
-              <MultiCascader
-                data={categoryData}
-                searchable={false}
-                menuStyle={{ padding: "6px 0" }}
-                style={{ width: "100%" }}
-                placeholder="請選擇"
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <Editor
-                onEdit={newValue => {
-                  console.log(newValue)
-                }}
-              />
-            </Form.Group>
-          </Form>
+        <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
+          <Modal.Header>
+            <Modal.Title>新增案例</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action=""
+                  disabled={carouselList.length > 0}
+                  onChange={(fileList: FileType[]) => {
+                    setCarouselList(fileList)
+                  }}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>分類</Form.Label>
+                <MultiCascader
+                  data={categoryData}
+                  searchable={false}
+                  menuStyle={{ padding: "6px 0" }}
+                  style={{ width: "100%" }}
+                  placeholder="請選擇"
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor
+                  onEdit={newValue => {
+                    console.log(newValue)
+                  }}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpenAdd(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                console.log("onConfirm")
+                setOpenAdd(false)
+              }}>
+              新增
+            </Button>
+          </Modal.Footer>
         </Modal>
       </Card.Header>
       <Card.Body>
@@ -241,54 +250,63 @@ const CaseCard = ({ data }: CaseCardProps) => {
           onChangePage={setPage}
           onChangeLimit={handleChangeLimit}
         />
-        <Modal
-          title="編輯案例"
-          open={openEdit}
-          confirmText="修改"
-          cancelText="取消"
-          onConfirm={() => {
-            console.log("onConfirm")
-          }}
-          onClose={() => setOpenEdit(false)}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-              <Uploader
-                listType="picture"
-                action=""
-                disabled={editCase.imageList.length > 1}
-                defaultFileList={editCase.imageList}
-                onChange={onChangeUploader}>
-                <button>
-                  <CameraRetro />
-                </button>
-              </Uploader>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" value={editCase.title} />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>分類</Form.Label>
-              <MultiCascader
-                data={categoryData}
-                searchable={false}
-                menuStyle={{ padding: "6px 0" }}
-                style={{ width: "100%" }}
-                placeholder="請選擇"
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <Editor
-                height={400}
-                value={editCase.description}
-                onEdit={newValue => {
-                  setEditCase({ ...editCase, description: newValue })
-                }}
-              />
-            </Form.Group>
-          </Form>
+        <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
+          <Modal.Header>
+            <Modal.Title>編輯案例</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <Uploader
+                  listType="picture"
+                  action=""
+                  disabled={editCase.imageList.length > 1}
+                  defaultFileList={editCase.imageList}
+                  onChange={onChangeUploader}>
+                  <button>
+                    <CameraRetro />
+                  </button>
+                </Uploader>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input type="text" value={editCase.title} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>分類</Form.Label>
+                <MultiCascader
+                  data={categoryData}
+                  searchable={false}
+                  menuStyle={{ padding: "6px 0" }}
+                  style={{ width: "100%" }}
+                  placeholder="請選擇"
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor
+                  height={400}
+                  value={editCase.description}
+                  onEdit={newValue => {
+                    setEditCase({ ...editCase, description: newValue })
+                  }}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpenEdit(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                console.log("onConfirm")
+                setOpenEdit(false)
+              }}>
+              修改
+            </Button>
+          </Modal.Footer>
         </Modal>
       </Card.Body>
     </Card>

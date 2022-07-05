@@ -139,87 +139,98 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
           <Button variant="secondary" onClick={() => setOpen(true)}>
             新增診所
           </Button>
-          <Modal
-            title="新增診所"
-            open={open}
-            confirmText="新增"
-            cancelText="取消"
-            onConfirm={handleCreate}
-            onClose={() => setOpen(false)}>
-            <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label required>診所名稱</Form.Label>
-                  <Form.Input
-                    type="text"
-                    onChange={e => setNewClinic({ ...newClinic, name: e.target.value + "" })}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>大分類</Form.Label>
-                  <MultiCascader
-                    data={options || []}
-                    style={{ width: 280 }}
-                    // onChange={value => {
-                    //   setNewClinic({ ...newClinic, categories: value as string[] })
-                    // }}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>電子信箱</Form.Label>
-                  <Form.Input
-                    type="email"
-                    onChange={e => setNewClinic({ ...newClinic, email: e.target.value + "" })}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>完整地址</Form.Label>
-                  <div className="inline-flex w-full">
+          <Modal open={open} onClose={() => setOpen(false)}>
+            <Modal.Header>
+              <Modal.Title>新增診所</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
+                <Form>
+                  <Form.Group layout="vertical">
+                    <Form.Label required>新增診所</Form.Label>
                     <Form.Input
                       type="text"
-                      placeholder="縣市"
-                      className="mr-4"
-                      style={{ flex: "1 1 300px" }}
-                      onChange={e => setNewClinic({ ...newClinic, county: e.target.value + "" })}
+                      onChange={e => setNewClinic({ ...newClinic, name: e.target.value + "" })}
                     />
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label required>大分類</Form.Label>
+                    <MultiCascader
+                      data={options || []}
+                      style={{ width: 280 }}
+                      // onChange={value => {
+                      //   setNewClinic({ ...newClinic, categories: value as string[] })
+                      // }}
+                    />
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label required>電子信箱</Form.Label>
                     <Form.Input
-                      type="text"
-                      placeholder="地區"
-                      className="mr-4"
-                      style={{ flex: "1 1 300px" }}
-                      onChange={e => setNewClinic({ ...newClinic, town: e.target.value + "" })}
+                      type="email"
+                      onChange={e => setNewClinic({ ...newClinic, email: e.target.value + "" })}
                     />
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label>完整地址</Form.Label>
+                    <div className="inline-flex w-full">
+                      <Form.Input
+                        type="text"
+                        placeholder="縣市"
+                        className="mr-4"
+                        style={{ flex: "1 1 300px" }}
+                        onChange={e => setNewClinic({ ...newClinic, county: e.target.value + "" })}
+                      />
+                      <Form.Input
+                        type="text"
+                        placeholder="地區"
+                        className="mr-4"
+                        style={{ flex: "1 1 300px" }}
+                        onChange={e => setNewClinic({ ...newClinic, town: e.target.value + "" })}
+                      />
+                      <Form.Input
+                        type="text"
+                        placeholder="地址"
+                        onChange={e => setNewClinic({ ...newClinic, address: e.target.value + "" })}
+                      />
+                    </div>
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label>診所網址</Form.Label>
                     <Form.Input
-                      type="text"
-                      placeholder="地址"
-                      onChange={e => setNewClinic({ ...newClinic, address: e.target.value + "" })}
+                      type="url"
+                      onChange={e => setNewClinic({ ...newClinic, web: e.target.value + "" })}
                     />
-                  </div>
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所網址</Form.Label>
-                  <Form.Input
-                    type="url"
-                    onChange={e => setNewClinic({ ...newClinic, web: e.target.value + "" })}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所電話</Form.Label>
-                  <Form.Input
-                    type="tel"
-                    onChange={e => setNewClinic({ ...newClinic, phone: e.target.value + "" })}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所介紹</Form.Label>
-                  <Editor
-                    onEdit={newValue => {
-                      setNewClinic({ ...newClinic, description: newValue + "" })
-                    }}
-                  />
-                </Form.Group>
-              </Form>
-            </div>
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label>診所電話</Form.Label>
+                    <Form.Input
+                      type="tel"
+                      onChange={e => setNewClinic({ ...newClinic, phone: e.target.value + "" })}
+                    />
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label>診所介紹</Form.Label>
+                    <Editor
+                      onEdit={newValue => {
+                        setNewClinic({ ...newClinic, description: newValue + "" })
+                      }}
+                    />
+                  </Form.Group>
+                </Form>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setOpen(false)}>
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  handleCreate()
+                  setOpen(false)
+                }}>
+                新增
+              </Button>
+            </Modal.Footer>
           </Modal>
         </Card.Header>
         <Card.Body>

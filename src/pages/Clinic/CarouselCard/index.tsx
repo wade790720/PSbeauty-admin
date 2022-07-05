@@ -119,35 +119,44 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
 
       <AddCarouselModal open={openCarousel} onClose={() => setOpenCarousel(false)} />
 
-      <Modal
-        title="編輯"
-        open={open}
-        confirmText="儲存"
-        cancelText="取消"
-        onConfirm={() => {
-          console.log("onConfirm")
-        }}
-        onClose={() => setOpen(false)}>
-        <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>預覽圖</Form.Label>
-            <DefaultPhoto
-              style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
-            />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label required>標題</Form.Label>
-            <Form.Input type="text" value="測試輪播" />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>超連結</Form.Label>
-            <Form.Input type="text" value="/url" />
-          </Form.Group>
-          <Form.Group layout="vertical">
-            <Form.Label>狀態</Form.Label>
-            <Toggle defaultChecked />
-          </Form.Group>
-        </Form>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Modal.Header>
+          <Modal.Title>編輯</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group layout="vertical">
+              <Form.Label>預覽圖</Form.Label>
+              <DefaultPhoto
+                style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
+              />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label required>標題</Form.Label>
+              <Form.Input type="text" value="測試輪播" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>超連結</Form.Label>
+              <Form.Input type="text" value="/url" />
+            </Form.Group>
+            <Form.Group layout="vertical">
+              <Form.Label>狀態</Form.Label>
+              <Toggle defaultChecked />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              console.log("onConfirm")
+              setOpen(false)
+            }}>
+            儲存
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   )

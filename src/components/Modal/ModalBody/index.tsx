@@ -1,17 +1,12 @@
 import cx from "classnames"
 import styled from "./ModalBody.module.scss"
 
-export type ModalBodyProps = {
-  /**
-   * The Modal content. (props.children > props.content)
-   */
-  content?: string
-} & ReactProps.Component
+export type ModalBodyProps = ReactProps.Component
 
 const ModalBody = (props: ModalBodyProps) => {
   return (
-    <main className={cx(styled.main, props.className)} style={props.style}>
-      {props.children || props.content}
+    <main className={cx(styled.wrapper, props.className)} style={props.style}>
+      {props.children}
     </main>
   )
 }
