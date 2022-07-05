@@ -4,8 +4,10 @@ import { InputPicker, Uploader } from "rsuite"
 import { FileType } from "rsuite/Uploader"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
 import Modal from "components/Modal"
-import { useGetAllClinicsQuery } from "pages/Clinic/Clinic.graphql.generated"
-import { useGetClinicByIdLazyQuery } from "./AddCarouselModal.graphql.generated"
+import {
+  useGetClinicByIdLazyQuery,
+  useGetAllClinicsQuery,
+} from "./AddCarouselModal.graphql.generated"
 import { useForm, Controller } from "react-hook-form"
 
 type AdvancedOption = "none" | "doctor" | "case"
