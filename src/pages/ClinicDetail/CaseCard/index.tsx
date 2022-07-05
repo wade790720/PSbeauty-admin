@@ -287,7 +287,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
                 <Form.Label>內容</Form.Label>
                 <Editor
                   height={400}
-                  value={editCase.description}
+                  initialValue={editCase.description}
                   onEdit={newValue => {
                     setEditCase({ ...editCase, description: newValue })
                   }}

@@ -1,16 +1,17 @@
-import { useState } from "react"
+import { useMemo } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
 import Editor from "components/Editor"
-import { MultiCascader } from "rsuite"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 import { GetClinicQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
+import { useForm } from "react-hook-form"
 
-import fakeData from "../category.json"
+type InfoCardProps = {
+  data: GetClinicQuery["clinic"]
+}
 
-type Clinic = {
-  id: string
+type Inputs = {
   name: string
   county: string
   town: string
@@ -21,44 +22,45 @@ type Clinic = {
   categories: string[]
 }
 
-type InfoCardProps = {
-  data: GetClinicQuery["clinic"]
-}
-
 const InfoCard = ({ data }: InfoCardProps) => {
-  const [clinic, setClinic] = useState<Clinic>({
-    id: data?.id || "",
-    name: data?.name || "",
-    county: data?.county || "",
-    town: data?.town || "",
-    address: data?.address || "",
-    web: data?.web || "",
-    phone: data?.phone || "",
-    description: data?.description || "",
-    categories: (data?.categories || []).map(category => category?.id || ""),
+  const { register, getValues, setValue, formState, handleSubmit, reset } = useForm<Inputs>({
+    mode: "onTouched",
   })
-
-  const [updateClinicMutation] = useUpdateClinicMutation({
-    variables: {
+  const clinic = useMemo(() => {
+    return {
       id: data?.id || "",
-      name: clinic.name || "",
-      phone: clinic.phone || "",
-      county: clinic.county || "",
-      town: clinic.town || "",
-      address: clinic.address || "",
-      web: clinic.web || "",
-      description: clinic.description || "",
-      categories: clinic.categories || [],
-    },
-  })
+      name: data?.name || "",
+      county: data?.county || "",
+      town: data?.town || "",
+      address: data?.address || "",
+      web: data?.web || "",
+      phone: data?.phone || "",
+      description: data?.description || "",
+      categories: data?.categories?.map(category => category?.id || ""),
+    }
+  }, [data])
+
+  const [updateClinicMutation] = useUpdateClinicMutation({ refetchQueries: ["GetClinic"] })
 
   const handleSave = () => {
-    updateClinicMutation()
+    const { name, county, town, address, web, phone, description, categories } = getValues()
+    updateClinicMutation({
+      variables: {
+        id: data?.id || "",
+        name,
+        phone,
+        county,
+        town,
+        address,
+        web,
+        description: description || clinic.description,
+        categories: categories || clinic.categories,
+      },
+    })
   }
 
   const handleClear = () => {
-    setClinic({
-      ...clinic,
+    reset({
       name: "",
       county: "",
       town: "",
@@ -72,20 +74,34 @@ const InfoCard = ({ data }: InfoCardProps) => {
 
   return (
     <Card>
-      <Card.Header title={clinic?.name || ""} />
+      <Card.Header title={clinic.name} />
       <Card.Body>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label required>診所名稱</Form.Label>
             <Form.Input
               type="text"
-              value={clinic.name || ""}
-              onChange={e => setClinic({ ...clinic, name: e.target.value + "" })}
+              value={clinic.name}
+              {...register("name", {
+                required: "此欄位為必填",
+                validate: value => value.length !== 0 || "輸入框內不能為空值",
+              })}
             />
+            {formState.errors?.name?.message && (
+              <Form.ErrorMessage>{formState.errors?.name?.message}</Form.ErrorMessage>
+            )}
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>大小分類</Form.Label>
-            <CosmeticMultiCascader defaultValue={clinic?.categories || [""]} />
+            <CosmeticMultiCascader
+              defaultValue={clinic.categories}
+              onChange={value => {
+                setValue(
+                  "categories",
+                  value.map(item => item + ""),
+                )
+              }}
+            />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>完整地址</Form.Label>
@@ -96,7 +112,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
                 className="mr-4"
                 style={{ flex: "1 1 300px" }}
                 value={clinic.county}
-                onChange={e => setClinic({ ...clinic, county: e.target.value + "" })}
+                {...register("county")}
               />
               <Form.Input
                 type="text"
@@ -104,44 +120,35 @@ const InfoCard = ({ data }: InfoCardProps) => {
                 className="mr-4"
                 style={{ flex: "1 1 300px" }}
                 value={clinic.town}
-                onChange={e => setClinic({ ...clinic, town: e.target.value + "" })}
+                {...register("town")}
               />
               <Form.Input
                 type="text"
                 placeholder="地址"
                 value={clinic.address}
-                onChange={e => setClinic({ ...clinic, address: e.target.value + "" })}
+                {...register("address")}
               />
             </div>
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>診所網址</Form.Label>
-            <Form.Input
-              type="url"
-              value={clinic.web}
-              onChange={e => setClinic({ ...clinic, web: e.target.value + "" })}
-            />
+            <Form.Input type="url" value={clinic.web} {...register("web")} />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>診所電話</Form.Label>
-            <Form.Input
-              type="tel"
-              value={clinic.phone}
-              onChange={e => setClinic({ ...clinic, phone: e.target.value + "" })}
-            />
+            <Form.Input type="tel" value={clinic.phone} {...register("phone")} />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>診所介紹</Form.Label>
             <Editor
-              value={clinic.description}
+              initialValue={clinic.description}
               onEdit={newValue => {
-                console.log(newValue)
-                setClinic({ ...clinic, description: newValue })
+                setValue("description", newValue)
               }}
             />
           </Form.Group>
           <div className="flex justify-end">
-            <Button style={{ marginRight: "10px" }} onClick={handleSave}>
+            <Button style={{ marginRight: "10px" }} onClick={handleSubmit(handleSave)}>
               儲存
             </Button>
             <Button variant="secondary" onClick={handleClear}>

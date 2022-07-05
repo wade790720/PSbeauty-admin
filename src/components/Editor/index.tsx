@@ -5,7 +5,7 @@ import styled from "./Editor.module.scss"
 interface EditorProps {
   onEdit?: ((a: string, editor: TinyMCEEditor) => void) | undefined
   height?: number
-  value?: string
+  initialValue?: string
 }
 
 const Editor = (props: EditorProps) => {
@@ -14,7 +14,7 @@ const Editor = (props: EditorProps) => {
   return (
     <div className={styled.wrapper}>
       <TinyMceReactEditor
-        value={props.value}
+        initialValue={props.initialValue}
         onInit={(_, editor) => {
           editorRef.current = editor
         }}
