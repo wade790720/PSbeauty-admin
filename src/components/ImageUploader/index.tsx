@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Uploader } from "rsuite"
 import { FileType } from "rsuite/Uploader"
 import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
@@ -10,14 +11,19 @@ type ImageUploaderProps = {
   fileList?: FileType[]
   defaultFileList?: FileType[]
   onChange?: (url: string) => void
+  imageLength?: number
 }
 
 const ImageUploader = (props: ImageUploaderProps) => {
+  const [fileList, setFileList] = useState<FileType[]>([])
+
   const onChangeUploader = (fileList: FileType[]) => {
     const fileToUpload = fileList[0].blobFile
     const fileName = fileList[0].name || ""
     const newRef = ref(storage, `image/${uuid()}/${fileName}`)
     const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
+
+    setFileList(fileList)
 
     uploadTask.on(
       "state_changed",
@@ -27,9 +33,8 @@ const ImageUploader = (props: ImageUploaderProps) => {
       err => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(url => {
+          console.log(url)
           props.onChange && props.onChange(url)
-          // setFileList(fileList)
-          // setNewSlide({ ...newSlide, image: url + "" })
         })
       },
     )
@@ -38,9 +43,10 @@ const ImageUploader = (props: ImageUploaderProps) => {
     <Uploader
       listType="picture"
       action=""
-      disabled={props.disabled}
+      autoUpload={false}
+      disabled={fileList.length > (props.imageLength || 0)}
       defaultFileList={props.defaultFileList}
-      fileList={props.fileList}
+      fileList={fileList}
       onChange={onChangeUploader}>
       <button>
         <CameraRetro />

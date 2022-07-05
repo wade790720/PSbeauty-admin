@@ -1,52 +1,52 @@
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useEffect } from "react"
 import Form from "components/Form"
-import { InputPicker, Uploader } from "rsuite"
-import { FileType } from "rsuite/Uploader"
-import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
+import { InputPicker } from "rsuite"
 import Modal from "components/Modal"
 import {
   useGetClinicByIdLazyQuery,
   useGetAllClinicsQuery,
 } from "./AddCarouselModal.graphql.generated"
 import { useForm, Controller } from "react-hook-form"
+import ImageUploader from "components/ImageUploader"
 
 type AdvancedOption = "none" | "doctor" | "case"
-type Inputs = {
+export type Carousel = {
   title: string
   clinic: string
   advancedOption: AdvancedOption
   doctor?: string
   case?: string
+  image?: string
 }
 
 type AddCarouselModalProps = {
   open: boolean
   onClose: () => void
-  onSubmit?: () => void
+  onSubmit?: (output: Carousel) => void
 }
 
 const AddCarouselModal = (props: AddCarouselModalProps) => {
-  const [carouselList, setCarouselList] = useState<FileType[]>([])
-  const { register, control, watch, getValues, formState, handleSubmit } = useForm<Inputs>({
-    mode: "onTouched",
-    defaultValues: {
-      title: "",
-      clinic: "",
-      advancedOption: "none",
-    },
-  })
+  const { register, control, watch, getValues, setValue, formState, handleSubmit } =
+    useForm<Carousel>({
+      mode: "onTouched",
+      defaultValues: {
+        title: "",
+        clinic: "",
+        advancedOption: "none",
+      },
+    })
   const watchClinic = watch("clinic")
   const watchAdvancedOption = watch("advancedOption")
 
-  const getAllClinicsQuery = useGetAllClinicsQuery()
+  const { data } = useGetAllClinicsQuery()
   const allClinics = useMemo(() => {
     return (
-      getAllClinicsQuery.data?.allClinics?.map(clinic => ({
+      data?.allClinics?.map(clinic => ({
         label: clinic?.name || "",
         value: clinic?.id || "",
       })) || []
     )
-  }, [getAllClinicsQuery.data])
+  }, [data])
 
   const [loadClinicByIdQuery, getClinicByIdQuery] = useGetClinicByIdLazyQuery()
   const selectedClinic = useMemo(() => {
@@ -73,7 +73,7 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
 
   const onSubmit = () => {
     console.log("onConfirm", getValues())
-    props.onSubmit && props.onSubmit()
+    props.onSubmit && props.onSubmit(getValues())
   }
 
   return (
@@ -87,17 +87,11 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
       <Form>
         <Form.Group layout="vertical">
           <Form.Label>預覽圖 (350 x 135px)</Form.Label>
-          <Uploader
-            listType="picture"
-            action=""
-            disabled={carouselList.length > 0}
-            onChange={(fileList: FileType[]) => {
-              setCarouselList(fileList)
-            }}>
-            <button>
-              <CameraRetro />
-            </button>
-          </Uploader>
+          <ImageUploader
+            onChange={url => {
+              setValue("image", url)
+            }}
+          />
         </Form.Group>
         <Form.Group layout="vertical">
           <Form.Label required>標題</Form.Label>

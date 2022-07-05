@@ -1,20 +1,16 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useMemo } from "react"
 import Button, { LinkButton } from "components/Button"
-import { Table, Pagination, Uploader } from "rsuite"
+import { Table, Pagination } from "rsuite"
 import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import { storage } from "../../../firebase"
-import { FileType } from "rsuite/Uploader"
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import ImageUploader from "components/ImageUploader"
 import {
   GetHomeQuery,
   useAddAdCardMutation,
   useDeleteAdCardMutation,
 } from "../Home.graphql.generated"
-import uuid from "utils/uuid"
 
 type AdListCardProps = {
   data: GetHomeQuery["adCards"]
@@ -35,15 +31,14 @@ const AdListCard = ({ data }: AdListCardProps) => {
   const [reviewOpen, setReviewOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
-  const [fileList, setFileList] = useState<FileType[]>([])
-  const activeCard = useRef<Card | null>(null)
+  const reviewCard = useRef<Card>()
   const [newPost, setNewPost] = useState({
     title: "",
     content: "",
     image: "",
   })
 
-  const [adCardsList, setAdCardsList] = useState(() => {
+  const adCardsList = useMemo(() => {
     if (!data?.edges) return []
 
     return data?.edges?.map((card, index) => ({
@@ -53,56 +48,14 @@ const AdListCard = ({ data }: AdListCardProps) => {
       content: card.node?.content || "",
       image: card.node?.image || "",
     }))
-  })
+  }, [data])
 
-  const [addAdCardMutation] = useAddAdCardMutation({
-    onCompleted: data => {
-      setAdCardsList([
-        {
-          index: 1,
-          id: data.addAdCard?.id || "",
-          title: newPost.title || "",
-          content: newPost.content || "",
-          image: newPost.image || "",
-        },
-        ...adCardsList.map(adCard => ({
-          ...adCard,
-          index: adCard.index + 1,
-        })),
-      ])
-    },
-  })
-
-  const [deleteAdCardMutation] = useDeleteAdCardMutation({
-    onCompleted: data => {
-      setAdCardsList(adCardsList.filter(card => card.id !== data.deleteAdCard?.id))
-    },
-  })
+  const [addAdCardMutation] = useAddAdCardMutation({ refetchQueries: ["GetHome"] })
+  const [deleteAdCardMutation] = useDeleteAdCardMutation({ refetchQueries: ["GetHome"] })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
-  }
-
-  const onChangeUploader = (fileList: FileType[]) => {
-    const fileToUpload = fileList[0].blobFile
-    const fileName = fileList[0].name || ""
-    const newRef = ref(storage, `image/${uuid()}/${fileName}`)
-    const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
-
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        console.log(snapshot.bytesTransferred)
-      },
-      err => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          setFileList(fileList)
-          setNewPost({ ...newPost, image: url + "" })
-        })
-      },
-    )
   }
 
   const create = () => {
@@ -158,7 +111,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                     <LinkButton
                       onClick={() => {
                         setReviewOpen(true)
-                        activeCard.current = {
+                        reviewCard.current = {
                           index: rowData.index,
                           id: rowData.id,
                           title: rowData.title,
@@ -207,17 +160,11 @@ const AdListCard = ({ data }: AdListCardProps) => {
           <Form>
             <Form.Group layout="vertical">
               <Form.Label required>預覽圖</Form.Label>
-              <Uploader
-                listType="picture"
-                action=""
-                fileList={fileList}
-                autoUpload={false}
-                disabled={fileList.length > 0}
-                onChange={onChangeUploader}>
-                <button>
-                  <CameraRetro />
-                </button>
-              </Uploader>
+              <ImageUploader
+                onChange={url => {
+                  setNewPost({ ...newPost, image: url + "" })
+                }}
+              />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>標題</Form.Label>
@@ -249,18 +196,18 @@ const AdListCard = ({ data }: AdListCardProps) => {
             <Form.Group layout="vertical">
               <Form.Label>預覽圖 (390 x 240px)</Form.Label>
               <img
-                src={activeCard.current?.image}
+                src={reviewCard.current?.image}
                 alt="preview"
                 style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
               />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>標題</Form.Label>
-              <p>{activeCard.current?.title}</p>
+              <p>{reviewCard.current?.title}</p>
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
-              <div dangerouslySetInnerHTML={{ __html: activeCard.current?.content || "" }} />
+              <div dangerouslySetInnerHTML={{ __html: reviewCard.current?.content || "" }} />
             </Form.Group>
           </Form>
         </Modal>

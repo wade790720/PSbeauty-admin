@@ -1,15 +1,10 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
-import { Table, Pagination, Toggle, Uploader } from "rsuite"
-import { FileType } from "rsuite/Uploader"
-import CameraRetro from "@rsuite/icons/legacy/CameraRetro"
-import uuid from "utils/uuid"
-import { storage } from "../../../firebase"
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
-import AddCarouselModal from "components/AddCarouselModal"
+import { Table, Pagination, Toggle } from "rsuite"
+import AddCarouselModal, { Carousel } from "components/AddCarouselModal"
 import {
   GetHomeQuery,
   useAddAdImageMutation,
@@ -30,13 +25,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
 
-  const [fileList, setFileList] = useState<FileType[]>([])
-  const [newSlide, setNewSlide] = useState({
-    title: "",
-    url: "",
-    image: "",
-    status: false,
-  })
   const [prepareUpdate, setPrepareUpdate] = useState({
     id: "",
     index: 0,
@@ -46,7 +34,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
     image: "",
   })
 
-  const [slides, setSlides] = useState(() => {
+  const slides = useMemo(() => {
     if (!data?.edges) return []
 
     return data.edges?.map(card => ({
@@ -57,64 +45,26 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
       url: card.node?.redirectType + "/" + card.node?.targetId,
       image: card.node?.image || "",
     }))
-  })
+  }, [data])
 
-  const [addAdImageMutation] = useAddAdImageMutation({
-    onCompleted: data => {
-      setSlides([
-        {
-          index: 1,
-          id: data.addAdImage?.id || "",
-          title: newSlide.title || "",
-          url: newSlide.url || "",
-          image: newSlide.image || "",
-          status: newSlide.status === true ? "開啟" : "關閉",
-        },
-        ...slides.map(slide => ({
-          ...slide,
-          index: slide.index + 1,
-        })),
-      ])
-    },
-  })
-
-  const [updateAdImageMutation] = useUpdateAdImageMutation({
-    onCompleted: data => {
-      const tmp = slides.map(slide => {
-        if (slide.id === data.updateAdImage?.id) {
-          return {
-            ...slide,
-            title: prepareUpdate.title,
-            index: prepareUpdate.index,
-            status: prepareUpdate.status === true ? "開啟" : "關閉",
-          }
-        } else {
-          return slide
-        }
-      })
-      setSlides(tmp)
-    },
-  })
-
-  const [deleteAdImageMutation] = useDeleteAdImageMutation({
-    onCompleted: data => {
-      setSlides(slides.filter(slide => slide.id !== data.deleteAdImage?.id))
-    },
-  })
+  const [addAdImageMutation] = useAddAdImageMutation({ refetchQueries: ["GetHome"] })
+  const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetHome"] })
+  const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetHome"] })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
   }
 
-  const handleCreate = () => {
+  const handleCreate = (carousel: Carousel) => {
+    console.log(carousel)
     addAdImageMutation({
       variables: {
         usageType: "首頁輪播",
-        redirect: "Clinic",
+        redirect: carousel.advancedOption,
         sort: 2,
-        targetId: "clinic_id_xxx",
-        image: newSlide.image,
+        targetId: (carousel.advancedOption === "case" ? carousel.case : carousel.clinic) || "",
+        image: carousel.image || "",
         status: false,
       },
     })
@@ -143,27 +93,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
           id,
         },
       })
-  }
-
-  const onChangeUploader = (fileList: FileType[]) => {
-    const fileToUpload = fileList[0].blobFile
-    const fileName = fileList[0].name || ""
-    const newRef = ref(storage, `image/${uuid()}/${fileName}`)
-    const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
-    setFileList(fileList)
-
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        console.log(snapshot.bytesTransferred)
-      },
-      err => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          setNewSlide({ ...newSlide, image: url + "" })
-        })
-      },
-    )
   }
 
   return (
