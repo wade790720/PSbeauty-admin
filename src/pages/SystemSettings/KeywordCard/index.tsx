@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Modal from "components/Modal"
@@ -20,49 +20,33 @@ type Inputs = {
 }
 
 const KeywordCard = ({ data }: KeywordCardProps) => {
-  const { register, watch, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
+  const { register, getValues, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
   const [keywordOpen, setKeywordOpen] = useState(false)
   const { Column, HeaderCell, Cell } = Table
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
 
-  const [keywords, setKeywords] = useState(() => {
+  const keywords = useMemo(() => {
     if (!data?.keywords) return []
 
     return data?.keywords?.map((word, index) => ({
       id: index + 1,
       name: word,
     }))
-  })
+  }, [data])
 
-  const [addKeywordMutation] = useAddKeywordMutation({
-    onCompleted: data => {
-      setKeywords([
-        ...keywords,
-        {
-          id: keywords.length + 1,
-          name: data.addPopularKeyword?.keyword || "",
-        },
-      ])
-    },
-  })
-
-  const [deleteKeywordMutation] = useDeleteKeywordMutation({
-    onCompleted: data => {
-      setKeywords(keywords.filter(word => word.name !== data.deletePopularKeyword?.keyword))
-    },
-  })
+  const [addKeywordMutation] = useAddKeywordMutation({ refetchQueries: ["GetSetting"] })
+  const [deleteKeywordMutation] = useDeleteKeywordMutation({ refetchQueries: ["GetSetting"] })
 
   const handleAdd = () => {
     addKeywordMutation({
       variables: {
-        keyword: watch().keyword,
+        keyword: getValues().keyword,
       },
     })
   }
 
   const handleDelete = (keyword: string) => {
-    console.log(keyword)
     const ask = confirm("確定要刪除嗎?")
     if (ask)
       deleteKeywordMutation({

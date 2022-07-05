@@ -8,7 +8,6 @@ import { useGetSettingQuery } from "./SystemSettings.graphql.generated"
 const SystemSettings = () => {
   const { data, loading, error } = useGetSettingQuery()
 
-  console.log(data)
   if (loading) return <QueryStatus.Loading />
   if (error) return <QueryStatus.Error />
   return (

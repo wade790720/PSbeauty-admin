@@ -107,7 +107,7 @@ export const AddDoctor = gql`
     $name: String
     $expertise: String
     $photo: String
-    $resumes: [String]
+    $resumes: String
     $title: String
   ) {
     addDoctor(

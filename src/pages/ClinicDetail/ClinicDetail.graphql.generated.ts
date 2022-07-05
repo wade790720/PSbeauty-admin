@@ -130,9 +130,7 @@ export type AddDoctorMutationVariables = Types.Exact<{
   name: Types.InputMaybe<Types.Scalars["String"]>
   expertise: Types.InputMaybe<Types.Scalars["String"]>
   photo: Types.InputMaybe<Types.Scalars["String"]>
-  resumes: Types.InputMaybe<
-    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
-  >
+  resumes: Types.InputMaybe<Types.Scalars["String"]>
   title: Types.InputMaybe<Types.Scalars["String"]>
 }>
 
@@ -377,7 +375,7 @@ export const AddDoctorDocument = gql`
     $name: String
     $expertise: String
     $photo: String
-    $resumes: [String]
+    $resumes: String
     $title: String
   ) {
     addDoctor(

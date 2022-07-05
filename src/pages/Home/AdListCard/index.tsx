@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo } from "react"
-import Button, { LinkButton } from "components/Button"
 import { Table, Pagination } from "rsuite"
+import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
@@ -11,6 +11,7 @@ import {
   useAddAdCardMutation,
   useDeleteAdCardMutation,
 } from "../Home.graphql.generated"
+import { useForm } from "react-hook-form"
 
 type AdListCardProps = {
   data: GetHomeQuery["adCards"]
@@ -24,7 +25,16 @@ type Card = {
   image: string
 }
 
+type Inputs = {
+  title: string
+  content: string
+  image: string
+}
+
 const AdListCard = ({ data }: AdListCardProps) => {
+  const { register, getValues, setValue, formState, handleSubmit } = useForm<Inputs>({
+    mode: "onTouched",
+  })
   const { Column, HeaderCell, Cell } = Table
 
   const [open, setOpen] = useState(false)
@@ -32,11 +42,6 @@ const AdListCard = ({ data }: AdListCardProps) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
   const reviewCard = useRef<Card>()
-  const [newPost, setNewPost] = useState({
-    title: "",
-    content: "",
-    image: "",
-  })
 
   const adCardsList = useMemo(() => {
     if (!data?.edges) return []
@@ -59,11 +64,13 @@ const AdListCard = ({ data }: AdListCardProps) => {
   }
 
   const create = () => {
+    const { title, content, image } = getValues()
+
     addAdCardMutation({
       variables: {
-        image: newPost.image,
-        title: newPost.title,
-        content: newPost.content,
+        image,
+        title,
+        content,
       },
     })
   }
@@ -153,7 +160,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
           open={open}
           confirmText="建立"
           cancelText="取消"
-          onConfirm={create}
+          onConfirm={handleSubmit(create)}
           closeOnDocumentClick={false}
           style={{ overflow: "auto", maxHeight: "600px" }}
           onClose={() => setOpen(false)}>
@@ -162,7 +169,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
               <Form.Label required>預覽圖</Form.Label>
               <ImageUploader
                 onChange={url => {
-                  setNewPost({ ...newPost, image: url + "" })
+                  setValue("image", url)
                 }}
               />
             </Form.Group>
@@ -170,14 +177,19 @@ const AdListCard = ({ data }: AdListCardProps) => {
               <Form.Label required>標題</Form.Label>
               <Form.Input
                 type="text"
-                onChange={e => setNewPost({ ...newPost, title: e.target.value + "" })}
+                {...register("title", {
+                  validate: value => value.length !== 0 || "輸入框內不能為空值",
+                })}
               />
+              {formState.errors?.title?.message && (
+                <Form.ErrorMessage>{formState.errors?.title?.message}</Form.ErrorMessage>
+              )}
             </Form.Group>
             <Form.Group layout="vertical" style={{ height: "200px" }}>
               <Form.Label required>內容</Form.Label>
               <Editor
                 onEdit={newValue => {
-                  setNewPost({ ...newPost, content: newValue + "" })
+                  setValue("content", newValue)
                 }}
               />
             </Form.Group>

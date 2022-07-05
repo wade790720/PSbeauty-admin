@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Table, Pagination } from "rsuite"
 import Card from "components/Card"
 import { LinkButton } from "components/Button"
@@ -13,7 +13,7 @@ const MemberCard = ({ data }: MemberCardProps) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
 
-  const [members, setMembers] = useState(() => {
+  const members = useMemo(() => {
     if (!data?.edges) return []
 
     return data?.edges?.map((member, index) => ({
@@ -22,13 +22,9 @@ const MemberCard = ({ data }: MemberCardProps) => {
       name: member.node?.name || "",
       email: member.node?.email || "",
     }))
-  })
+  }, [data])
 
-  const [deleteMemberMutation] = useDeleteMemberMutation({
-    onCompleted: data => {
-      setMembers(members.filter(member => member.id !== data.deleteUser?.id))
-    },
-  })
+  const [deleteMemberMutation] = useDeleteMemberMutation({ refetchQueries: ["GetSetting"] })
 
   const handleDelete = (id: string) => {
     deleteMemberMutation({
