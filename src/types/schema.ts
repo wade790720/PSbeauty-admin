@@ -403,13 +403,13 @@ export type AddDoctorInput = {
   /** 所屬診所 */
   clinicId: InputMaybe<Scalars["String"]>
   /** 醫師專長，自填 */
-  expertise: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
+  expertise: InputMaybe<Scalars["String"]>
   /** 姓名 */
   name: InputMaybe<Scalars["String"]>
   /** 照片 */
   photo: InputMaybe<Scalars["String"]>
   /** 學經歷 */
-  resumes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
+  resumes: InputMaybe<Scalars["String"]>
   /** 頭銜 */
   title: InputMaybe<Scalars["String"]>
 }
@@ -2367,14 +2367,14 @@ export type UpdateDoctorInput = {
   /** 診所識別碼 */
   clinicId: InputMaybe<Scalars["String"]>
   /** 醫師專長，自填 */
-  expertise: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
+  expertise: InputMaybe<Scalars["String"]>
   id: InputMaybe<Scalars["String"]>
   /** 醫師姓名 */
   name: InputMaybe<Scalars["String"]>
   /** 照片 */
   photo: InputMaybe<Scalars["String"]>
   /** 學經歷 */
-  resumes: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
+  resumes: InputMaybe<Scalars["String"]>
   /** 頭銜 */
   title: InputMaybe<Scalars["String"]>
 }

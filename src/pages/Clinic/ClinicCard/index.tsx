@@ -1,10 +1,9 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { useGo } from "components/Router"
-import { Table, Pagination, MultiCascader } from "rsuite"
+import { Table, Pagination } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import {
   GetClinicQuery,
-  useGetCategoriesQuery,
   useAddClinicMutation,
   useDeleteClinicMutation,
 } from "../Clinic.graphql.generated"
@@ -12,6 +11,7 @@ import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
 import Editor from "components/Editor"
+import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 
 type ClinicCardProps = {
   data: GetClinicQuery["clinics"]
@@ -23,7 +23,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
   const [open, setOpen] = useState(false)
-  const categories = useGetCategoriesQuery()
 
   const [newClinic, setNewClinic] = useState({
     name: "",
@@ -78,30 +77,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
     },
   })
 
-  const options = useMemo(() => {
-    if (!categories.data) return []
-
-    if (categories?.data?.topCategories) {
-      return categories.data?.topCategories.map((firstOption, firstIdx) => {
-        return {
-          label: firstOption?.name,
-          value: `${firstIdx + 1}`,
-          children: firstOption?.secondCategories?.map((secondOption, secondIdx) => {
-            return {
-              label: secondOption?.name,
-              value: `${firstIdx + 1}-${secondIdx + 1}`,
-              children: secondOption?.categories?.map(thirdOption => ({
-                id: thirdOption?.id,
-                value: thirdOption?.id || "",
-                label: thirdOption?.name,
-              })),
-            }
-          }),
-        }
-      })
-    }
-  }, [categories])
-
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
     setLimit(dataKey)
@@ -155,12 +130,10 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
                   </Form.Group>
                   <Form.Group layout="vertical">
                     <Form.Label required>大分類</Form.Label>
-                    <MultiCascader
-                      data={options || []}
-                      style={{ width: 280 }}
-                      // onChange={value => {
-                      //   setNewClinic({ ...newClinic, categories: value as string[] })
-                      // }}
+                    <CosmeticMultiCascader
+                    // onChange={value =>
+                    //   setNewClinic({ ...newClinic, categories: value as string[] })
+                    // }
                     />
                   </Form.Group>
                   <Form.Group layout="vertical">

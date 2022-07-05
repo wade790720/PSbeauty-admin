@@ -4,10 +4,10 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Editor from "components/Editor"
 import { MultiCascader } from "rsuite"
+import CosmeticMultiCascader from "components/CosmeticMultiCascader"
+import { GetClinicQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
 
 import fakeData from "../category.json"
-
-import { GetClinicQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
 
 type Clinic = {
   id: string
@@ -85,14 +85,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>大小分類</Form.Label>
-            <MultiCascader
-              data={fakeData}
-              searchable={false}
-              menuStyle={{ padding: "6px 0" }}
-              style={{ width: 280 }}
-              value={clinic?.categories || [""]}
-              placeholder="請選擇"
-            />
+            <CosmeticMultiCascader defaultValue={clinic?.categories || [""]} />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>完整地址</Form.Label>
