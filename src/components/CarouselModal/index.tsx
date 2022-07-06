@@ -1,46 +1,40 @@
-import { useMemo, useEffect } from "react"
-import Form from "components/Form"
-import { InputPicker } from "rsuite"
+import { useGetAllClinicsQuery, useGetClinicByIdLazyQuery } from "./CarouselModal.graphql.generated"
+import { useEffect, useMemo } from "react"
+import { Controller, useForm } from "react-hook-form"
 import Modal from "components/Modal"
-import Button from "components/Button"
-import {
-  useGetClinicByIdLazyQuery,
-  useGetAllClinicsQuery,
-} from "./AddCarouselModal.graphql.generated"
-import { useForm, Controller } from "react-hook-form"
+import Form from "components/Form"
 import ImageUploader from "components/ImageUploader"
+import { InputPicker, Toggle } from "rsuite"
+import Button from "components/Button"
 
-type AdvancedOption = "none" | "doctor" | "case"
-export type Carousel = {
-  title: string
-  clinic: string
-  advancedOption: AdvancedOption
-  doctor?: string
-  case?: string
-  image?: string
-}
-
-type AddCarouselModalProps = {
+export type CarouselModalProps = {
+  defaultCarousel?: Carousel
+  type: "add" | "edit"
   open: boolean
   onClose: () => void
   onSubmit?: (output: Carousel) => void
 }
 
-const AddCarouselModal = (props: AddCarouselModalProps) => {
-  const { register, control, watch, getValues, setValue, formState, handleSubmit } =
-    useForm<Carousel>({
-      mode: "onTouched",
-      defaultValues: {
-        title: "",
-        clinic: "",
-        advancedOption: "none",
-      },
-    })
-  const watchClinic = watch("clinic")
-  const watchAdvancedOption = watch("advancedOption")
+export type Clinic = {
+  label: string
+  value: string
+}
 
+type AdvancedOption = "none" | "doctor" | "case"
+export type Carousel = {
+  title: string
+  clinic: string
+  sort: string
+  advancedOption: AdvancedOption
+  doctor?: string
+  case?: string
+  image?: string
+  show: boolean
+}
+
+const CarouselModal = (props: CarouselModalProps) => {
   const { data } = useGetAllClinicsQuery()
-  const allClinics = useMemo(() => {
+  const allClinics = useMemo<Clinic[]>(() => {
     return (
       data?.allClinics?.map(clinic => ({
         label: clinic?.name || "",
@@ -48,6 +42,19 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
       })) || []
     )
   }, [data])
+
+  const { register, control, watch, getValues, setValue, handleSubmit } = useForm<Carousel>({
+    mode: "onTouched",
+    defaultValues: props.defaultCarousel || {
+      title: "",
+      clinic: "",
+      sort: "",
+      advancedOption: "none",
+      show: true,
+    },
+  })
+  const watchClinic = watch("clinic")
+  const watchAdvancedOption = watch("advancedOption")
 
   const [loadClinicByIdQuery, getClinicByIdQuery] = useGetClinicByIdLazyQuery()
   const selectedClinic = useMemo(() => {
@@ -80,21 +87,35 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Modal.Header>
-        <Modal.Title>新增輪播圖</Modal.Title>
+        <Modal.Title>{props.type === "add" ? "新增輪播圖" : "編輯"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>預覽圖 (350 x 135px)</Form.Label>
-            <ImageUploader
-              onChange={url => {
-                setValue("image", url)
-              }}
-            />
+            {props.type === "add" ? (
+              <ImageUploader
+                onChange={url => {
+                  setValue("image", url)
+                }}
+              />
+            ) : (
+              props?.defaultCarousel?.image && (
+                <img
+                  src={props?.defaultCarousel?.image}
+                  alt="preview"
+                  style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
+                />
+              )
+            )}
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>標題</Form.Label>
             <Form.Input placeholder="請輸入輪播標題" {...register("title")} />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label required>順序</Form.Label>
+            <Form.Input placeholder="請輸入順序" {...register("sort")} />
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>診所</Form.Label>
@@ -153,6 +174,18 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
               }
             </Form.Group>
           )}
+          <Form.Group layout="vertical">
+            <Form.Label>狀態</Form.Label>
+            {
+              <Controller
+                render={({ field: { value, onChange } }) => (
+                  <Toggle defaultChecked={value} onChange={onChange} />
+                )}
+                name="show"
+                control={control}
+              />
+            }
+          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -164,11 +197,11 @@ const AddCarouselModal = (props: AddCarouselModalProps) => {
             handleSubmit(onSubmit)()
             props.onClose()
           }}>
-          新增
+          {props.type === "add" ? "新增" : "儲存"}
         </Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
-export default AddCarouselModal
+export default CarouselModal

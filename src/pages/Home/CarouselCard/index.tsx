@@ -4,13 +4,13 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import { Table, Pagination, Toggle } from "rsuite"
-import AddCarouselModal, { Carousel } from "components/AddCarouselModal"
 import {
   GetHomeQuery,
   useAddAdImageMutation,
   useUpdateAdImageMutation,
   useDeleteAdImageMutation,
 } from "../Home.graphql.generated"
+import CarouselModal, { Carousel } from "components/CarouselModal"
 
 type CarouselCardProps = {
   data: GetHomeQuery["adImages"]
@@ -174,74 +174,27 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <AddCarouselModal
+      <CarouselModal
+        type="add"
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
         onSubmit={handleCreate}
       />
 
-      <Modal open={openEditModal} onClose={() => setOpenEditModal(false)}>
-        <Modal.Header>
-          <Modal.Title>編輯</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖</Form.Label>
-              <img
-                src={prepareUpdate?.image}
-                alt="preview"
-                style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input
-                type="text"
-                value={prepareUpdate?.title}
-                onChange={e => setPrepareUpdate({ ...prepareUpdate, title: e.target.value + "" })}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>順序</Form.Label>
-              <Form.Input
-                type="number"
-                value={prepareUpdate?.index}
-                onChange={e =>
-                  setPrepareUpdate({ ...prepareUpdate, index: parseInt(e.target.value) })
-                }
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>超連結</Form.Label>
-              <Form.Input
-                type="text"
-                value={prepareUpdate?.url}
-                onChange={e => setPrepareUpdate({ ...prepareUpdate, url: e.target.value + "" })}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>狀態</Form.Label>
-              <Toggle
-                defaultChecked={prepareUpdate?.status}
-                onChange={checked => setPrepareUpdate({ ...prepareUpdate, status: checked })}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOpenEditModal(false)}>
-            取消
-          </Button>
-          <Button
-            onClick={() => {
-              handleUpdate()
-              setOpenEditModal(false)
-            }}>
-            儲存
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <CarouselModal
+        type="edit"
+        defaultCarousel={{
+          title: prepareUpdate?.title,
+          clinic: "12",
+          sort: String(prepareUpdate?.index || ""),
+          advancedOption: "none",
+          image: prepareUpdate?.image,
+          show: prepareUpdate?.status,
+        }}
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        onSubmit={handleUpdate}
+      />
     </>
   )
 }

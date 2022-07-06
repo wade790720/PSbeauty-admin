@@ -6,7 +6,7 @@ import { Table, Pagination, Toggle } from "rsuite"
 import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
 import Card from "components/Card"
 import { GetClinicQuery } from "../Clinic.graphql.generated"
-import AddCarouselModal from "components/AddCarouselModal"
+import CarouselModal from "components/CarouselModal"
 
 const fakeData = [
   {
@@ -86,6 +86,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
                   function handleAction() {
                     alert(`id:${rowData.id}`)
                   }
+
                   return (
                     <span>
                       <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> |{" "}
@@ -117,7 +118,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <AddCarouselModal open={openCarousel} onClose={() => setOpenCarousel(false)} />
+      <CarouselModal type="add" open={openCarousel} onClose={() => setOpenCarousel(false)} />
 
       <Modal open={open} onClose={() => setOpen(false)}>
         <Modal.Header>

@@ -141,7 +141,7 @@ const InfoCard = ({ data }: InfoCardProps) => {
           <Form.Group layout="vertical">
             <Form.Label>診所介紹</Form.Label>
             <Editor
-              initialValue={clinic.description}
+              // initialValue={clinic.description}
               onEdit={newValue => {
                 setValue("description", newValue)
               }}

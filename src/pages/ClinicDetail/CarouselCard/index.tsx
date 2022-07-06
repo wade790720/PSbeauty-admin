@@ -3,7 +3,7 @@ import Button from "components/Button"
 import Card from "components/Card"
 import CarouselTable from "components/CarouselTable"
 import { ImagesFragment } from "../ClinicDetail.graphql.generated"
-import AddCarouselModal from "components/AddCarouselModal"
+import CarouselModal from "components/CarouselModal"
 
 type CarouselCardProps = {
   data: ImagesFragment["images"]
@@ -18,7 +18,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         <Button variant="secondary" onClick={() => setOpenCarousel(true)}>
           新增
         </Button>
-        <AddCarouselModal open={openCarousel} onClose={() => setOpenCarousel(false)} />
+        <CarouselModal type="add" open={openCarousel} onClose={() => setOpenCarousel(false)} />
       </Card.Header>
       <Card.Body>
         <CarouselTable />
