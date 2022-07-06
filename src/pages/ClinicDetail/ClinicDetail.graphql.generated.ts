@@ -125,6 +125,50 @@ export type UpdateClinicMutation = {
   updateClinic: { __typename: "UpdateClinicPayload"; id: string | null } | null
 }
 
+export type AddCaseMutationVariables = Types.Exact<{
+  clinicId: Types.InputMaybe<Types.Scalars["String"]>
+  beforeImage: Types.InputMaybe<Types.Scalars["String"]>
+  beforeImageText: Types.InputMaybe<Types.Scalars["String"]>
+  afterImage: Types.InputMaybe<Types.Scalars["String"]>
+  afterImageText: Types.InputMaybe<Types.Scalars["String"]>
+  categories: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+  description: Types.InputMaybe<Types.Scalars["String"]>
+  hot: Types.Scalars["Boolean"]
+  title: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type AddCaseMutation = {
+  addCase: { __typename: "AddCasePayload"; id: string | null } | null
+}
+
+export type UpdateCaseMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+  beforeImage: Types.InputMaybe<Types.Scalars["String"]>
+  beforeImageText: Types.InputMaybe<Types.Scalars["String"]>
+  afterImage: Types.InputMaybe<Types.Scalars["String"]>
+  afterImageText: Types.InputMaybe<Types.Scalars["String"]>
+  categories: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+  description: Types.InputMaybe<Types.Scalars["String"]>
+  hot: Types.Scalars["Boolean"]
+  title: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type UpdateCaseMutation = {
+  updateCase: { __typename: "UpdateCasePayload"; id: string | null } | null
+}
+
+export type DeleteCaseMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type DeleteCaseMutation = {
+  deleteCase: { __typename: "DeleteCasePayload"; id: string | null } | null
+}
+
 export type AddDoctorMutationVariables = Types.Exact<{
   clinicId: Types.InputMaybe<Types.Scalars["String"]>
   name: Types.InputMaybe<Types.Scalars["String"]>
@@ -368,6 +412,192 @@ export type UpdateClinicMutationResult = Apollo.MutationResult<UpdateClinicMutat
 export type UpdateClinicMutationOptions = Apollo.BaseMutationOptions<
   UpdateClinicMutation,
   UpdateClinicMutationVariables
+>
+export const AddCaseDocument = gql`
+  mutation AddCase(
+    $clinicId: String
+    $beforeImage: String
+    $beforeImageText: String
+    $afterImage: String
+    $afterImageText: String
+    $categories: [String]
+    $description: String
+    $hot: Boolean!
+    $title: String
+  ) {
+    addCase(
+      input: {
+        clinicId: $clinicId
+        beforeImage: $beforeImage
+        beforeImageText: $beforeImageText
+        afterImage: $afterImage
+        afterImageText: $afterImage
+        categories: $categories
+        description: $description
+        hot: $hot
+        title: $title
+      }
+    ) {
+      id
+    }
+  }
+`
+export type AddCaseMutationFn = Apollo.MutationFunction<AddCaseMutation, AddCaseMutationVariables>
+
+/**
+ * __useAddCaseMutation__
+ *
+ * To run a mutation, you first call `useAddCaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCaseMutation, { data, loading, error }] = useAddCaseMutation({
+ *   variables: {
+ *      clinicId: // value for 'clinicId'
+ *      beforeImage: // value for 'beforeImage'
+ *      beforeImageText: // value for 'beforeImageText'
+ *      afterImage: // value for 'afterImage'
+ *      afterImageText: // value for 'afterImageText'
+ *      categories: // value for 'categories'
+ *      description: // value for 'description'
+ *      hot: // value for 'hot'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useAddCaseMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddCaseMutation, AddCaseMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AddCaseMutation, AddCaseMutationVariables>(AddCaseDocument, options)
+}
+export type AddCaseMutationHookResult = ReturnType<typeof useAddCaseMutation>
+export type AddCaseMutationResult = Apollo.MutationResult<AddCaseMutation>
+export type AddCaseMutationOptions = Apollo.BaseMutationOptions<
+  AddCaseMutation,
+  AddCaseMutationVariables
+>
+export const UpdateCaseDocument = gql`
+  mutation UpdateCase(
+    $id: String
+    $beforeImage: String
+    $beforeImageText: String
+    $afterImage: String
+    $afterImageText: String
+    $categories: [String]
+    $description: String
+    $hot: Boolean!
+    $title: String
+  ) {
+    updateCase(
+      input: {
+        id: $id
+        beforeImage: $beforeImage
+        beforeImageText: $beforeImageText
+        afterImage: $afterImage
+        afterImageText: $afterImage
+        categories: $categories
+        description: $description
+        hot: $hot
+        title: $title
+      }
+    ) {
+      id
+    }
+  }
+`
+export type UpdateCaseMutationFn = Apollo.MutationFunction<
+  UpdateCaseMutation,
+  UpdateCaseMutationVariables
+>
+
+/**
+ * __useUpdateCaseMutation__
+ *
+ * To run a mutation, you first call `useUpdateCaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCaseMutation, { data, loading, error }] = useUpdateCaseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      beforeImage: // value for 'beforeImage'
+ *      beforeImageText: // value for 'beforeImageText'
+ *      afterImage: // value for 'afterImage'
+ *      afterImageText: // value for 'afterImageText'
+ *      categories: // value for 'categories'
+ *      description: // value for 'description'
+ *      hot: // value for 'hot'
+ *      title: // value for 'title'
+ *   },
+ * });
+ */
+export function useUpdateCaseMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateCaseMutation, UpdateCaseMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateCaseMutation, UpdateCaseMutationVariables>(
+    UpdateCaseDocument,
+    options,
+  )
+}
+export type UpdateCaseMutationHookResult = ReturnType<typeof useUpdateCaseMutation>
+export type UpdateCaseMutationResult = Apollo.MutationResult<UpdateCaseMutation>
+export type UpdateCaseMutationOptions = Apollo.BaseMutationOptions<
+  UpdateCaseMutation,
+  UpdateCaseMutationVariables
+>
+export const DeleteCaseDocument = gql`
+  mutation DeleteCase($id: String) {
+    deleteCase(input: { id: $id }) {
+      id
+    }
+  }
+`
+export type DeleteCaseMutationFn = Apollo.MutationFunction<
+  DeleteCaseMutation,
+  DeleteCaseMutationVariables
+>
+
+/**
+ * __useDeleteCaseMutation__
+ *
+ * To run a mutation, you first call `useDeleteCaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCaseMutation, { data, loading, error }] = useDeleteCaseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCaseMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteCaseMutation, DeleteCaseMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<DeleteCaseMutation, DeleteCaseMutationVariables>(
+    DeleteCaseDocument,
+    options,
+  )
+}
+export type DeleteCaseMutationHookResult = ReturnType<typeof useDeleteCaseMutation>
+export type DeleteCaseMutationResult = Apollo.MutationResult<DeleteCaseMutation>
+export type DeleteCaseMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCaseMutation,
+  DeleteCaseMutationVariables
 >
 export const AddDoctorDocument = gql`
   mutation AddDoctor(

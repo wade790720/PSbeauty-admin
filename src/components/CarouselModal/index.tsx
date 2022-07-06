@@ -20,7 +20,7 @@ export type Clinic = {
   value: string
 }
 
-type AdvancedOption = "none" | "doctor" | "case"
+type AdvancedOption = "clinic" | "doctor" | "case"
 export type Carousel = {
   title: string
   clinic: string
@@ -49,7 +49,7 @@ const CarouselModal = (props: CarouselModalProps) => {
       title: "",
       clinic: "",
       sort: "",
-      advancedOption: "none",
+      advancedOption: "clinic",
       show: true,
     },
   })

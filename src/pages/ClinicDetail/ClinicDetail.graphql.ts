@@ -100,6 +100,73 @@ export const UpdateClinic = gql`
     }
   }
 `
+export const AddCase = gql`
+  mutation AddCase(
+    $clinicId: String
+    $beforeImage: String
+    $beforeImageText: String
+    $afterImage: String
+    $afterImageText: String
+    $categories: [String]
+    $description: String
+    $hot: Boolean!
+    $title: String
+  ) {
+    addCase(
+      input: {
+        clinicId: $clinicId
+        beforeImage: $beforeImage
+        beforeImageText: $beforeImageText
+        afterImage: $afterImage
+        afterImageText: $afterImage
+        categories: $categories
+        description: $description
+        hot: $hot
+        title: $title
+      }
+    ) {
+      id
+    }
+  }
+`
+
+export const UpdateCase = gql`
+  mutation UpdateCase(
+    $id: String
+    $beforeImage: String
+    $beforeImageText: String
+    $afterImage: String
+    $afterImageText: String
+    $categories: [String]
+    $description: String
+    $hot: Boolean!
+    $title: String
+  ) {
+    updateCase(
+      input: {
+        id: $id
+        beforeImage: $beforeImage
+        beforeImageText: $beforeImageText
+        afterImage: $afterImage
+        afterImageText: $afterImage
+        categories: $categories
+        description: $description
+        hot: $hot
+        title: $title
+      }
+    ) {
+      id
+    }
+  }
+`
+
+export const DeleteCase = gql`
+  mutation DeleteCase($id: String) {
+    deleteCase(input: { id: $id }) {
+      id
+    }
+  }
+`
 
 export const AddDoctor = gql`
   mutation AddDoctor(
