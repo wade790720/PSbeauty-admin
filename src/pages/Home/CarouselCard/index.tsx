@@ -187,7 +187,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
           title: prepareUpdate?.title,
           clinic: "12",
           sort: String(prepareUpdate?.index || ""),
-          advancedOption: "none",
+          advancedOption: "clinic",
           image: prepareUpdate?.image,
           show: prepareUpdate?.status,
         }}

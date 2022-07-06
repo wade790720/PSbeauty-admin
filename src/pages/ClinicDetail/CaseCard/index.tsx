@@ -15,6 +15,7 @@ import {
 } from "../ClinicDetail.graphql.generated"
 import ImageUploader from "components/ImageUploader"
 import { useForm } from "react-hook-form"
+import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 
 type CaseCardProps = {
   data: CasesFragment["cases"]
@@ -208,13 +209,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>分類</Form.Label>
-              <MultiCascader
-                data={categoryData}
-                searchable={false}
-                menuStyle={{ padding: "6px 0" }}
-                style={{ width: "100%" }}
-                placeholder="請選擇"
-              />
+              <CosmeticMultiCascader />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
@@ -260,13 +255,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label required>分類</Form.Label>
-              <MultiCascader
-                data={categoryData}
-                searchable={false}
-                menuStyle={{ padding: "6px 0" }}
-                style={{ width: "100%" }}
-                placeholder="請選擇"
-              />
+              <CosmeticMultiCascader />
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>內容</Form.Label>
