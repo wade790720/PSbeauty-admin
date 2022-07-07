@@ -42,8 +42,8 @@ export const Doctors = gql`
   }
 `
 
-export const GetClinic = gql`
-  query GetClinic($id: String) {
+export const GetClinicDetail = gql`
+  query GetClinicDetail($id: String) {
     clinic(id: $id) {
       id
       name

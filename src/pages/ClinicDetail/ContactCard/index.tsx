@@ -4,44 +4,47 @@ import Form from "components/Form"
 import styled from "./ContactCard.module.scss"
 import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
-import { GetClinicQuery, useUpdateClinicContactMutation } from "../ClinicDetail.graphql.generated"
+import {
+  GetClinicDetailQuery,
+  useUpdateClinicContactMutation,
+} from "../ClinicDetail.graphql.generated"
 
 type ContactCardProps = {
-  data: GetClinicQuery["clinic"]
+  data: GetClinicDetailQuery["clinic"]
 }
 
 type Inputs = {
-  name: string
-  phone: string
-  email: string
+  contactName: string
+  contactPhone: string
+  contactEmail: string
 }
 
 const ContactCard = ({ data }: ContactCardProps) => {
-  const { register, watch, formState, handleSubmit, reset } = useForm<Inputs>({
+  const { register, getValues, formState, handleSubmit, reset } = useForm<Inputs>({
     mode: "onTouched",
     defaultValues: {
-      name: data?.contactName || "",
-      phone: data?.contactPhone || "",
-      email: data?.contactEmail || "",
+      contactName: data?.contactName || "",
+      contactPhone: data?.contactPhone || "",
+      contactEmail: data?.contactEmail || "",
     },
   })
-  const watchFields = watch()
 
   const [updateClinicContactMutation] = useUpdateClinicContactMutation()
 
   const handleSave = () => {
+    const { contactName, contactEmail, contactPhone } = getValues()
     updateClinicContactMutation({
       variables: {
         id: data?.id || "",
-        contactName: watchFields.name,
-        contactEmail: watchFields.email,
-        contactPhone: watchFields.phone,
+        contactName,
+        contactEmail,
+        contactPhone,
       },
     })
   }
 
   const handleClear = () => {
-    reset({ name: "", phone: "", email: "" })
+    reset({ contactName: "", contactEmail: "", contactPhone: "" })
   }
 
   return (
@@ -75,14 +78,13 @@ const ContactCard = ({ data }: ContactCardProps) => {
             <Form.Label>姓名</Form.Label>
             <Form.Input
               type="text"
-              value={watchFields.name}
-              {...register("name", {
+              {...register("contactName", {
                 validate: value => value.length !== 0 || "輸入框內不能為空值",
               })}
             />
-            {formState.errors?.name?.message && (
+            {formState.errors?.contactName?.message && (
               <Form.ErrorMessage className={styled["error-message"]}>
-                {formState.errors?.name?.message}
+                {formState.errors?.contactName?.message}
               </Form.ErrorMessage>
             )}
           </Form.Group>
@@ -90,14 +92,13 @@ const ContactCard = ({ data }: ContactCardProps) => {
             <Form.Label>電話</Form.Label>
             <Form.Input
               type="tel"
-              value={watchFields.phone}
-              {...register("phone", {
+              {...register("contactPhone", {
                 validate: value => value.length !== 0 || "輸入框內不能為空值",
               })}
             />
-            {formState.errors?.phone?.message && (
+            {formState.errors?.contactPhone?.message && (
               <Form.ErrorMessage className={styled["error-message"]}>
-                {formState.errors?.phone?.message}
+                {formState.errors?.contactPhone?.message}
               </Form.ErrorMessage>
             )}
           </Form.Group>
@@ -105,8 +106,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
             <Form.Label required>信箱</Form.Label>
             <Form.Input
               type="email"
-              value={watchFields.email}
-              {...register("email", {
+              {...register("contactEmail", {
                 required: "此欄位為必填",
                 pattern: {
                   value: /\S+@\S+\.\S+/,
@@ -114,9 +114,9 @@ const ContactCard = ({ data }: ContactCardProps) => {
                 },
               })}
             />
-            {formState.errors?.email?.message && (
+            {formState.errors?.contactEmail?.message && (
               <Form.ErrorMessage className={styled["error-message"]}>
-                {formState.errors?.email?.message}
+                {formState.errors?.contactEmail?.message}
               </Form.ErrorMessage>
             )}
           </Form.Group>

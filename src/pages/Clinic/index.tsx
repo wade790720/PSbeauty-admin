@@ -9,7 +9,7 @@ import { useGetClinicQuery } from "./Clinic.graphql.generated"
 const CosmeticClinic = () => {
   const { data, loading, error } = useGetClinicQuery({
     variables: {
-      clinicFirst: 5,
+      clinicFirst: 10,
       clinicOrderId: SortEnumType.Desc,
       adImagesFirst: 5,
       adImagesOrderId: SortEnumType.Desc,

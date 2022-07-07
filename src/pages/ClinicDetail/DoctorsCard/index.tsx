@@ -12,7 +12,7 @@ import {
   useAddDoctorMutation,
   useDeleteDoctorMutation,
 } from "../ClinicDetail.graphql.generated"
-import { useForm } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 
 type DoctorsCardProps = {
   data: DoctorsFragment["doctors"]
@@ -37,11 +37,9 @@ type Inputs = {
 }
 
 const DoctorsCard = ({ data }: DoctorsCardProps) => {
-  const { register, getValues, setValue, formState, handleSubmit } = useForm<Inputs>({
-    mode: "onTouched",
-  })
   const { Column, HeaderCell, Cell } = Table
   const match = useMatch("/cms/cosmetic-clinic/:id")
+  const methods = useForm<Inputs>({ mode: "onTouched" })
   const [openAdd, setOpenAdd] = useState(false)
   const [openReview, setOpenReview] = useState(false)
   const reviewDoctor = useRef<Doctor>()
@@ -60,19 +58,19 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
     }))
   }, [data])
 
-  const [addDoctorMutation] = useAddDoctorMutation({ refetchQueries: ["GetClinic"] })
-  const [deleteDoctorMutation] = useDeleteDoctorMutation({ refetchQueries: ["GetClinic"] })
+  const [addDoctorMutation] = useAddDoctorMutation({ refetchQueries: ["GetClinicDetail"] })
+  const [deleteDoctorMutation] = useDeleteDoctorMutation({ refetchQueries: ["GetClinicDetail"] })
 
   const handleAdd = () => {
-    const { name, title, photo, expertise, resumes } = getValues()
+    const { name, title, photo, expertise, resumes } = methods.getValues()
     addDoctorMutation({
       variables: {
         clinicId: match?.params.id || "",
         name,
         title,
         photo,
-        expertise,
         resumes,
+        expertise,
       },
     })
   }
@@ -156,46 +154,43 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           <Modal.Title>新增醫師</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>照片 (100 x 100px)</Form.Label>
-              <ImageUploader
-                onChange={url => {
-                  setValue("photo", url)
-                }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>姓名</Form.Label>
-              <Form.Input
-                type="text"
-                {...register("name", {
-                  required: "此欄位為必填",
-                  validate: value => value.length !== 0 || "輸入框內不能為空值",
-                })}
-              />
-              {formState.errors?.name?.message && (
-                <Form.ErrorMessage>{formState.errors?.name?.message}</Form.ErrorMessage>
-              )}
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>職稱</Form.Label>
-              <Form.Input type="text" {...register("title")} />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>專長</Form.Label>
-              <Form.Input type="text" {...register("expertise")} />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>經歷</Form.Label>
-              <Editor
-                height={400}
-                onEdit={newValue => {
-                  setValue("resumes", newValue)
-                }}
-              />
-            </Form.Group>
-          </Form>
+          <FormProvider {...methods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>照片 (100 x 100px)</Form.Label>
+                <ImageUploader
+                  onChange={url => {
+                    methods.setValue("photo", url)
+                  }}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>姓名</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...methods.register("name", {
+                    required: "此欄位為必填",
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+                {methods.formState.errors?.name?.message && (
+                  <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
+                )}
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>職稱</Form.Label>
+                <Form.Input type="text" {...methods.register("title")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>專長</Form.Label>
+                <Form.Input type="text" {...methods.register("expertise")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>經歷</Form.Label>
+                <Editor name="resumes" />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setOpenAdd(false)}>
@@ -203,7 +198,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Button>
           <Button
             onClick={() => {
-              handleSubmit(handleAdd)()
+              methods.handleSubmit(handleAdd)()
               setOpenAdd(false)
             }}>
             建立

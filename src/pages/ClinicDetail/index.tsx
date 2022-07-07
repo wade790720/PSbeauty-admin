@@ -6,11 +6,11 @@ import DoctorsCard from "./DoctorsCard"
 import Layout from "components/Layout"
 import QueryStatus from "components/QueryStatus"
 import { useMatch } from "react-router-dom"
-import { useGetClinicQuery } from "./ClinicDetail.graphql.generated"
+import { useGetClinicDetailQuery } from "./ClinicDetail.graphql.generated"
 
 const CosmeticClinicDetail = () => {
   const match = useMatch("/cms/cosmetic-clinic/:id")
-  const { data, loading, error } = useGetClinicQuery({
+  const { data, loading, error } = useGetClinicDetailQuery({
     variables: {
       id: match?.params.id || "",
     },
@@ -25,15 +25,11 @@ const CosmeticClinicDetail = () => {
         <Layout.Breadcrumbs.Item href="#/cms/cosmetic-clinic">診所</Layout.Breadcrumbs.Item>
         <Layout.Breadcrumbs.Item>診所資訊</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
-      {data && (
-        <>
-          <InfoCard data={data.clinic} />
-          <ContactCard data={data.clinic} />
-          <CarouselCard data={data.clinic?.images || []} />
-          <CaseCard data={data.clinic?.cases || []} />
-          <DoctorsCard data={data.clinic?.doctors || []} />
-        </>
-      )}
+      <InfoCard data={data?.clinic || null} />
+      <ContactCard data={data?.clinic || null} />
+      <CarouselCard data={data?.clinic?.images || []} />
+      <CaseCard data={data?.clinic?.cases || []} />
+      <DoctorsCard data={data?.clinic?.doctors || []} />
     </>
   )
 }

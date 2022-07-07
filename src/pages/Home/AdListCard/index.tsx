@@ -11,7 +11,7 @@ import {
   useAddAdCardMutation,
   useDeleteAdCardMutation,
 } from "../Home.graphql.generated"
-import { useForm } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 
 type AdListCardProps = {
   data: GetHomeQuery["adCards"]
@@ -21,22 +21,20 @@ type Card = {
   index: number
   id: string
   title: string
-  content: string
   image: string
+  content: string
 }
 
 type Inputs = {
   title: string
-  content: string
   image: string
+  content: string
 }
 
 const AdListCard = ({ data }: AdListCardProps) => {
-  const { register, getValues, setValue, formState, handleSubmit } = useForm<Inputs>({
-    mode: "onTouched",
-  })
   const { Column, HeaderCell, Cell } = Table
 
+  const methods = useForm<Inputs>({ mode: "onTouched" })
   const [open, setOpen] = useState(false)
   const [reviewOpen, setReviewOpen] = useState(false)
   const [page, setPage] = useState(1)
@@ -63,9 +61,8 @@ const AdListCard = ({ data }: AdListCardProps) => {
     setLimit(dataKey)
   }
 
-  const create = () => {
-    const { title, content, image } = getValues()
-
+  const handleCreate = () => {
+    const { image, title, content } = methods.getValues()
     addAdCardMutation({
       variables: {
         image,
@@ -164,36 +161,36 @@ const AdListCard = ({ data }: AdListCardProps) => {
             <Modal.Title>新增廣告卡</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label required>預覽圖</Form.Label>
-                <ImageUploader
-                  onChange={url => {
-                    setValue("image", url)
-                  }}
-                />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>標題</Form.Label>
-                <Form.Input
-                  type="text"
-                  {...register("title", {
-                    validate: value => value.length !== 0 || "輸入框內不能為空值",
-                  })}
-                />
-                {formState.errors?.title?.message && (
-                  <Form.ErrorMessage>{formState.errors?.title?.message}</Form.ErrorMessage>
-                )}
-              </Form.Group>
-              <Form.Group layout="vertical" style={{ height: "200px" }}>
-                <Form.Label required>內容</Form.Label>
-                <Editor
-                  onEdit={newValue => {
-                    setValue("content", newValue)
-                  }}
-                />
-              </Form.Group>
-            </Form>
+            <FormProvider {...methods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label required>預覽圖</Form.Label>
+                  <ImageUploader
+                    onChange={url => {
+                      methods.setValue("image", url)
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>標題</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...methods.register("title", {
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                  {methods.formState.errors?.title?.message && (
+                    <Form.ErrorMessage>
+                      {methods.formState.errors?.title?.message}
+                    </Form.ErrorMessage>
+                  )}
+                </Form.Group>
+                <Form.Group layout="vertical" style={{ height: "200px" }}>
+                  <Form.Label required>內容</Form.Label>
+                  <Editor name="content" />
+                </Form.Group>
+              </Form>
+            </FormProvider>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setOpen(false)}>
@@ -201,7 +198,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
             </Button>
             <Button
               onClick={() => {
-                handleSubmit(create)()
+                methods.handleSubmit(handleCreate)()
                 setOpen(false)
               }}>
               建立

@@ -46,11 +46,11 @@ export type DoctorsFragment = {
   } | null> | null
 }
 
-export type GetClinicQueryVariables = Types.Exact<{
+export type GetClinicDetailQueryVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
 }>
 
-export type GetClinicQuery = {
+export type GetClinicDetailQuery = {
   clinic: {
     __typename: "Clinic"
     id: string | null
@@ -276,8 +276,8 @@ export const DoctorsFragmentDoc = gql`
     }
   }
 `
-export const GetClinicDocument = gql`
-  query GetClinic($id: String) {
+export const GetClinicDetailDocument = gql`
+  query GetClinicDetail($id: String) {
     clinic(id: $id) {
       id
       name
@@ -309,36 +309,45 @@ export const GetClinicDocument = gql`
 `
 
 /**
- * __useGetClinicQuery__
+ * __useGetClinicDetailQuery__
  *
- * To run a query within a React component, call `useGetClinicQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetClinicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetClinicDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClinicDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetClinicQuery({
+ * const { data, loading, error } = useGetClinicDetailQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetClinicQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetClinicQuery, GetClinicQueryVariables>,
+export function useGetClinicDetailQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetClinicDetailQuery, GetClinicDetailQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetClinicQuery, GetClinicQueryVariables>(GetClinicDocument, options)
+  return Apollo.useQuery<GetClinicDetailQuery, GetClinicDetailQueryVariables>(
+    GetClinicDetailDocument,
+    options,
+  )
 }
-export function useGetClinicLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetClinicQuery, GetClinicQueryVariables>,
+export function useGetClinicDetailLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetClinicDetailQuery, GetClinicDetailQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetClinicQuery, GetClinicQueryVariables>(GetClinicDocument, options)
+  return Apollo.useLazyQuery<GetClinicDetailQuery, GetClinicDetailQueryVariables>(
+    GetClinicDetailDocument,
+    options,
+  )
 }
-export type GetClinicQueryHookResult = ReturnType<typeof useGetClinicQuery>
-export type GetClinicLazyQueryHookResult = ReturnType<typeof useGetClinicLazyQuery>
-export type GetClinicQueryResult = Apollo.QueryResult<GetClinicQuery, GetClinicQueryVariables>
+export type GetClinicDetailQueryHookResult = ReturnType<typeof useGetClinicDetailQuery>
+export type GetClinicDetailLazyQueryHookResult = ReturnType<typeof useGetClinicDetailLazyQuery>
+export type GetClinicDetailQueryResult = Apollo.QueryResult<
+  GetClinicDetailQuery,
+  GetClinicDetailQueryVariables
+>
 export const UpdateClinicDocument = gql`
   mutation UpdateClinic(
     $id: String

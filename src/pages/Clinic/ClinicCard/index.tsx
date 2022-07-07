@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useGo } from "components/Router"
 import { Table, Pagination } from "rsuite"
 import Button, { LinkButton } from "components/Button"
@@ -12,9 +12,22 @@ import Modal from "components/Modal"
 import Form from "components/Form"
 import Editor from "components/Editor"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
+import { useForm, FormProvider } from "react-hook-form"
 
 type ClinicCardProps = {
   data: GetClinicQuery["clinics"]
+}
+
+type Inputs = {
+  name: string
+  email: string
+  county: string
+  town: string
+  address: string
+  phone: string
+  web: string
+  description: string
+  categories: string[]
 }
 
 const ClinicCard = ({ data }: ClinicCardProps) => {
@@ -24,19 +37,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const [limit, setLimit] = useState(10)
   const [open, setOpen] = useState(false)
 
-  const [newClinic, setNewClinic] = useState({
-    name: "",
-    email: "",
-    county: "",
-    town: "",
-    address: "",
-    web: "",
-    phone: "",
-    description: "",
-    categories: [""],
-  })
-
-  const [clinics, setClinics] = useState(() => {
+  const clinics = useMemo(() => {
     if (!data?.edges) return []
 
     return data?.edges?.map((clinic, index) => {
@@ -53,29 +54,11 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
         consultReplyCount: clinic.node?.consultReplyCount || 0,
       }
     })
-  })
+  }, [data])
 
-  const [addClinicMutation] = useAddClinicMutation({
-    onCompleted: data => {
-      setClinics([
-        ...clinics,
-        {
-          index: clinics[clinics.length - 1].index + 1,
-          id: data.addClinic?.id || "",
-          name: newClinic.name,
-          address: newClinic.county + newClinic.town + newClinic.address,
-          caseCount: 0,
-          consultReplyCount: 0,
-        },
-      ])
-    },
-  })
-
-  const [deleteClinicMutation] = useDeleteClinicMutation({
-    onCompleted: data => {
-      setClinics(clinics.filter(clinic => clinic.id !== data.deleteClinic?.id))
-    },
-  })
+  const methods = useForm<Inputs>({ mode: "onTouched" })
+  const [addClinicMutation] = useAddClinicMutation({ refetchQueries: ["GetClinic"] })
+  const [deleteClinicMutation] = useDeleteClinicMutation({ refetchQueries: ["GetClinic"] })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
@@ -83,16 +66,17 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   }
 
   const handleCreate = () => {
+    const { name, county, town, address, web, phone, description, categories } = methods.getValues()
     addClinicMutation({
       variables: {
-        name: newClinic.name,
-        categories: newClinic.categories,
-        county: newClinic.county,
-        town: newClinic.town,
-        address: newClinic.address,
-        description: newClinic.description,
-        phone: newClinic.phone,
-        web: newClinic.web,
+        name,
+        categories,
+        county,
+        town,
+        address,
+        description,
+        phone,
+        web,
       },
     })
   }
@@ -114,97 +98,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
           <Button variant="secondary" onClick={() => setOpen(true)}>
             新增診所
           </Button>
-          <Modal open={open} onClose={() => setOpen(false)}>
-            <Modal.Header>
-              <Modal.Title>新增診所</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
-                <Form>
-                  <Form.Group layout="vertical">
-                    <Form.Label required>新增診所</Form.Label>
-                    <Form.Input
-                      type="text"
-                      onChange={e => setNewClinic({ ...newClinic, name: e.target.value + "" })}
-                    />
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label required>大分類</Form.Label>
-                    <CosmeticMultiCascader
-                    // onChange={value =>
-                    //   setNewClinic({ ...newClinic, categories: value as string[] })
-                    // }
-                    />
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label required>電子信箱</Form.Label>
-                    <Form.Input
-                      type="email"
-                      onChange={e => setNewClinic({ ...newClinic, email: e.target.value + "" })}
-                    />
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label>完整地址</Form.Label>
-                    <div className="inline-flex w-full">
-                      <Form.Input
-                        type="text"
-                        placeholder="縣市"
-                        className="mr-4"
-                        style={{ flex: "1 1 300px" }}
-                        onChange={e => setNewClinic({ ...newClinic, county: e.target.value + "" })}
-                      />
-                      <Form.Input
-                        type="text"
-                        placeholder="地區"
-                        className="mr-4"
-                        style={{ flex: "1 1 300px" }}
-                        onChange={e => setNewClinic({ ...newClinic, town: e.target.value + "" })}
-                      />
-                      <Form.Input
-                        type="text"
-                        placeholder="地址"
-                        onChange={e => setNewClinic({ ...newClinic, address: e.target.value + "" })}
-                      />
-                    </div>
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label>診所網址</Form.Label>
-                    <Form.Input
-                      type="url"
-                      onChange={e => setNewClinic({ ...newClinic, web: e.target.value + "" })}
-                    />
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label>診所電話</Form.Label>
-                    <Form.Input
-                      type="tel"
-                      onChange={e => setNewClinic({ ...newClinic, phone: e.target.value + "" })}
-                    />
-                  </Form.Group>
-                  <Form.Group layout="vertical">
-                    <Form.Label>診所介紹</Form.Label>
-                    <Editor
-                      onEdit={newValue => {
-                        setNewClinic({ ...newClinic, description: newValue + "" })
-                      }}
-                    />
-                  </Form.Group>
-                </Form>
-              </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setOpen(false)}>
-                取消
-              </Button>
-              <Button
-                onClick={() => {
-                  handleCreate()
-                  setOpen(false)
-                }}>
-                新增
-              </Button>
-            </Modal.Footer>
-          </Modal>
         </Card.Header>
         <Card.Body>
           <Table height={400} data={clinics}>
@@ -269,6 +162,84 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
           />
         </Card.Body>
       </Card>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Modal.Header>
+          <Modal.Title>新增診所</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
+            <FormProvider {...methods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label required>新增診所</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...methods.register("name", {
+                      required: "此欄位為必填",
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                  {methods.formState.errors?.name?.message && (
+                    <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
+                  )}
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>大分類</Form.Label>
+                  <CosmeticMultiCascader name="categories" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>電子信箱</Form.Label>
+                  <Form.Input type="email" {...methods.register("email")} />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>完整地址</Form.Label>
+                  <div className="inline-flex w-full">
+                    <Form.Input
+                      type="text"
+                      placeholder="縣市"
+                      className="mr-4"
+                      style={{ flex: "1 1 300px" }}
+                      {...methods.register("county")}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="地區"
+                      className="mr-4"
+                      style={{ flex: "1 1 300px" }}
+                      {...methods.register("town")}
+                    />
+                    <Form.Input type="text" placeholder="地址" {...methods.register("address")} />
+                  </div>
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所網址</Form.Label>
+                  <Form.Input type="url" {...methods.register("web")} />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所電話</Form.Label>
+                  <Form.Input type="tel" {...methods.register("phone")} />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>診所介紹</Form.Label>
+                  <Editor name="description" />
+                </Form.Group>
+              </Form>
+            </FormProvider>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            取消
+          </Button>
+          <Button
+            onClick={() => {
+              methods.handleSubmit(handleCreate)()
+              setOpen(false)
+            }}>
+            新增
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

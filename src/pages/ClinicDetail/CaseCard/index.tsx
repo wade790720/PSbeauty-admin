@@ -4,9 +4,8 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import { Table, Pagination, MultiCascader } from "rsuite"
+import { Table, Pagination } from "rsuite"
 import { FileType } from "rsuite/Uploader"
-import categoryData from "../category.json"
 import {
   CasesFragment,
   useAddCaseMutation,
@@ -14,7 +13,7 @@ import {
   useDeleteCaseMutation,
 } from "../ClinicDetail.graphql.generated"
 import ImageUploader from "components/ImageUploader"
-import { useForm } from "react-hook-form"
+import { useForm, FormProvider } from "react-hook-form"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 
 type CaseCardProps = {
@@ -33,19 +32,19 @@ type Case = {
 
 type AddInputs = {
   title: string
+  description: string
 }
 
 type EditInputs = {
   title: string
-  category: string
   categories: string[]
   description: string
   imageList: string[]
 }
 
 const CaseCard = ({ data }: CaseCardProps) => {
-  const AddForm = useForm<AddInputs>({ mode: "onTouched" })
-  const EditForm = useForm<EditInputs>({ mode: "onTouched" })
+  const addMethods = useForm<AddInputs>({ mode: "onTouched" })
+  const editMethods = useForm<EditInputs>({ mode: "onTouched" })
   const { Column, HeaderCell, Cell } = Table
   const [openAdd, setOpenAdd] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
@@ -63,30 +62,28 @@ const CaseCard = ({ data }: CaseCardProps) => {
   }
 
   const [cases, setCases] = useState(() => {
-    return data
-      ? data.map((item, index) => ({
-          id: item?.id,
-          index: index + 1,
-          title: item?.title,
-          category: (item?.categories || []).reduce((acc, current) => {
-            return acc + " / " + current?.name
-          }, ""),
-          categories: (item?.categories || []).map(item => item?.id),
-          description: item?.description,
-          imageList: [
-            {
-              name: "before",
-              fileKey: 1,
-              url: item?.beforeImage,
-            },
-            {
-              name: "after",
-              fileKey: 2,
-              url: item?.afterImage,
-            },
-          ],
-        }))
-      : []
+    if (!data) return []
+
+    return data.map((item, index) => ({
+      id: item?.id,
+      index: index + 1,
+      title: item?.title,
+      category: item?.categories?.reduce((acc, current) => acc + " / " + current?.name, ""),
+      categories: item?.categories?.map(item => item?.id),
+      description: item?.description,
+      imageList: [
+        {
+          name: "before",
+          fileKey: 1,
+          url: item?.beforeImage,
+        },
+        {
+          name: "after",
+          fileKey: 2,
+          url: item?.afterImage,
+        },
+      ],
+    }))
   })
 
   const [editCase, setEditCase] = useState<Case>({
@@ -100,7 +97,11 @@ const CaseCard = ({ data }: CaseCardProps) => {
   })
 
   const handleDelete = (id: string) => {
-    console.log(id)
+    deleteCaseMutation({
+      variables: {
+        id,
+      },
+    })
   }
 
   return (
@@ -193,33 +194,31 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <Modal.Title>新增案例</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-              <ImageUploader />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input
-                type="text"
-                {...AddForm.register("title", {
-                  validate: value => value.length !== 0 || "輸入框內不能為空值",
-                })}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>分類</Form.Label>
-              <CosmeticMultiCascader />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <Editor
-                onEdit={newValue => {
-                  console.log(newValue)
-                }}
-              />
-            </Form.Group>
-          </Form>
+          <FormProvider {...addMethods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <ImageUploader />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...addMethods.register("title", {
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>分類</Form.Label>
+                <CosmeticMultiCascader name="categories" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor name="description" />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setOpenAdd(false)}>
@@ -239,35 +238,31 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <Modal.Title>編輯案例</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-              <ImageUploader />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input
-                type="text"
-                {...EditForm.register("title", {
-                  validate: value => value.length !== 0 || "輸入框內不能為空值",
-                })}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>分類</Form.Label>
-              <CosmeticMultiCascader />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <Editor
-                height={400}
-                initialValue={editCase.description}
-                onEdit={newValue => {
-                  setEditCase({ ...editCase, description: newValue })
-                }}
-              />
-            </Form.Group>
-          </Form>
+          <FormProvider {...editMethods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
+                <ImageUploader />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>標題</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...editMethods.register("title", {
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>分類</Form.Label>
+                <CosmeticMultiCascader name="categories" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor name="description" height={400} />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setOpenEdit(false)}>

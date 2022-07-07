@@ -1,15 +1,20 @@
 import { MultiCascader } from "rsuite"
 import { useMemo } from "react"
 import { useGetCategoriesQuery } from "./CosmeticMultiCascader.graphql.generated"
+import { useFormContext, useController } from "react-hook-form"
 
 type ValueType = (string | number)[]
 type CosmeticMultiCascaderProps = {
-  defaultValue?: ValueType
-  onChange?: (value: ValueType) => void
+  name: string
 }
 
-const CosmeticMultiCascader = (props: CosmeticMultiCascaderProps) => {
+const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
   const { data } = useGetCategoriesQuery()
+
+  const { control } = useFormContext<{ [name: string]: ValueType }>()
+  const {
+    field: { onChange, ...field },
+  } = useController({ control, name })
 
   const options = useMemo(() => {
     if (!data) return []
@@ -37,10 +42,10 @@ const CosmeticMultiCascader = (props: CosmeticMultiCascaderProps) => {
 
   return (
     <MultiCascader
+      {...field}
       searchable={false}
-      defaultValue={props.defaultValue}
       data={options || []}
-      onChange={value => props.onChange && props.onChange(value)}
+      onChange={onChange}
       menuStyle={{ padding: "6px 0" }}
       placeholder="請選擇分類"
       style={{ width: 280 }}
