@@ -166,66 +166,64 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
         <Modal.Header>
           <Modal.Title>新增診所</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <div className="px-5 mb-5" style={{ overflow: "auto", height: "500px" }}>
-            <FormProvider {...methods}>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label required>新增診所</Form.Label>
+        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
+          <FormProvider {...methods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label required>新增診所</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...methods.register("name", {
+                    required: "此欄位為必填",
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+                {methods.formState.errors?.name?.message && (
+                  <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
+                )}
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>大分類</Form.Label>
+                <CosmeticMultiCascader name="categories" />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label required>電子信箱</Form.Label>
+                <Form.Input type="email" {...methods.register("email")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>完整地址</Form.Label>
+                <div className="inline-flex w-full">
                   <Form.Input
                     type="text"
-                    {...methods.register("name", {
-                      required: "此欄位為必填",
-                      validate: value => value.length !== 0 || "輸入框內不能為空值",
-                    })}
+                    placeholder="縣市"
+                    className="mr-4"
+                    style={{ flex: "1 1 300px" }}
+                    {...methods.register("county")}
                   />
-                  {methods.formState.errors?.name?.message && (
-                    <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
-                  )}
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>大分類</Form.Label>
-                  <CosmeticMultiCascader name="categories" />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>電子信箱</Form.Label>
-                  <Form.Input type="email" {...methods.register("email")} />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>完整地址</Form.Label>
-                  <div className="inline-flex w-full">
-                    <Form.Input
-                      type="text"
-                      placeholder="縣市"
-                      className="mr-4"
-                      style={{ flex: "1 1 300px" }}
-                      {...methods.register("county")}
-                    />
-                    <Form.Input
-                      type="text"
-                      placeholder="地區"
-                      className="mr-4"
-                      style={{ flex: "1 1 300px" }}
-                      {...methods.register("town")}
-                    />
-                    <Form.Input type="text" placeholder="地址" {...methods.register("address")} />
-                  </div>
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所網址</Form.Label>
-                  <Form.Input type="url" {...methods.register("web")} />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所電話</Form.Label>
-                  <Form.Input type="tel" {...methods.register("phone")} />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label>診所介紹</Form.Label>
-                  <Editor name="description" />
-                </Form.Group>
-              </Form>
-            </FormProvider>
-          </div>
+                  <Form.Input
+                    type="text"
+                    placeholder="地區"
+                    className="mr-4"
+                    style={{ flex: "1 1 300px" }}
+                    {...methods.register("town")}
+                  />
+                  <Form.Input type="text" placeholder="地址" {...methods.register("address")} />
+                </div>
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所網址</Form.Label>
+                <Form.Input type="url" {...methods.register("web")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所電話</Form.Label>
+                <Form.Input type="tel" {...methods.register("phone")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>診所介紹</Form.Label>
+                <Editor name="description" />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setOpen(false)}>

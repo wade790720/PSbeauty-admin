@@ -213,7 +213,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
         <Modal.Header>
           <Modal.Title>新增案例</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
           <FormProvider {...addMethods}>
             <Form>
               <Form.Group layout="vertical">
@@ -255,7 +255,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
         <Modal.Header>
           <Modal.Title>編輯案例</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
           <FormProvider {...editMethods}>
             <Form>
               <Form.Group layout="vertical">

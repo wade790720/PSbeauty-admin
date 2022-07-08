@@ -146,14 +146,11 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Table>
         </Card.Body>
       </Card>
-      <Modal
-        open={openAdd}
-        onClose={() => setOpenAdd(false)}
-        style={{ overflow: "auto", maxHeight: "600px" }}>
+      <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
         <Modal.Header>
           <Modal.Title>新增醫師</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
           <FormProvider {...methods}>
             <Form>
               <Form.Group layout="vertical">
@@ -210,7 +207,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         <Modal.Header>
           <Modal.Title>檢視醫師</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
           <Form>
             <Form.Group layout="vertical">
               <Form.Label>預覽圖 (100 x 100px)</Form.Label>

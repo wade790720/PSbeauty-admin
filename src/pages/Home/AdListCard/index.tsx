@@ -152,15 +152,11 @@ const AdListCard = ({ data }: AdListCardProps) => {
         />
 
         {/* 新增廣告卡 */}
-        <Modal
-          open={open}
-          closeOnDocumentClick={false}
-          style={{ overflow: "auto", maxHeight: "600px" }}
-          onClose={() => setOpen(false)}>
+        <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
           <Modal.Header>
             <Modal.Title>新增廣告卡</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
             <FormProvider {...methods}>
               <Form>
                 <Form.Group layout="vertical">
@@ -186,7 +182,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                   )}
                 </Form.Group>
                 <Form.Group layout="vertical" style={{ height: "200px" }}>
-                  <Form.Label required>內容</Form.Label>
+                  <Form.Label>內容</Form.Label>
                   <Editor name="content" />
                 </Form.Group>
               </Form>

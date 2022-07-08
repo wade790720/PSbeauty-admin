@@ -89,7 +89,7 @@ const CarouselModal = (props: CarouselModalProps) => {
       <Modal.Header>
         <Modal.Title>{props.type === "add" ? "新增輪播圖" : "編輯"}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>預覽圖 (350 x 135px)</Form.Label>
