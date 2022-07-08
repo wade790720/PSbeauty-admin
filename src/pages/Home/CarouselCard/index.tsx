@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
-import { Table, Pagination } from "rsuite"
+import { Table } from "rsuite"
 import {
   GetHomeQuery,
   useAddAdImageMutation,
@@ -16,9 +16,6 @@ type CarouselCardProps = {
 
 const CarouselCard = ({ data }: CarouselCardProps) => {
   const { Column, HeaderCell, Cell } = Table
-
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
 
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
@@ -49,13 +46,11 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetHome"] })
   const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetHome"] })
 
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
-  }
-
   const handleCreate = (carousel: Carousel) => {
-    console.log(carousel)
+    if (slides.length >= 10) {
+      alert("超過10張輪播圖上限，請刪除掉，再做新增")
+      return
+    }
     addAdImageMutation({
       variables: {
         usageType: "首頁輪播",
@@ -151,24 +146,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
               </Cell>
             </Column>
           </Table>
-          <Pagination
-            className="p-5"
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size="xs"
-            layout={["-", "limit", "|", "pager", "skip"]}
-            total={slides.length}
-            limitOptions={[10, 20]}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
         </Card.Body>
       </Card>
 

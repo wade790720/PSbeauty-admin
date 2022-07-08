@@ -81,6 +81,7 @@ const CarouselModal = (props: CarouselModalProps) => {
 
   const onSubmit = () => {
     console.log("onConfirm", getValues())
+
     props.onSubmit && props.onSubmit(getValues())
   }
 

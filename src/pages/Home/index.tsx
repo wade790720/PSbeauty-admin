@@ -10,7 +10,7 @@ const Home = () => {
     variables: {
       adCardsFirst: 5,
       adCardsOrderId: SortEnumType.Desc,
-      adImagesFirst: 5,
+      adImagesFirst: 10,
       adImagesOrderId: SortEnumType.Desc,
       adImagesWhere: "首頁輪播",
     },

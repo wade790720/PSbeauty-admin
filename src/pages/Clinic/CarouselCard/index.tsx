@@ -1,22 +1,9 @@
 import { useState, useMemo } from "react"
-import Modal from "components/Modal"
-import Form from "components/Form"
+import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
-import { Table, Pagination, Toggle } from "rsuite"
-import { ReactComponent as DefaultPhoto } from "./DefaultPhoto.svg"
 import Card from "components/Card"
-import { GetClinicQuery } from "../Clinic.graphql.generated"
 import CarouselModal from "components/CarouselModal"
-
-const fakeData = [
-  {
-    id: 1,
-    status: "open",
-    title: "測試輪播",
-    url: "/home",
-    createTime: "2022-04-18",
-  },
-]
+import { GetClinicQuery } from "../Clinic.graphql.generated"
 
 type CarouselCardProps = {
   data: GetClinicQuery["adImages"]
@@ -24,37 +11,47 @@ type CarouselCardProps = {
 
 const { Column, HeaderCell, Cell } = Table
 const CarouselCard = ({ data }: CarouselCardProps) => {
-  const [openCarousel, setOpenCarousel] = useState(false)
-  const [limit, setLimit] = useState(10)
-  const [page, setPage] = useState(1)
-  const [open, setOpen] = useState(false)
+  const [openAddModal, setOpenAddModal] = useState(false)
+  const [openEditModal, setOpenEditModal] = useState(false)
 
-  const imageList = useMemo(() => {
+  const slides = useMemo(() => {
     if (!data?.edges) return []
 
-    return data?.edges?.map((card, index) => ({
-      index: index + 1,
+    return data?.edges?.map(card => ({
+      index: card.node?.sort || 0,
       id: card.node?.id || "",
       status: card.node?.status === true ? "開啟" : "關閉",
       url: card.node?.redirectType + "/" + card.node?.targetId,
+      image: card.node?.image || "",
     }))
   }, [data?.edges])
 
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
+  const handleCreate = () => {
+    if (slides.length >= 10) {
+      alert("超過10張輪播圖上限，請刪除掉，再做新增")
+      return
+    }
+  }
+
+  const handleUpdate = () => {
+    console.log("handleUpdate")
+  }
+
+  const handleDelete = (id: string) => {
+    const ask = confirm("確定要刪除嗎?")
+    if (ask) console.log("handleDelete")
   }
 
   return (
     <>
       <Card>
         <Card.Header title="輪播">
-          <Button variant="secondary" onClick={() => setOpenCarousel(true)}>
+          <Button variant="secondary" onClick={() => setOpenAddModal(true)}>
             新增
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table height={400} data={imageList}>
+          <Table height={400} data={slides}>
             <Column width={70} align="center" fixed>
               <HeaderCell>序號</HeaderCell>
               <Cell dataKey="index" />
@@ -83,82 +80,27 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
               <HeaderCell>動作</HeaderCell>
               <Cell>
                 {rowData => {
-                  function handleAction() {
-                    alert(`id:${rowData.id}`)
-                  }
-
                   return (
                     <span>
-                      <LinkButton onClick={() => setOpen(true)}> 編輯 </LinkButton> |{" "}
-                      <LinkButton onClick={handleAction}> 刪除 </LinkButton>
+                      <LinkButton onClick={() => setOpenEditModal(true)}> 編輯 </LinkButton> |{" "}
+                      <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
                   )
                 }}
               </Cell>
             </Column>
           </Table>
-          <Pagination
-            className="p-5"
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size="xs"
-            layout={["-", "limit", "|", "pager", "skip"]}
-            total={fakeData.length}
-            limitOptions={[10, 20]}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
         </Card.Body>
       </Card>
 
-      <CarouselModal type="add" open={openCarousel} onClose={() => setOpenCarousel(false)} />
+      <CarouselModal type="add" open={openAddModal} onClose={() => setOpenAddModal(false)} />
 
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <Modal.Header>
-          <Modal.Title>編輯</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖</Form.Label>
-              <DefaultPhoto
-                style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label required>標題</Form.Label>
-              <Form.Input type="text" value="測試輪播" />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>超連結</Form.Label>
-              <Form.Input type="text" value="/url" />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>狀態</Form.Label>
-              <Toggle defaultChecked />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOpen(false)}>
-            取消
-          </Button>
-          <Button
-            onClick={() => {
-              console.log("onConfirm")
-              setOpen(false)
-            }}>
-            儲存
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <CarouselModal
+        type="edit"
+        open={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        onSubmit={handleUpdate}
+      />
     </>
   )
 }

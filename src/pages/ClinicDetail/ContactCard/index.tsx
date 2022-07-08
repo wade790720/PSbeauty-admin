@@ -1,6 +1,7 @@
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
+import DatePicker from "components/DatePicker"
 import styled from "./ContactCard.module.scss"
 import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
@@ -74,6 +75,10 @@ const ContactCard = ({ data }: ContactCardProps) => {
           </div>
         </div>
         <Form>
+          <Form.Group layout="vertical">
+            <Form.Label>付款日期</Form.Label>
+            <DatePicker />
+          </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>姓名</Form.Label>
             <Form.Input
