@@ -7,11 +7,13 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import uuid from "utils/uuid"
 
 type ImageUploaderProps = {
+  listType?: "picture" | "text" | "picture-text" | undefined
   disabled?: boolean
   fileList?: FileType[]
   defaultFileList?: FileType[]
   onChange?: (url: string) => void
   imageLength?: number
+  renderFileInfo?: (file: FileType, fileElement: React.ReactNode) => React.ReactNode
 }
 
 const ImageUploader = (props: ImageUploaderProps) => {
@@ -41,12 +43,13 @@ const ImageUploader = (props: ImageUploaderProps) => {
   }
   return (
     <Uploader
-      listType="picture"
+      listType={props.listType || "picture"}
       action=""
       autoUpload={false}
       disabled={fileList.length > (props.imageLength || 0)}
       defaultFileList={props.defaultFileList}
       fileList={fileList}
+      renderFileInfo={props.renderFileInfo}
       onChange={onChangeUploader}>
       <button>
         <CameraRetro />

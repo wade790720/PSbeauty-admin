@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -13,6 +13,7 @@ import {
   useDeleteCaseMutation,
 } from "../ClinicDetail.graphql.generated"
 import ImageUploader from "components/ImageUploader"
+import { useMatch } from "react-router-dom"
 import { useForm, FormProvider } from "react-hook-form"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 
@@ -20,29 +21,23 @@ type CaseCardProps = {
   data: CasesFragment["cases"]
 }
 
-type Case = {
-  id: string
-  index: number
+type AddInputs = {
   title: string
-  category: string
   categories: string[]
   description: string
   imageList: FileType[]
 }
 
-type AddInputs = {
-  title: string
-  description: string
-}
-
 type EditInputs = {
+  id: string
   title: string
   categories: string[]
   description: string
-  imageList: string[]
+  imageList: FileType[]
 }
 
 const CaseCard = ({ data }: CaseCardProps) => {
+  const match = useMatch("/cms/cosmetic-clinic/:id")
   const addMethods = useForm<AddInputs>({ mode: "onTouched" })
   const editMethods = useForm<EditInputs>({ mode: "onTouched" })
   const { Column, HeaderCell, Cell } = Table
@@ -61,7 +56,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
     setLimit(dataKey)
   }
 
-  const [cases, setCases] = useState(() => {
+  const cases = useMemo(() => {
     if (!data) return []
 
     return data.map((item, index) => ({
@@ -84,24 +79,51 @@ const CaseCard = ({ data }: CaseCardProps) => {
         },
       ],
     }))
-  })
+  }, [data])
 
-  const [editCase, setEditCase] = useState<Case>({
-    id: "",
-    index: 0,
-    title: "",
-    category: "",
-    categories: [],
-    description: "",
-    imageList: [],
-  })
-
-  const handleDelete = (id: string) => {
-    deleteCaseMutation({
+  const handleAdd = () => {
+    const { categories, description, title } = addMethods.getValues()
+    addCaseMutation({
       variables: {
-        id,
+        clinicId: match?.params.id || "",
+        beforeImage: "",
+        beforeImageText: "",
+        afterImage: "",
+        afterImageText: "",
+        categories,
+        description,
+        hot: false,
+        title,
       },
     })
+  }
+
+  const handleUpdate = () => {
+    const { id, categories, description, title } = editMethods.getValues()
+    updateCaseMutation({
+      variables: {
+        id,
+        beforeImage: "",
+        beforeImageText: "",
+        afterImage: "",
+        afterImageText: "",
+        categories,
+        description,
+        hot: false,
+        title,
+      },
+    })
+    setOpenEdit(false)
+  }
+
+  const handleDelete = (id: string) => {
+    const ask = confirm("確定要刪除嗎?")
+    if (ask)
+      deleteCaseMutation({
+        variables: {
+          id,
+        },
+      })
   }
 
   return (
@@ -138,11 +160,9 @@ const CaseCard = ({ data }: CaseCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenEdit(true)
-                          setEditCase({
+                          editMethods.reset({
                             id: rowData.id,
-                            index: rowData.index,
                             title: rowData.title,
-                            category: rowData.category,
                             categories: rowData.categories,
                             description: rowData.description,
                             imageList: [
@@ -198,7 +218,11 @@ const CaseCard = ({ data }: CaseCardProps) => {
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                <ImageUploader />
+                <ImageUploader
+                  listType="picture-text"
+                  imageLength={1}
+                  renderFileInfo={() => <Form.Input type="text" />}
+                />
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>標題</Form.Label>
@@ -224,13 +248,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <Button variant="secondary" onClick={() => setOpenAdd(false)}>
             取消
           </Button>
-          <Button
-            onClick={() => {
-              console.log("onConfirm")
-              setOpenAdd(false)
-            }}>
-            新增
-          </Button>
+          <Button onClick={addMethods.handleSubmit(handleAdd)}>新增</Button>
         </Modal.Footer>
       </Modal>
       <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
@@ -242,7 +260,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                <ImageUploader />
+                <ImageUploader renderFileInfo={() => <Form.Input type="text" />} />
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>標題</Form.Label>
@@ -268,13 +286,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <Button variant="secondary" onClick={() => setOpenEdit(false)}>
             取消
           </Button>
-          <Button
-            onClick={() => {
-              console.log("onConfirm")
-              setOpenEdit(false)
-            }}>
-            修改
-          </Button>
+          <Button onClick={editMethods.handleSubmit(handleUpdate)}>修改</Button>
         </Modal.Footer>
       </Modal>
     </>
