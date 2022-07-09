@@ -1,17 +1,17 @@
-import { useMemo, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import { Table } from "rsuite"
+import { GetAdImagesQuery } from "graphql/queries/getAdImage.graphql.generated"
 import {
-  GetHomeQuery,
   useAddAdImageMutation,
   useUpdateAdImageMutation,
   useDeleteAdImageMutation,
-} from "../Home.graphql.generated"
+} from "graphql/mutations/adImage.graphql.generated"
 import CarouselModal, { Carousel } from "components/CarouselModal"
 
 type CarouselCardProps = {
-  data: GetHomeQuery["adImages"]
+  data: GetAdImagesQuery["adImages"]
 }
 
 const CarouselCard = ({ data }: CarouselCardProps) => {
@@ -20,31 +20,26 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
 
-  const [prepareUpdate, setPrepareUpdate] = useState({
-    id: "",
-    index: 0,
-    title: "",
-    status: false,
-    url: "",
-    image: "",
-  })
+  const [reviewCarousel, setReviewCarousel] = useState<Carousel>()
 
   const slides = useMemo(() => {
     if (!data?.edges) return []
 
-    return data.edges?.map(card => ({
-      index: card.node?.sort || 0,
-      id: card.node?.id || "",
-      title: card.node?.title || "",
-      status: card.node?.status === true ? "開啟" : "關閉",
-      url: card.node?.redirectType + "/" + card.node?.targetId,
-      image: card.node?.image || "",
-    }))
+    return data.edges
+      ?.map(card => ({
+        index: card.node?.sort || 0,
+        id: card.node?.id || "",
+        title: card.node?.title || "",
+        status: card.node?.status === true ? "開啟" : "關閉",
+        url: card.node?.redirectType + "/" + card.node?.targetId,
+        image: card.node?.image || "",
+      }))
+      .sort((a, b) => a.index - b.index)
   }, [data])
 
-  const [addAdImageMutation] = useAddAdImageMutation({ refetchQueries: ["GetHome"] })
-  const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetHome"] })
-  const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetHome"] })
+  const [addAdImageMutation] = useAddAdImageMutation({ refetchQueries: ["GetAdImages"] })
+  const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetAdImages"] })
+  const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetAdImages"] })
 
   const handleCreate = (carousel: Carousel) => {
     if (slides.length >= 10) {
@@ -54,26 +49,26 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
     addAdImageMutation({
       variables: {
         usageType: "首頁輪播",
+        title: carousel.title,
         redirect: carousel.advancedOption,
-        sort: 2,
-        targetId: (carousel.advancedOption === "case" ? carousel.case : carousel.clinic) || "",
+        sort: carousel.sort,
+        targetId: (carousel.advancedOption === "case" ? carousel.caseId : carousel.clinicId) || "",
         image: carousel.image || "",
-        status: false,
+        status: carousel.status,
       },
     })
   }
 
-  const handleUpdate = () => {
-    console.log(prepareUpdate)
+  const handleUpdate = (carousel: Carousel) => {
     updateAdImageMutation({
       variables: {
-        id: prepareUpdate.id,
+        id: carousel.id || "",
         usageType: "首頁輪播",
-        title: prepareUpdate.title,
-        redirect: "Clinic",
-        sort: prepareUpdate.index,
-        targetId: "clinic_id_xxx",
-        status: prepareUpdate.status,
+        title: carousel.title,
+        redirect: carousel.advancedOption,
+        sort: carousel.sort,
+        targetId: (carousel.advancedOption === "case" ? carousel.caseId : carousel.clinicId) || "",
+        status: carousel.status,
       },
     })
   }
@@ -127,13 +122,14 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenEditModal(true)
-                          setPrepareUpdate({
+                          setReviewCarousel({
                             id: rowData.id,
                             title: rowData.title,
+                            sort: rowData.index,
                             status: rowData.status === "開啟" ? true : false,
-                            url: rowData.url,
+                            advancedOption: rowData.url.split("/")[0],
+                            clinicId: rowData.url.split("/")[1],
                             image: rowData.image,
-                            index: rowData.index,
                           })
                         }}>
                         {" "}
@@ -152,6 +148,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
       <CarouselModal
         type="add"
         open={openAddModal}
+        sortList={slides.map(slide => slide.index)}
         onClose={() => setOpenAddModal(false)}
         onSubmit={handleCreate}
       />
@@ -159,12 +156,12 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
       <CarouselModal
         type="edit"
         defaultCarousel={{
-          title: prepareUpdate?.title,
-          clinic: "12",
-          sort: String(prepareUpdate?.index || ""),
-          advancedOption: "clinic",
-          image: prepareUpdate?.image,
-          show: prepareUpdate?.status,
+          title: reviewCarousel?.title || "",
+          clinicId: reviewCarousel?.clinicId || "",
+          sort: reviewCarousel?.sort || 0,
+          advancedOption: reviewCarousel?.advancedOption || "clinic",
+          image: reviewCarousel?.image,
+          status: reviewCarousel?.status || true,
         }}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}

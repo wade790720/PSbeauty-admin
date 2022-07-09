@@ -11,6 +11,7 @@ export type CarouselModalProps = {
   defaultCarousel?: Carousel
   type: "add" | "edit"
   open: boolean
+  sortList?: number[]
   onClose: () => void
   onSubmit?: (output: Carousel) => void
 }
@@ -21,15 +22,17 @@ export type Clinic = {
 }
 
 type AdvancedOption = "clinic" | "doctor" | "case"
+
 export type Carousel = {
+  id?: string
   title: string
-  clinic: string
-  sort: string
+  clinicId: string
+  sort: number
   advancedOption: AdvancedOption
   doctor?: string
-  case?: string
+  caseId?: string
   image?: string
-  show: boolean
+  status: boolean
 }
 
 const CarouselModal = (props: CarouselModalProps) => {
@@ -43,17 +46,20 @@ const CarouselModal = (props: CarouselModalProps) => {
     )
   }, [data])
 
-  const { register, control, watch, getValues, setValue, handleSubmit } = useForm<Carousel>({
-    mode: "onTouched",
-    defaultValues: props.defaultCarousel || {
-      title: "",
-      clinic: "",
-      sort: "",
-      advancedOption: "clinic",
-      show: true,
-    },
-  })
-  const watchClinic = watch("clinic")
+  console.log(props.defaultCarousel)
+
+  const { register, control, reset, watch, formState, getValues, setValue, handleSubmit } =
+    useForm<Carousel>({
+      mode: "onTouched",
+      defaultValues: props.defaultCarousel || {
+        title: "",
+        clinicId: "",
+        sort: 1,
+        advancedOption: "clinic",
+        status: true,
+      },
+    })
+  const watchClinic = watch("clinicId")
   const watchAdvancedOption = watch("advancedOption")
 
   const [loadClinicByIdQuery, getClinicByIdQuery] = useGetClinicByIdLazyQuery()
@@ -74,10 +80,12 @@ const CarouselModal = (props: CarouselModalProps) => {
 
   useEffect(() => {
     if (!watchClinic) return
-    loadClinicByIdQuery({
-      variables: { id: watchClinic },
-    })
+    loadClinicByIdQuery({ variables: { id: watchClinic } })
   }, [loadClinicByIdQuery, watchClinic])
+
+  useEffect(() => {
+    if (props.defaultCarousel !== getValues()) reset(props.defaultCarousel)
+  }, [props.defaultCarousel])
 
   const onSubmit = () => {
     console.log("onConfirm", getValues())
@@ -88,7 +96,7 @@ const CarouselModal = (props: CarouselModalProps) => {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Modal.Header>
-        <Modal.Title>{props.type === "add" ? "新增輪播圖" : "編輯"}</Modal.Title>
+        <Modal.Title>{props.type === "add" ? "新增輪播圖" : "編輯輪播圖"}</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
         <Form>
@@ -112,11 +120,32 @@ const CarouselModal = (props: CarouselModalProps) => {
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>標題</Form.Label>
-            <Form.Input placeholder="請輸入輪播標題" {...register("title")} />
+            <Form.Input
+              placeholder="請輸入輪播標題"
+              {...register("title", {
+                required: "此欄位為必填",
+                validate: value => value.length !== 0 || "輸入框內不能為空值",
+              })}
+            />
+            {formState.errors?.title?.message && (
+              <Form.ErrorMessage>{formState.errors?.title?.message}</Form.ErrorMessage>
+            )}
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label required>順序</Form.Label>
-            <Form.Input placeholder="請輸入順序" {...register("sort")} />
+            <Form.Input
+              type="number"
+              placeholder="請輸入順序"
+              {...register("sort", {
+                required: "此欄位為必填",
+                valueAsNumber: true,
+                validate: value =>
+                  props.sortList?.every(sort => sort !== value) || "順序值不能重覆",
+              })}
+            />
+            {formState.errors?.sort?.message && (
+              <Form.ErrorMessage>{formState.errors?.sort?.message}</Form.ErrorMessage>
+            )}
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>診所</Form.Label>
@@ -125,7 +154,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                 render={({ field: { onChange } }) => (
                   <InputPicker data={allClinics} onChange={value => onChange(value)} />
                 )}
-                name="clinic"
+                name="clinicId"
                 control={control}
               />
             }
@@ -133,7 +162,7 @@ const CarouselModal = (props: CarouselModalProps) => {
           {watchClinic && (
             <Form.Group layout="vertical">
               <Form.Label>進階篩選</Form.Label>
-              <Form.Radio {...register("advancedOption")} value="none">
+              <Form.Radio {...register("advancedOption")} value="clinic">
                 無
               </Form.Radio>
               <Form.Radio {...register("advancedOption")} value="doctor">
@@ -169,7 +198,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                   render={({ field: { onChange } }) => (
                     <InputPicker data={selectedClinic.cases} onChange={value => onChange(value)} />
                   )}
-                  name="case"
+                  name="caseId"
                   control={control}
                 />
               }
@@ -182,7 +211,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                 render={({ field: { value, onChange } }) => (
                   <Toggle defaultChecked={value} onChange={onChange} />
                 )}
-                name="show"
+                name="status"
                 control={control}
               />
             }
