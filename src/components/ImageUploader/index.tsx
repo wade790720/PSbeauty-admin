@@ -11,46 +11,52 @@ type ImageUploaderProps = {
   disabled?: boolean
   fileList?: FileType[]
   defaultFileList?: FileType[]
-  onChange?: (url: string) => void
+  onChange?: (url: string[]) => void
+  // onUpload
   imageLength?: number
   renderFileInfo?: (file: FileType, fileElement: React.ReactNode) => React.ReactNode
 }
 
 const ImageUploader = (props: ImageUploaderProps) => {
-  const [fileList, setFileList] = useState<FileType[]>([])
+  const [urlList, setUrlList] = useState<string[]>([])
 
-  const onChangeUploader = (fileList: FileType[]) => {
-    const fileToUpload = fileList[0].blobFile
-    const fileName = fileList[0].name || ""
-    const newRef = ref(storage, `image/${uuid()}/${fileName}`)
-    const uploadTask = uploadBytesResumable(newRef, fileToUpload as Blob)
-
-    setFileList(fileList)
-
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        console.log(snapshot.bytesTransferred)
-      },
-      err => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(url => {
-          console.log(url)
-          props.onChange && props.onChange(url)
-        })
-      },
-    )
-  }
   return (
     <Uploader
       listType={props.listType || "picture"}
       action=""
       autoUpload={false}
-      disabled={fileList.length > (props.imageLength || 0)}
+      // disabled={fileList.length > (props.imageLength || 0)}
       defaultFileList={props.defaultFileList}
-      fileList={fileList}
       renderFileInfo={props.renderFileInfo}
-      onChange={onChangeUploader}>
+      shouldQueueUpdate={(fileList: FileType[], newFile: FileType[] | FileType) => {
+        if (Array.isArray(newFile)) {
+          const newRef = ref(storage, `image/${uuid()}/${newFile[0].name || ""}`)
+          const uploadTask = uploadBytesResumable(newRef, newFile[0].blobFile as Blob)
+          uploadTask.on(
+            "state_changed",
+            snapshot => {
+              console.log(snapshot.bytesTransferred)
+            },
+            err => console.log(err),
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then(url => {
+                console.log(url)
+                const newUrlList = [...urlList, url]
+                setUrlList(newUrlList)
+                props.onChange && props.onChange(newUrlList)
+              })
+            },
+          )
+        }
+        return true
+      }}
+      onRemove={(file: FileType) => {
+        const newUrlList = urlList.filter(url => {
+          return file.name && url.includes(file.name) ? false : true
+        })
+        setUrlList(newUrlList)
+        props.onChange && props.onChange(newUrlList)
+      }}>
       <button>
         <CameraRetro />
       </button>

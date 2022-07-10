@@ -46,8 +46,6 @@ const CarouselModal = (props: CarouselModalProps) => {
     )
   }, [data])
 
-  console.log(props.defaultCarousel)
-
   const { register, control, reset, watch, formState, getValues, setValue, handleSubmit } =
     useForm<Carousel>({
       mode: "onTouched",
@@ -104,8 +102,9 @@ const CarouselModal = (props: CarouselModalProps) => {
             <Form.Label>預覽圖 (350 x 135px)</Form.Label>
             {props.type === "add" ? (
               <ImageUploader
-                onChange={url => {
-                  setValue("image", url)
+                onChange={urlList => {
+                  // setValue("image", url)
+                  console.info("ImageUploader", urlList)
                 }}
               />
             ) : (

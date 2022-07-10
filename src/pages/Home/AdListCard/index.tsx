@@ -163,7 +163,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                   <Form.Label required>預覽圖</Form.Label>
                   <ImageUploader
                     onChange={url => {
-                      methods.setValue("image", url)
+                      // methods.setValue("image", url)
                     }}
                   />
                 </Form.Group>

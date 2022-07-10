@@ -157,7 +157,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
                 <Form.Label>照片 (100 x 100px)</Form.Label>
                 <ImageUploader
                   onChange={url => {
-                    methods.setValue("photo", url)
+                    // methods.setValue("photo", url)
                   }}
                 />
               </Form.Group>
