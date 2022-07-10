@@ -221,7 +221,12 @@ const CaseCard = ({ data }: CaseCardProps) => {
                 <ImageUploader
                   listType="picture-text"
                   imageLength={1}
-                  renderFileInfo={() => <Form.Input type="text" />}
+                  renderFileInfo={() => (
+                    <div className="flex items-center">
+                      <label style={{ margin: 0, width: "45px" }}>描述</label>
+                      <Form.Input type="text" />
+                    </div>
+                  )}
                 />
               </Form.Group>
               <Form.Group layout="vertical">
@@ -260,7 +265,14 @@ const CaseCard = ({ data }: CaseCardProps) => {
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                <ImageUploader renderFileInfo={() => <Form.Input type="text" />} />
+                <ImageUploader
+                  renderFileInfo={() => (
+                    <div className="flex items-center">
+                      <label style={{ margin: 0, width: "45px" }}>描述</label>
+                      <Form.Input type="text" />
+                    </div>
+                  )}
+                />
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>標題</Form.Label>

@@ -77,7 +77,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
         <Form>
           <Form.Group layout="vertical">
             <Form.Label>付款日期</Form.Label>
-            <DatePicker />
+            {/* <DatePicker /> */}
           </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>姓名</Form.Label>
