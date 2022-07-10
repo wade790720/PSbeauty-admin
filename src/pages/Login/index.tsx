@@ -11,6 +11,7 @@ import axios from "axios"
 import { gql } from "@apollo/client"
 import { print } from "graphql"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 
 const CUSTOM_TOKEN = gql`
   query {
@@ -28,25 +29,36 @@ type Inputs = {
 
 export default function Login() {
   const go = useGo()
-  const { register, watch, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
-  const watchFields = watch()
+  const [errorMessage, setErrorMessage] = useState("")
+  const { register, getValues, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
 
   const login = async () => {
     // Get firebase token
     const userCredential = await signInWithEmailAndPassword(
       auth,
-      watchFields.email,
-      watchFields.password,
+      getValues().email,
+      getValues().password,
+    ).then(
+      response => {
+        setErrorMessage("")
+        return response.user.getIdToken(true)
+      },
+      error => {
+        setErrorMessage(error.message)
+        return ""
+      },
     )
-    const idToken = await userCredential.user.getIdToken(true)
+    const idToken = await userCredential
 
     // Get customToken for graphql
     const requestHeaders = { headers: headers(idToken) }
     const query = { query: print(CUSTOM_TOKEN) }
     const customToken = await axios.post(endpoint, query, requestHeaders)
-    setStorageValue("token", customToken.data.data.customToken.customToken)
 
-    if (customToken) go.toHome()
+    if (customToken) {
+      setStorageValue("token", customToken.data.data.customToken.customToken)
+      go.toHome()
+    }
   }
 
   return (
@@ -114,6 +126,13 @@ export default function Login() {
                 登入
               </Button>
             </Form>
+            {errorMessage && (
+              <div className={styled["error-message"]}>
+                {errorMessage === "Firebase: Error (auth/user-not-found)."
+                  ? "使用者不存在"
+                  : errorMessage}
+              </div>
+            )}
           </div>
         </div>
       </div>

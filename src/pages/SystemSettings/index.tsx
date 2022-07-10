@@ -15,7 +15,7 @@ const SystemSettings = () => {
       <Layout.Breadcrumbs>
         <Layout.Breadcrumbs.Item>系統</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
-      <CategoryCard />
+      <CategoryCard data={data?.topCategories || null} />
       <KeywordCard data={data?.popularKeywords || null} />
       <MemberCard data={data?.users || null} />
     </>

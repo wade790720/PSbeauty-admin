@@ -14,7 +14,7 @@ const Home = () => {
     },
   })
 
-  const adImageQuery = useGetAdImagesQuery({
+  const adImageHomeQuery = useGetAdImagesQuery({
     variables: {
       first: 10,
       orderId: SortEnumType.Desc,
@@ -22,8 +22,36 @@ const Home = () => {
     },
   })
 
-  if (getHomeQuery.loading && adImageQuery.loading) return <QueryStatus.Loading />
-  if (getHomeQuery.error && adImageQuery.error) return <QueryStatus.Error />
+  const adImageClinicQuery = useGetAdImagesQuery({
+    variables: {
+      first: 10,
+      orderId: SortEnumType.Desc,
+      where: "診所輪播",
+    },
+  })
+
+  const adImageCaseQuery = useGetAdImagesQuery({
+    variables: {
+      first: 10,
+      orderId: SortEnumType.Desc,
+      where: "案例輪播",
+    },
+  })
+
+  if (
+    getHomeQuery.loading &&
+    adImageHomeQuery.loading &&
+    adImageClinicQuery.loading &&
+    adImageCaseQuery.loading
+  )
+    return <QueryStatus.Loading />
+  if (
+    getHomeQuery.error &&
+    adImageHomeQuery.error &&
+    adImageClinicQuery.error &&
+    adImageCaseQuery.error
+  )
+    return <QueryStatus.Error />
 
   return (
     <>
@@ -31,7 +59,9 @@ const Home = () => {
         <Layout.Breadcrumbs.Item>首頁</Layout.Breadcrumbs.Item>
       </Layout.Breadcrumbs>
       <AdListCard data={getHomeQuery.data?.adCards || null} />
-      <CarouselCard data={adImageQuery.data?.adImages || null} />
+      <CarouselCard data={adImageHomeQuery.data?.adImages || null} usageType="home" />
+      <CarouselCard data={adImageClinicQuery.data?.adImages || null} usageType="clinic" />
+      <CarouselCard data={adImageCaseQuery.data?.adImages || null} usageType="case" />
     </>
   )
 }

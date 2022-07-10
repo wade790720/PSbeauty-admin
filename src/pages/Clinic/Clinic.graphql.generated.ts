@@ -4,11 +4,8 @@ import { gql } from "@apollo/client"
 import * as Apollo from "@apollo/client"
 const defaultOptions = {} as const
 export type GetClinicQueryVariables = Types.Exact<{
-  clinicFirst: Types.InputMaybe<Types.Scalars["Int"]>
-  clinicOrderId: Types.InputMaybe<Types.SortEnumType>
-  adImagesFirst: Types.InputMaybe<Types.Scalars["Int"]>
-  adImagesOrderId: Types.InputMaybe<Types.SortEnumType>
-  adImagesWhere: Types.InputMaybe<Types.Scalars["String"]>
+  first: Types.InputMaybe<Types.Scalars["Int"]>
+  orderId: Types.InputMaybe<Types.SortEnumType>
 }>
 
 export type GetClinicQuery = {
@@ -34,30 +31,6 @@ export type GetClinicQuery = {
         address: string | null
         name: string | null
         id: string | null
-      } | null
-    }> | null
-  } | null
-  adImages: {
-    __typename: "AdImagesConnection"
-    pageInfo: {
-      __typename: "PageInfo"
-      hasNextPage: boolean
-      hasPreviousPage: boolean
-      startCursor: string | null
-      endCursor: string | null
-    }
-    edges: Array<{
-      __typename: "AdImagesEdge"
-      cursor: string
-      node: {
-        __typename: "AdImage"
-        id: string | null
-        image: string | null
-        sort: number
-        usageType: string | null
-        redirectType: string | null
-        targetId: string | null
-        status: boolean
       } | null
     }> | null
   } | null
@@ -89,14 +62,8 @@ export type DeleteClinicMutation = {
 }
 
 export const GetClinicDocument = gql`
-  query GetClinic(
-    $clinicFirst: Int
-    $clinicOrderId: SortEnumType
-    $adImagesFirst: Int
-    $adImagesOrderId: SortEnumType
-    $adImagesWhere: String
-  ) {
-    clinics(order: { id: $clinicOrderId }, first: $clinicFirst) {
+  query GetClinic($first: Int, $orderId: SortEnumType) {
+    clinics(order: { id: $orderId }, first: $first) {
       totalCount
       pageInfo {
         hasNextPage
@@ -117,30 +84,6 @@ export const GetClinicDocument = gql`
         }
       }
     }
-    adImages(
-      where: { usageType: { eq: $adImagesWhere } }
-      order: { id: $adImagesOrderId }
-      first: $adImagesFirst
-    ) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          id
-          image
-          sort
-          usageType
-          redirectType
-          targetId
-          status
-        }
-      }
-    }
   }
 `
 
@@ -156,11 +99,8 @@ export const GetClinicDocument = gql`
  * @example
  * const { data, loading, error } = useGetClinicQuery({
  *   variables: {
- *      clinicFirst: // value for 'clinicFirst'
- *      clinicOrderId: // value for 'clinicOrderId'
- *      adImagesFirst: // value for 'adImagesFirst'
- *      adImagesOrderId: // value for 'adImagesOrderId'
- *      adImagesWhere: // value for 'adImagesWhere'
+ *      first: // value for 'first'
+ *      orderId: // value for 'orderId'
  *   },
  * });
  */

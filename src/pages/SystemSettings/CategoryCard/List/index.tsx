@@ -1,11 +1,28 @@
 import cx from "classnames"
 import styled from "./List.module.scss"
 import Item from "./Item"
+import React, { useState } from "react"
 
-const List = ({ className, children, ...props }: ReactProps.Component) => {
+type ListProps = {
+  defaultActive?: string
+} & ReactProps.Component
+
+const List = ({ className, children, ...props }: ListProps) => {
+  const [active, setActive] = useState(props.defaultActive)
+
   return (
     <div className={cx(styled.wrapper, className)} {...props}>
-      {children}
+      {React.Children.map(children, child => {
+        if (!React.isValidElement(child)) return
+        return React.cloneElement(child, {
+          ...child.props,
+          active: child.props.value === active,
+          onClick: (e: { target: HTMLInputElement }) => {
+            setActive(e.target.innerText)
+            child.props.onClick && child.props.onClick()
+          },
+        })
+      })}
     </div>
   )
 }

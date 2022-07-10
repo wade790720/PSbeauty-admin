@@ -92,7 +92,7 @@ const CarouselModal = (props: CarouselModalProps) => {
   }
 
   return (
-    <Modal open={props.open} onClose={props.onClose}>
+    <Modal open={props.open} closeOnDocumentClick={false} onClose={props.onClose}>
       <Modal.Header>
         <Modal.Title>{props.type === "add" ? "新增輪播圖" : "編輯輪播圖"}</Modal.Title>
       </Modal.Header>

@@ -1,14 +1,8 @@
 import { gql } from "@apollo/client"
 
 export const GetClinic = gql`
-  query GetClinic(
-    $clinicFirst: Int
-    $clinicOrderId: SortEnumType
-    $adImagesFirst: Int
-    $adImagesOrderId: SortEnumType
-    $adImagesWhere: String
-  ) {
-    clinics(order: { id: $clinicOrderId }, first: $clinicFirst) {
+  query GetClinic($first: Int, $orderId: SortEnumType) {
+    clinics(order: { id: $orderId }, first: $first) {
       totalCount
       pageInfo {
         hasNextPage
@@ -26,30 +20,6 @@ export const GetClinic = gql`
           address
           name
           id
-        }
-      }
-    }
-    adImages(
-      where: { usageType: { eq: $adImagesWhere } }
-      order: { id: $adImagesOrderId }
-      first: $adImagesFirst
-    ) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        cursor
-        node {
-          id
-          image
-          sort
-          usageType
-          redirectType
-          targetId
-          status
         }
       }
     }

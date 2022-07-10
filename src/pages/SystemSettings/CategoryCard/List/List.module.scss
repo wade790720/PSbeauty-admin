@@ -8,14 +8,31 @@
 
 .item {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding-top: 13px;
   padding-right: 20px;
   padding-bottom: 13px;
   padding-left: 20px;
   border-bottom: 1px solid #e5e5ea;
-  cursor: pointer;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
 
   &:hover {
     background-color: #f2faff;
+  }
+
+  &.active {
+    background-color: #253858;
+    color: #fff;
+
+    svg {
+      fill: #fff;
+    }
   }
 }

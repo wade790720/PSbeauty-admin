@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import { Table } from "rsuite"
@@ -12,14 +12,20 @@ import CarouselModal, { Carousel } from "components/CarouselModal"
 
 type CarouselCardProps = {
   data: GetAdImagesQuery["adImages"]
+  usageType: "home" | "clinic" | "case"
 }
 
-const CarouselCard = ({ data }: CarouselCardProps) => {
+const carouselType = {
+  home: "首頁輪播",
+  clinic: "診所輪播",
+  case: "案例輪播",
+}
+
+const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
   const { Column, HeaderCell, Cell } = Table
 
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
-
   const [reviewCarousel, setReviewCarousel] = useState<Carousel>()
 
   const slides = useMemo(() => {
@@ -48,7 +54,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
     }
     addAdImageMutation({
       variables: {
-        usageType: "首頁輪播",
+        usageType: carouselType[usageType],
         title: carousel.title,
         redirect: carousel.advancedOption,
         sort: carousel.sort,
@@ -63,7 +69,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
     updateAdImageMutation({
       variables: {
         id: carousel.id || "",
-        usageType: "首頁輪播",
+        usageType: carouselType[usageType],
         title: carousel.title,
         redirect: carousel.advancedOption,
         sort: carousel.sort,
@@ -86,7 +92,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   return (
     <>
       <Card>
-        <Card.Header title="輪播">
+        <Card.Header title={carouselType[usageType]}>
           <Button variant="secondary" onClick={() => setOpenAddModal(true)}>
             新增
           </Button>

@@ -1,6 +1,4 @@
 import ClinicCard from "./ClinicCard"
-import CarouselCard from "./CarouselCard"
-
 import Layout from "components/Layout"
 import QueryStatus from "components/QueryStatus"
 import { SortEnumType } from "types/schema"
@@ -9,11 +7,8 @@ import { useGetClinicQuery } from "./Clinic.graphql.generated"
 const CosmeticClinic = () => {
   const { data, loading, error } = useGetClinicQuery({
     variables: {
-      clinicFirst: 10,
-      clinicOrderId: SortEnumType.Desc,
-      adImagesFirst: 5,
-      adImagesOrderId: SortEnumType.Desc,
-      adImagesWhere: "診所輪播",
+      first: 10,
+      orderId: SortEnumType.Desc,
     },
   })
 
@@ -27,7 +22,6 @@ const CosmeticClinic = () => {
       </Layout.Breadcrumbs>
 
       {data && <ClinicCard data={data?.clinics} />}
-      {data && <CarouselCard data={data?.adImages} />}
     </>
   )
 }

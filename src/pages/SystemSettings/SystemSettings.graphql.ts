@@ -21,6 +21,16 @@ export const GetSetting = gql`
         }
       }
     }
+    topCategories {
+      name
+      secondCategories {
+        name
+        categories {
+          id
+          name
+        }
+      }
+    }
   }
 `
 
@@ -43,6 +53,22 @@ export const DeleteKeyword = gql`
 export const DeleteMember = gql`
   mutation DeleteMember($id: String) {
     deleteUser(input: { id: $id }) {
+      id
+    }
+  }
+`
+
+export const AddCategory = gql`
+  mutation AddCategory($topParent: String, $parent: String, $name: String) {
+    addCategory(input: { topParent: $topParent, parent: $parent, name: $name }) {
+      id
+    }
+  }
+`
+
+export const DeleteCategory = gql`
+  mutation DeleteCategory($id: String) {
+    deleteCategory(input: { id: $id }) {
       id
     }
   }
