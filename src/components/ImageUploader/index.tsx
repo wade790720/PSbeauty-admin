@@ -25,7 +25,7 @@ const ImageUploader = (props: ImageUploaderProps) => {
       listType={props.listType || "picture"}
       action=""
       autoUpload={false}
-      // disabled={fileList.length > (props.imageLength || 0)}
+      disabled={urlList.length > (props.imageLength || 0)}
       defaultFileList={props.defaultFileList}
       renderFileInfo={props.renderFileInfo}
       shouldQueueUpdate={(fileList: FileType[], newFile: FileType[] | FileType) => {

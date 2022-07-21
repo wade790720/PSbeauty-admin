@@ -4,11 +4,11 @@ import Item from "./Item"
 import React, { useState } from "react"
 
 type ListProps = {
-  defaultActive?: string
+  default?: string
 } & ReactProps.Component
 
 const List = ({ className, children, ...props }: ListProps) => {
-  const [active, setActive] = useState(props.defaultActive)
+  const [active, setActive] = useState(props.default)
 
   return (
     <div className={cx(styled.wrapper, className)} {...props}>

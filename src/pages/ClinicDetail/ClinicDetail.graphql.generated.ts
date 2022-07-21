@@ -440,7 +440,7 @@ export const AddCaseDocument = gql`
         beforeImage: $beforeImage
         beforeImageText: $beforeImageText
         afterImage: $afterImage
-        afterImageText: $afterImage
+        afterImageText: $afterImageText
         categories: $categories
         description: $description
         hot: $hot

@@ -1,3 +1,4 @@
+import cx from "classnames"
 import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
@@ -26,6 +27,10 @@ type AddInputs = {
   categories: string[]
   description: string
   imageList: FileType[]
+  beforeImage: string
+  beforeImageText: string
+  afterImage: string
+  afterImageText: string
 }
 
 type EditInputs = {
@@ -34,6 +39,10 @@ type EditInputs = {
   categories: string[]
   description: string
   imageList: FileType[]
+  beforeImage: string
+  beforeImageText: string
+  afterImage: string
+  afterImageText: string
 }
 
 const CaseCard = ({ data }: CaseCardProps) => {
@@ -82,14 +91,23 @@ const CaseCard = ({ data }: CaseCardProps) => {
   }, [data])
 
   const handleAdd = () => {
-    const { categories, description, title } = addMethods.getValues()
+    const {
+      categories,
+      description,
+      title,
+      beforeImage,
+      beforeImageText,
+      afterImage,
+      afterImageText,
+    } = addMethods.getValues()
+
     addCaseMutation({
       variables: {
         clinicId: match?.params.id || "",
-        beforeImage: "",
-        beforeImageText: "",
-        afterImage: "",
-        afterImageText: "",
+        beforeImage,
+        beforeImageText,
+        afterImage,
+        afterImageText,
         categories,
         description,
         hot: false,
@@ -217,17 +235,35 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <FormProvider {...addMethods}>
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                <ImageUploader
-                  listType="picture-text"
-                  imageLength={1}
-                  renderFileInfo={() => (
-                    <div className="flex items-center">
-                      <label style={{ margin: 0, width: "45px" }}>描述</label>
-                      <Form.Input type="text" />
-                    </div>
-                  )}
-                />
+                <Form.Label>案例圖 (700 x 800px)</Form.Label>
+                <div className={cx("flex w-full")}>
+                  <div className="flex-1 mr-1">
+                    <ImageUploader
+                      listType="picture"
+                      onChange={urlList => {
+                        addMethods.setValue("beforeImage", urlList[0])
+                      }}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="術前描述"
+                      {...addMethods.register("beforeImageText")}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <ImageUploader
+                      listType="picture"
+                      onChange={urlList => {
+                        addMethods.setValue("afterImage", urlList[0])
+                      }}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="術後描述"
+                      {...addMethods.register("afterImageText")}
+                    />
+                  </div>
+                </div>
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>標題</Form.Label>
@@ -264,15 +300,36 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <FormProvider {...editMethods}>
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (700 x 800px)</Form.Label>
-                <ImageUploader
-                  renderFileInfo={() => (
-                    <div className="flex items-center">
-                      <label style={{ margin: 0, width: "45px" }}>描述</label>
-                      <Form.Input type="text" />
-                    </div>
-                  )}
-                />
+                <Form.Label>案例圖 (700 x 800px)</Form.Label>
+                <div className={cx("flex w-full")}>
+                  <div className="flex-1 mr-1">
+                    <ImageUploader
+                      listType="picture"
+                      defaultFileList-={editMethods.getValues().imageList[0]}
+                      onChange={urlList => {
+                        editMethods.setValue("beforeImage", urlList[0])
+                      }}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="術前描述"
+                      {...editMethods.register("beforeImageText")}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <ImageUploader
+                      listType="picture"
+                      onChange={urlList => {
+                        editMethods.setValue("afterImage", urlList[0])
+                      }}
+                    />
+                    <Form.Input
+                      type="text"
+                      placeholder="術後描述"
+                      {...editMethods.register("afterImageText")}
+                    />
+                  </div>
+                </div>
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label required>標題</Form.Label>

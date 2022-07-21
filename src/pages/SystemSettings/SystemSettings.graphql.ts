@@ -6,12 +6,6 @@ export const GetSetting = gql`
       keywords
     }
     users {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
       edges {
         cursor
         node {
@@ -21,9 +15,16 @@ export const GetSetting = gql`
         }
       }
     }
+  }
+`
+
+export const GetCategories = gql`
+  query GetCategories {
     topCategories {
+      id
       name
       secondCategories {
+        id
         name
         categories {
           id
@@ -38,6 +39,32 @@ export const AddKeyword = gql`
   mutation AddKeyword($keyword: String) {
     addPopularKeyword(input: { keyword: $keyword }) {
       keyword
+    }
+  }
+`
+
+export const AddTopCategory = gql`
+  mutation AddTopCategory($name: String) {
+    addTopCategory(input: { name: $name }) {
+      id
+    }
+  }
+`
+
+export const AddSecondCategory = gql`
+  mutation AddSecondCategory($name: String, $topCategoryId: String) {
+    addSecondCategory(input: { name: $name, topCategoryId: $topCategoryId }) {
+      id
+    }
+  }
+`
+
+export const AddCategory = gql`
+  mutation AddCategory($name: String, $topCategoryId: String, $secondCategoryId: String) {
+    addCategory(
+      input: { name: $name, topCategoryId: $topCategoryId, secondCategoryId: $secondCategoryId }
+    ) {
+      id
     }
   }
 `
@@ -58,9 +85,17 @@ export const DeleteMember = gql`
   }
 `
 
-export const AddCategory = gql`
-  mutation AddCategory($topParent: String, $parent: String, $name: String) {
-    addCategory(input: { topParent: $topParent, parent: $parent, name: $name }) {
+export const DeleteTopCategory = gql`
+  mutation DeleteTopCategory($id: String) {
+    deleteTopCategory(input: { id: $id }) {
+      id
+    }
+  }
+`
+
+export const DeleteSecondCategory = gql`
+  mutation DeleteSecondCategory($id: String) {
+    deleteSecondCategory(input: { id: $id }) {
       id
     }
   }

@@ -20,11 +20,11 @@ type Inputs = {
 }
 
 const KeywordCard = ({ data }: KeywordCardProps) => {
-  const { register, getValues, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
+  const { register, getValues, formState, handleSubmit, reset } = useForm<Inputs>({
+    mode: "onTouched",
+  })
   const [keywordOpen, setKeywordOpen] = useState(false)
   const { Column, HeaderCell, Cell } = Table
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
 
   const keywords = useMemo(() => {
     if (!data?.keywords) return []
@@ -38,12 +38,13 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
   const [addKeywordMutation] = useAddKeywordMutation({ refetchQueries: ["GetSetting"] })
   const [deleteKeywordMutation] = useDeleteKeywordMutation({ refetchQueries: ["GetSetting"] })
 
-  const handleAdd = () => {
-    addKeywordMutation({
+  const handleAdd = async () => {
+    await addKeywordMutation({
       variables: {
         keyword: getValues().keyword,
       },
     })
+    reset({ keyword: "" })
   }
 
   const handleDelete = (keyword: string) => {
@@ -54,11 +55,6 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
           keyword,
         },
       })
-  }
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
   }
 
   return (
@@ -94,24 +90,6 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
               </Cell>
             </Column>
           </Table>
-          <Pagination
-            className="p-5"
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size="xs"
-            layout={["-", "limit", "|", "pager", "skip"]}
-            total={keywords.length}
-            limitOptions={[10, 20]}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
         </Card.Body>
       </Card>
 

@@ -118,7 +118,7 @@ export const AddCase = gql`
         beforeImage: $beforeImage
         beforeImageText: $beforeImageText
         afterImage: $afterImage
-        afterImageText: $afterImage
+        afterImageText: $afterImageText
         categories: $categories
         description: $description
         hot: $hot

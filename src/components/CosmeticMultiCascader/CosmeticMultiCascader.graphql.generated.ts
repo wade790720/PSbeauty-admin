@@ -10,7 +10,7 @@ export type GetCategoriesQuery = {
     __typename: "TopCategory"
     name: string | null
     secondCategories: Array<{
-      __typename: "MiddleCategory"
+      __typename: "SecondCategory"
       name: string | null
       categories: Array<{
         __typename: "Category"

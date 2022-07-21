@@ -6,6 +6,7 @@ export type ItemProps = {
   value: string | number
   active?: boolean
   onClick?: React.MouseEventHandler<HTMLElement>
+  onRemove?: React.MouseEventHandler<HTMLElement>
 } & ReactProps.Component
 
 const Item = ({ className, children, ...props }: ItemProps) => {
@@ -14,7 +15,9 @@ const Item = ({ className, children, ...props }: ItemProps) => {
       className={cx(styled.item, { [styled.active]: props.active }, className)}
       onClick={props.onClick}>
       {children}
-      <CloseIcon />
+      <span onClick={props.onRemove}>
+        <CloseIcon />
+      </span>
     </div>
   )
 }
