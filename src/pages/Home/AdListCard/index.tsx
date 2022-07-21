@@ -61,15 +61,16 @@ const AdListCard = ({ data }: AdListCardProps) => {
     setLimit(dataKey)
   }
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const { image, title, content } = methods.getValues()
-    addAdCardMutation({
+    await addAdCardMutation({
       variables: {
         image,
         title,
         content,
       },
     })
+    methods.reset({ title: "", content: "" })
   }
 
   const handleDelete = (id: string) => {
@@ -163,7 +164,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                   <Form.Label required>預覽圖</Form.Label>
                   <ImageUploader
                     onChange={url => {
-                      // methods.setValue("image", url)
+                      methods.setValue("image", url[0])
                     }}
                   />
                 </Form.Group>
