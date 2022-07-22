@@ -112,7 +112,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                 <img
                   src={props?.defaultCarousel?.image}
                   alt="preview"
-                  style={{ width: "350px", height: "135px", border: "1px solid #e4e6ef" }}
+                  style={{ width: "350px", border: "1px solid #e4e6ef" }}
                 />
               )
             )}
@@ -172,7 +172,7 @@ const CarouselModal = (props: CarouselModalProps) => {
               </Form.Radio>
             </Form.Group>
           )}
-          {watchAdvancedOption === "doctor" && (
+          {/* {watchAdvancedOption === "doctor" && (
             <Form.Group>
               <Form.Label>診所醫生</Form.Label>
               {
@@ -188,7 +188,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                 />
               }
             </Form.Group>
-          )}
+          )} */}
           {watchAdvancedOption === "case" && (
             <Form.Group>
               <Form.Label>診所案例</Form.Label>
