@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react"
+/* eslint-disable prettier/prettier */
+import { useState, useMemo, useReducer } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -25,6 +26,7 @@ type Inputs = {
 }
 
 const CategoryCard = ({ data }: CategoryCardProps) => {
+  const [, forceRerender] = useReducer(x => x + 1, 0)
   const categories = useMemo(() => {
     if (!data) return []
 
@@ -43,28 +45,25 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
   }, [data])
 
   const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id)
-  const [secondCategoryId, setSecondCategoryId] = useState(
-    categories?.[0]?.secondCategories?.[0].id || "",
-  )
+  const [secondCategoryId, setSecondCategoryId] = useState(categories?.[0]?.secondCategories?.[0]?.id || "")
+
+  const secondCategories = useMemo(() => {
+    return categories.find(category => category.id === topCategoryId)?.secondCategories
+  }, [categories, topCategoryId])
+
+  const thirdCategories = useMemo(() => {
+    return categories
+      .find(category => category.id === topCategoryId)
+      ?.secondCategories?.find(item => item.id === secondCategoryId)?.categories
+  }, [categories, topCategoryId, secondCategoryId])
 
   const { register, getValues, reset } = useForm<Inputs>({ mode: "onTouched" })
-
   const [addTopCategoryMutation] = useAddTopCategoryMutation({ refetchQueries: ["GetCategories"] })
-  const [addSecondCategoryMutation] = useAddSecondCategoryMutation({
-    refetchQueries: ["GetCategories"],
-  })
-  const [addCategoryMutation] = useAddCategoryMutation({
-    refetchQueries: ["GetCategories"],
-  })
-  const [deleteTopCategoryMutation] = useDeleteTopCategoryMutation({
-    refetchQueries: ["GetCategories"],
-  })
-  const [deleteSecondCategoryMutation] = useDeleteSecondCategoryMutation({
-    refetchQueries: ["GetCategories"],
-  })
-  const [deleteCategoryMutation] = useDeleteCategoryMutation({
-    refetchQueries: ["GetCategories"],
-  })
+  const [addSecondCategoryMutation] = useAddSecondCategoryMutation({ refetchQueries: ["GetCategories"] })
+  const [addCategoryMutation] = useAddCategoryMutation({ refetchQueries: ["GetCategories"] })
+  const [deleteTopCategoryMutation] = useDeleteTopCategoryMutation({ refetchQueries: ["GetCategories"] })
+  const [deleteSecondCategoryMutation] = useDeleteSecondCategoryMutation({ refetchQueries: ["GetCategories"] })
+  const [deleteCategoryMutation] = useDeleteCategoryMutation({ refetchQueries: ["GetCategories"] })
 
   const handleAddTopCategory = async () => {
     await addTopCategoryMutation({
@@ -83,6 +82,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
       },
     })
     reset({ secondCategory: "" })
+    forceRerender()
   }
 
   const handleAddCategory = async () => {
@@ -157,51 +157,43 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
               <Button onClick={handleAddTopCategory}>新增</Button>
             </div>
           </div>
+
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第二層分類</div>
-            <List
-              key={topCategoryId}
-              default={
-                categories.find(category => category.id === topCategoryId)?.secondCategories?.[0]
-                  ?.name || ""
-              }>
-              {categories
-                .find(category => category.id === topCategoryId)
-                ?.secondCategories?.map((item, index) => (
-                  <List.Item
-                    key={item.id + "-" + index}
-                    value={item.name}
-                    onClick={() => {
-                      setSecondCategoryId(item.id)
-                    }}
-                    onRemove={() => {
-                      handleDeleteSecondCategory(item.id)
-                    }}>
-                    {item.name}
-                  </List.Item>
-                ))}
+            <List key={secondCategories?.[0]?.id} default={secondCategories?.[0]?.name}>
+              {secondCategories?.map((item, index) => (
+                <List.Item
+                  key={item.id + "-" + index}
+                  value={item.name}
+                  onClick={() => {
+                    setSecondCategoryId(item.id)
+                  }}
+                  onRemove={() => {
+                    handleDeleteSecondCategory(item.id)
+                  }}>
+                  {item.name}
+                </List.Item>
+              ))}
             </List>
             <div className="flex items-center mt-4">
               <Form.Input type="text" className="mr-4" {...register("secondCategory")} />
               <Button onClick={handleAddSecondCategory}>新增</Button>
             </div>
           </div>
+
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第三層分類</div>
-            <List key={secondCategoryId}>
-              {categories
-                .find(category => category.id === topCategoryId)
-                ?.secondCategories?.find(item => item.id === secondCategoryId)
-                ?.categories?.map((item, index) => (
-                  <List.Item
-                    key={item.id + "-" + index}
-                    value={item.name || ""}
-                    onRemove={() => {
-                      handleDeleteCategory(item?.id)
-                    }}>
-                    {item.name}
-                  </List.Item>
-                ))}
+            <List key={thirdCategories?.[0]?.id}>
+              {thirdCategories?.map((item, index) => (
+                <List.Item
+                  key={item.id + "-" + index}
+                  value={item.name || ""}
+                  onRemove={() => {
+                    handleDeleteCategory(item?.id)
+                  }}>
+                  {item.name}
+                </List.Item>
+              ))}
             </List>
             <div className="flex items-center mt-4">
               <Form.Input type="text" className="mr-4" {...register("category")} />
