@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -25,8 +25,28 @@ type Inputs = {
 }
 
 const CategoryCard = ({ data }: CategoryCardProps) => {
-  const [topCategory, setTopCategory] = useState(data?.[0] || null)
-  const [secondCategory, setSecondCategory] = useState(data?.[0]?.secondCategories?.[0] || null)
+  const categories = useMemo(() => {
+    if (!data) return []
+
+    return data?.map(firstItem => ({
+      id: firstItem?.id || "",
+      name: firstItem?.name || "",
+      secondCategories: firstItem?.secondCategories?.map(secondItem => ({
+        id: secondItem?.id || "",
+        name: secondItem?.name || "",
+        categories: secondItem?.categories?.map(thirdItem => ({
+          id: thirdItem?.id || "",
+          name: thirdItem?.name || "",
+        })),
+      })),
+    }))
+  }, [data])
+
+  const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id)
+  const [secondCategoryId, setSecondCategoryId] = useState(
+    categories?.[0]?.secondCategories?.[0].id || "",
+  )
+
   const { register, getValues, reset } = useForm<Inputs>({ mode: "onTouched" })
 
   const [addTopCategoryMutation] = useAddTopCategoryMutation({ refetchQueries: ["GetCategories"] })
@@ -59,7 +79,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
     await addSecondCategoryMutation({
       variables: {
         name: getValues().secondCategory,
-        topCategoryId: topCategory?.id || "",
+        topCategoryId,
       },
     })
     reset({ secondCategory: "" })
@@ -69,8 +89,8 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
     await addCategoryMutation({
       variables: {
         name: getValues().category,
-        topCategoryId: topCategory?.id || "",
-        secondCategoryId: secondCategory?.id || "",
+        topCategoryId,
+        secondCategoryId,
       },
     })
     reset({ category: "" })
@@ -113,19 +133,22 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
         <div className="inline-flex w-full">
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第一層分類</div>
-            <List default={data?.[0]?.name || ""}>
-              {data?.map((item, index) => (
+            <List default={categories?.[0]?.name}>
+              {categories?.map((item, index) => (
                 <List.Item
-                  key={item + "-" + index}
-                  value={item?.name || ""}
+                  key={item.id + "-" + index}
+                  value={item.name}
                   onClick={() => {
-                    setTopCategory(item)
-                    setSecondCategory(item?.secondCategories?.[0] || null)
+                    setTopCategoryId(item.id)
+
+                    if (item.secondCategories && item.secondCategories?.length > 0) {
+                      setSecondCategoryId(item.secondCategories?.[0].id || "")
+                    }
                   }}
                   onRemove={() => {
-                    handleDeleteTopCategory(item?.id || "")
+                    handleDeleteTopCategory(item.id)
                   }}>
-                  {item?.name}
+                  {item.name}
                 </List.Item>
               ))}
             </List>
@@ -136,20 +159,27 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
           </div>
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第二層分類</div>
-            <List key={topCategory?.name}>
-              {topCategory?.secondCategories?.map((item, index) => (
-                <List.Item
-                  key={item + "-" + index}
-                  value={item?.name || ""}
-                  onClick={() => {
-                    setSecondCategory(item)
-                  }}
-                  onRemove={() => {
-                    handleDeleteSecondCategory(item?.id || "")
-                  }}>
-                  {item?.name}
-                </List.Item>
-              ))}
+            <List
+              key={topCategoryId}
+              default={
+                categories.find(category => category.id === topCategoryId)?.secondCategories?.[0]
+                  ?.name || ""
+              }>
+              {categories
+                .find(category => category.id === topCategoryId)
+                ?.secondCategories?.map((item, index) => (
+                  <List.Item
+                    key={item.id + "-" + index}
+                    value={item.name}
+                    onClick={() => {
+                      setSecondCategoryId(item.id)
+                    }}
+                    onRemove={() => {
+                      handleDeleteSecondCategory(item.id)
+                    }}>
+                    {item.name}
+                  </List.Item>
+                ))}
             </List>
             <div className="flex items-center mt-4">
               <Form.Input type="text" className="mr-4" {...register("secondCategory")} />
@@ -158,17 +188,20 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
           </div>
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第三層分類</div>
-            <List key={secondCategory?.name}>
-              {secondCategory?.categories?.map((item, index) => (
-                <List.Item
-                  key={item + "-" + index}
-                  value={item?.name || ""}
-                  onRemove={() => {
-                    handleDeleteCategory(item?.id || "")
-                  }}>
-                  {item?.name}
-                </List.Item>
-              ))}
+            <List key={secondCategoryId}>
+              {categories
+                .find(category => category.id === topCategoryId)
+                ?.secondCategories?.find(item => item.id === secondCategoryId)
+                ?.categories?.map((item, index) => (
+                  <List.Item
+                    key={item.id + "-" + index}
+                    value={item.name || ""}
+                    onRemove={() => {
+                      handleDeleteCategory(item?.id)
+                    }}>
+                    {item.name}
+                  </List.Item>
+                ))}
             </List>
             <div className="flex items-center mt-4">
               <Form.Input type="text" className="mr-4" {...register("category")} />
