@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
@@ -32,14 +33,33 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
     if (!data?.edges) return []
 
     return data.edges
-      ?.map(card => ({
-        index: card.node?.sort || 0,
-        id: card.node?.id || "",
-        title: card.node?.title || "",
-        status: card.node?.status === true ? "開啟" : "關閉",
-        url: card.node?.redirectType + "/" + card.node?.targetId,
-        image: card.node?.image || "",
-      }))
+      ?.map(card => {
+
+        let url
+        switch (card.node?.redirectType) {
+          case "clinic": {
+            url = card.node?.redirectType + "/" + card.node?.clinicId
+            break;
+          }
+          case "doctor": {
+            url = "clinic/" + card.node?.clinicId + "/" + card.node?.redirectType
+            break;
+          }
+          case "case": {
+            url = "clinic/" + card.node?.clinicId + "/" + card.node?.redirectType + "/" + card.node?.targetId
+            break;
+          }
+        }
+
+        return {
+          index: card.node?.sort || 0,
+          id: card.node?.id || "",
+          title: card.node?.title || "",
+          status: card.node?.status === true ? "開啟" : "關閉",
+          url,
+          image: card.node?.image || "",
+        }
+      })
       .sort((a, b) => a.index - b.index)
   }, [data])
 
@@ -58,7 +78,8 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         title: carousel.title,
         redirect: carousel.advancedOption,
         sort: carousel.sort,
-        targetId: (carousel.advancedOption === "case" ? carousel.caseId : carousel.clinicId) || "",
+        clinicId: carousel.clinicId,
+        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
         image: carousel.image || "",
         status: carousel.status,
       },
@@ -73,7 +94,8 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         title: carousel.title,
         redirect: carousel.advancedOption,
         sort: carousel.sort,
-        targetId: (carousel.advancedOption === "case" ? carousel.caseId : carousel.clinicId) || "",
+        clinicId: carousel.clinicId,
+        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
         status: carousel.status,
       },
     })
@@ -128,14 +150,16 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenEditModal(true)
+                          console.log("review", rowData)
                           setReviewCarousel({
                             id: rowData.id,
                             title: rowData.title,
                             sort: rowData.index,
-                            status: rowData.status === "開啟" ? true : false,
-                            advancedOption: rowData.url.split("/")[0],
-                            clinicId: rowData.url.split("/")[1],
                             image: rowData.image,
+                            status: rowData.status === "開啟" ? true : false,
+                            advancedOption: rowData.url.split("/")[2] !== "" ? rowData.url.split("/")[2] : "clinic",
+                            clinicId: rowData.url.split("/")[1],
+                            targetId: rowData.url.split("/")[3],
                           })
                         }}>
                         {" "}
@@ -162,8 +186,10 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
       <CarouselModal
         type="edit"
         defaultCarousel={{
+          id: reviewCarousel?.id,
           title: reviewCarousel?.title || "",
           clinicId: reviewCarousel?.clinicId || "",
+          targetId: reviewCarousel?.targetId || "",
           sort: reviewCarousel?.sort || 0,
           advancedOption: reviewCarousel?.advancedOption || "clinic",
           image: reviewCarousel?.image,

@@ -12,13 +12,6 @@ export type GetAdImagesQueryVariables = Types.Exact<{
 export type GetAdImagesQuery = {
   adImages: {
     __typename: "AdImagesConnection"
-    pageInfo: {
-      __typename: "PageInfo"
-      hasNextPage: boolean
-      hasPreviousPage: boolean
-      startCursor: string | null
-      endCursor: string | null
-    }
     edges: Array<{
       __typename: "AdImagesEdge"
       cursor: string
@@ -30,6 +23,7 @@ export type GetAdImagesQuery = {
         usageType: string | null
         redirectType: string | null
         targetId: string | null
+        clinicId: string | null
         status: boolean
         title: string | null
       } | null
@@ -40,12 +34,6 @@ export type GetAdImagesQuery = {
 export const GetAdImagesDocument = gql`
   query GetAdImages($first: Int, $orderId: SortEnumType, $where: String) {
     adImages(where: { usageType: { eq: $where } }, order: { id: $orderId }, first: $first) {
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
       edges {
         cursor
         node {
@@ -55,6 +43,7 @@ export const GetAdImagesDocument = gql`
           usageType
           redirectType
           targetId
+          clinicId
           status
           title
         }

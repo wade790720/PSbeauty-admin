@@ -55,7 +55,9 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         usageType: "診所輪播",
         redirect: carousel.advancedOption,
         sort: 2,
-        targetId: (carousel.advancedOption === "case" ? carousel.caseId : carousel.clinicId) || "",
+        clinicId: carousel.clinicId,
+        targetId:
+          (carousel.advancedOption === "case" ? carousel.targetId : carousel.clinicId) || "",
         image: carousel.image || "",
         status: false,
       },
@@ -70,6 +72,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         title: "",
         redirect: "Clinic",
         sort: 2,
+        clinicId: "",
         targetId: "clinic_id_xxx",
         status: false,
       },

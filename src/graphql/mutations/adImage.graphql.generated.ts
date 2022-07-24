@@ -8,6 +8,7 @@ export type AddAdImageMutationVariables = Types.Exact<{
   usageType: Types.InputMaybe<Types.Scalars["String"]>
   redirect: Types.InputMaybe<Types.Scalars["String"]>
   sort: Types.Scalars["Int"]
+  clinicId: Types.InputMaybe<Types.Scalars["String"]>
   targetId: Types.InputMaybe<Types.Scalars["String"]>
   image: Types.InputMaybe<Types.Scalars["String"]>
   status: Types.Scalars["Boolean"]
@@ -23,6 +24,7 @@ export type UpdateAdImageMutationVariables = Types.Exact<{
   sort: Types.Scalars["Int"]
   usageType: Types.InputMaybe<Types.Scalars["String"]>
   redirect: Types.InputMaybe<Types.Scalars["String"]>
+  clinicId: Types.InputMaybe<Types.Scalars["String"]>
   targetId: Types.InputMaybe<Types.Scalars["String"]>
   status: Types.Scalars["Boolean"]
 }>
@@ -45,6 +47,7 @@ export const AddAdImageDocument = gql`
     $usageType: String
     $redirect: String
     $sort: Int!
+    $clinicId: String
     $targetId: String
     $image: String
     $status: Boolean!
@@ -55,6 +58,7 @@ export const AddAdImageDocument = gql`
         title: $title
         redirectType: $redirect
         sort: $sort
+        clinicId: $clinicId
         targetId: $targetId
         image: $image
         status: $status
@@ -86,6 +90,7 @@ export type AddAdImageMutationFn = Apollo.MutationFunction<
  *      usageType: // value for 'usageType'
  *      redirect: // value for 'redirect'
  *      sort: // value for 'sort'
+ *      clinicId: // value for 'clinicId'
  *      targetId: // value for 'targetId'
  *      image: // value for 'image'
  *      status: // value for 'status'
@@ -114,6 +119,7 @@ export const UpdateAdImageDocument = gql`
     $sort: Int!
     $usageType: String
     $redirect: String
+    $clinicId: String
     $targetId: String
     $status: Boolean!
   ) {
@@ -124,6 +130,7 @@ export const UpdateAdImageDocument = gql`
         sort: $sort
         usageType: $usageType
         redirectType: $redirect
+        clinicId: $clinicId
         targetId: $targetId
         status: $status
       }
@@ -155,6 +162,7 @@ export type UpdateAdImageMutationFn = Apollo.MutationFunction<
  *      sort: // value for 'sort'
  *      usageType: // value for 'usageType'
  *      redirect: // value for 'redirect'
+ *      clinicId: // value for 'clinicId'
  *      targetId: // value for 'targetId'
  *      status: // value for 'status'
  *   },

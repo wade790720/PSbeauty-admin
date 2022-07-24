@@ -6,6 +6,7 @@ export const AddAdImage = gql`
     $usageType: String
     $redirect: String
     $sort: Int!
+    $clinicId: String
     $targetId: String
     $image: String
     $status: Boolean!
@@ -16,6 +17,7 @@ export const AddAdImage = gql`
         title: $title
         redirectType: $redirect
         sort: $sort
+        clinicId: $clinicId
         targetId: $targetId
         image: $image
         status: $status
@@ -33,6 +35,7 @@ export const UpdateAdImage = gql`
     $sort: Int!
     $usageType: String
     $redirect: String
+    $clinicId: String
     $targetId: String
     $status: Boolean!
   ) {
@@ -43,6 +46,7 @@ export const UpdateAdImage = gql`
         sort: $sort
         usageType: $usageType
         redirectType: $redirect
+        clinicId: $clinicId
         targetId: $targetId
         status: $status
       }

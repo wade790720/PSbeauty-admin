@@ -30,7 +30,7 @@ export type Carousel = {
   sort: number
   advancedOption: AdvancedOption
   doctor?: string
-  caseId?: string
+  targetId?: string
   image?: string
   status: boolean
 }
@@ -86,9 +86,9 @@ const CarouselModal = (props: CarouselModalProps) => {
   }, [props.defaultCarousel])
 
   const onSubmit = () => {
-    console.log("onConfirm", getValues())
-
-    props.onSubmit && props.onSubmit(getValues())
+    console.log("onSubmit", getValues())
+    console.log(watch().targetId)
+    // props.onSubmit && props.onSubmit(getValues())
   }
 
   return (
@@ -103,8 +103,7 @@ const CarouselModal = (props: CarouselModalProps) => {
             {props.type === "add" ? (
               <ImageUploader
                 onChange={urlList => {
-                  // setValue("image", url)
-                  console.info("ImageUploader", urlList)
+                  setValue("image", urlList[0])
                 }}
               />
             ) : (
@@ -138,8 +137,9 @@ const CarouselModal = (props: CarouselModalProps) => {
               {...register("sort", {
                 required: "此欄位為必填",
                 valueAsNumber: true,
-                validate: value =>
-                  props.sortList?.every(sort => sort !== value) || "順序值不能重覆",
+                // validate: value => {
+                //   return props.sortList?.every(sort => sort !== value) || "順序值不能重覆"
+                // },
               })}
             />
             {formState.errors?.sort?.message && (
@@ -150,11 +150,18 @@ const CarouselModal = (props: CarouselModalProps) => {
             <Form.Label>診所</Form.Label>
             {
               <Controller
-                render={({ field: { onChange } }) => (
-                  <InputPicker data={allClinics} onChange={value => onChange(value)} />
-                )}
                 name="clinicId"
                 control={control}
+                render={({ field: { value, onChange } }) => (
+                  <InputPicker
+                    data={allClinics}
+                    defaultValue={value}
+                    onChange={value => {
+                      console.log("clinicId onChange", value)
+                      onChange(value)
+                    }}
+                  />
+                )}
               />
             }
           </Form.Group>
@@ -172,33 +179,20 @@ const CarouselModal = (props: CarouselModalProps) => {
               </Form.Radio>
             </Form.Group>
           )}
-          {/* {watchAdvancedOption === "doctor" && (
-            <Form.Group>
-              <Form.Label>診所醫生</Form.Label>
-              {
-                <Controller
-                  render={({ field: { onChange } }) => (
-                    <InputPicker
-                      data={selectedClinic.doctors}
-                      onChange={value => onChange(value)}
-                    />
-                  )}
-                  name="doctor"
-                  control={control}
-                />
-              }
-            </Form.Group>
-          )} */}
           {watchAdvancedOption === "case" && (
             <Form.Group>
               <Form.Label>診所案例</Form.Label>
               {
                 <Controller
-                  render={({ field: { onChange } }) => (
-                    <InputPicker data={selectedClinic.cases} onChange={value => onChange(value)} />
-                  )}
-                  name="caseId"
                   control={control}
+                  name="targetId"
+                  render={({ field: { value, onChange } }) => (
+                    <InputPicker
+                      data={selectedClinic.cases}
+                      defaultValue={value}
+                      onChange={onChange}
+                    />
+                  )}
                 />
               }
             </Form.Group>
@@ -207,11 +201,11 @@ const CarouselModal = (props: CarouselModalProps) => {
             <Form.Label>狀態</Form.Label>
             {
               <Controller
+                name="status"
+                control={control}
                 render={({ field: { value, onChange } }) => (
                   <Toggle defaultChecked={value} onChange={onChange} />
                 )}
-                name="status"
-                control={control}
               />
             }
           </Form.Group>

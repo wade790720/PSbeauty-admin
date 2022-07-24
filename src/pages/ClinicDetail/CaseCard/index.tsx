@@ -305,7 +305,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
                   <div className="flex-1 mr-1">
                     <ImageUploader
                       listType="picture"
-                      defaultFileList-={editMethods.getValues().imageList[0]}
+                      defaultFileList-={editMethods.getValues().imageList?.[0]}
                       onChange={urlList => {
                         editMethods.setValue("beforeImage", urlList[0])
                       }}
