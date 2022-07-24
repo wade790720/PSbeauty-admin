@@ -38,7 +38,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         let url
         switch (card.node?.redirectType) {
           case "clinic": {
-            url = card.node?.redirectType + "/" + card.node?.clinicId
+            url = card.node?.clinicId ? card.node?.redirectType + "/" + card.node?.clinicId : "無跳轉"
             break;
           }
           case "doctor": {
@@ -68,8 +68,8 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
   const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetAdImages"] })
 
   const handleCreate = (carousel: Carousel) => {
-    if (slides.length >= 10) {
-      alert("超過10張輪播圖上限，請刪除掉，再做新增")
+    if (slides.length >= 5) {
+      alert("超過5張輪播圖上限，請刪除掉，再做新增")
       return
     }
     addAdImageMutation({
@@ -176,6 +176,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
       </Card>
 
       <CarouselModal
+        key={Math.floor(Math.random() * 5)}
         type="add"
         open={openAddModal}
         sortList={slides.map(slide => slide.index)}

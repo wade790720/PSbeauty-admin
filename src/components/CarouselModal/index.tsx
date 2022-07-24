@@ -86,11 +86,10 @@ const CarouselModal = (props: CarouselModalProps) => {
   }, [props.defaultCarousel])
 
   const onSubmit = () => {
-    console.log("onSubmit", getValues())
-    console.log(watch().targetId)
-    // props.onSubmit && props.onSubmit(getValues())
+    props.onSubmit && props.onSubmit(getValues())
   }
 
+  console.log(getValues())
   return (
     <Modal open={props.open} closeOnDocumentClick={false} onClose={props.onClose}>
       <Modal.Header>
