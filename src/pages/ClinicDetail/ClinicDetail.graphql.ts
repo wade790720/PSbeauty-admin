@@ -25,6 +25,11 @@ export const Images = gql`
       title
       redirectType
       targetId
+      status
+      clinic {
+        id
+        name
+      }
     }
   }
 `

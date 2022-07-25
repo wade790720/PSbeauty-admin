@@ -2,79 +2,95 @@ import { useState, useMemo } from "react"
 import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
-import CarouselModal, { Carousel } from "components/CarouselModal"
+import CarouselModal, { Carousel } from "./CarouselModal"
+
 import {
-  useAddAdImageMutation,
-  useUpdateAdImageMutation,
-  useDeleteAdImageMutation,
-} from "graphql/mutations/adImage.graphql.generated"
-import { ImagesFragment } from "../ClinicDetail.graphql.generated"
+  useAddClinicImageMutation,
+  useUpdateClinicImageMutation,
+  useDeleteClinicImageMutation,
+  ImagesFragment,
+} from "../ClinicDetail.graphql.generated"
 
 type CarouselCardProps = {
   data: ImagesFragment["images"]
 }
 
-const fakeData = [
-  {
-    id: 1,
-    status: "open",
-    title: "測試輪播",
-    url: "/home",
-    createTime: "2022-04-18",
-  },
-]
-
 const CarouselCard = ({ data }: CarouselCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const [openAddModal, setOpenAddModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
+  const [reviewSlide, setReviewSlide] = useState<Carousel>()
 
-  const [addAdImageMutation] = useAddAdImageMutation({ refetchQueries: ["GetClinic"] })
-  const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetClinic"] })
-  const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetClinic"] })
+  const [addClinicImageMutation] = useAddClinicImageMutation({
+    refetchQueries: ["GetClinicDetail"],
+  })
+  const [updateClinicImageMutation] = useUpdateClinicImageMutation({
+    refetchQueries: ["GetClinicDetail"],
+  })
+  const [deleteClinicImageMutation] = useDeleteClinicImageMutation({
+    refetchQueries: ["GetClinicDetail"],
+  })
 
   const slides = useMemo(() => {
     if (!data) return []
 
-    return data.map(slide => ({
-      index: slide?.sort || 0,
-      id: slide?.id || "",
-      url: slide?.redirectType + "/" + slide?.targetId,
-      image: slide?.image || "",
-    }))
+    return data.map(slide => {
+      let url
+      switch (slide?.redirectType) {
+        case "clinic": {
+          url = "無跳轉"
+          break
+        }
+        case "doctor": {
+          url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType
+          break
+        }
+        case "case": {
+          url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType + "/" + slide?.targetId
+          break
+        }
+      }
+
+      return {
+        index: slide?.sort || 0,
+        id: slide?.id || "",
+        title: slide?.title || "",
+        url,
+        image: slide?.image || "",
+        status: slide?.status === true ? "開啟" : "關閉",
+        clinic: slide?.clinic,
+      }
+    })
   }, [data])
 
   const handleCreate = (carousel: Carousel) => {
-    if (slides.length >= 10) {
-      alert("超過10張輪播圖上限，請刪除掉，再做新增")
+    if (slides.length >= 5) {
+      alert("超過5張輪播圖上限，請刪除掉，再做新增")
       return
     }
-    addAdImageMutation({
+    addClinicImageMutation({
       variables: {
-        title: "",
-        usageType: "診所輪播",
-        redirect: carousel.advancedOption,
-        sort: 2,
-        clinicId: carousel.clinicId,
-        targetId:
-          (carousel.advancedOption === "case" ? carousel.targetId : carousel.clinicId) || "",
+        clinicId: carousel.redirect === "yes" ? carousel.clinicId : "",
+        sort: carousel.sort,
+        status: carousel.status,
+        title: carousel.title,
         image: carousel.image || "",
-        status: false,
+        redirectType: carousel.advancedOption,
+        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
       },
     })
   }
 
   const handleUpdate = () => {
-    updateAdImageMutation({
+    updateClinicImageMutation({
       variables: {
-        id: "",
-        usageType: "首頁輪播",
-        title: "",
-        redirect: "Clinic",
-        sort: 2,
         clinicId: "",
-        targetId: "clinic_id_xxx",
+        sort: 2,
         status: false,
+        title: "",
+        image: "",
+        redirectType: "Clinic",
+        targetId: "clinic_id_xxx",
       },
     })
   }
@@ -82,12 +98,14 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const handleDelete = (id: string) => {
     const ask = confirm("確定要刪除嗎?")
     if (ask)
-      deleteAdImageMutation({
+      deleteClinicImageMutation({
         variables: {
           id,
         },
       })
   }
+
+  console.log(reviewSlide)
 
   return (
     <>
@@ -98,15 +116,10 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table
-            height={400}
-            data={fakeData}
-            onRowClick={data => {
-              console.log(data)
-            }}>
+          <Table height={400} data={slides}>
             <Column width={70} align="center" fixed>
               <HeaderCell>序號</HeaderCell>
-              <Cell dataKey="id" />
+              <Cell dataKey="index" />
             </Column>
 
             <Column width={70} align="center" fixed>
@@ -124,18 +137,32 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
               <Cell dataKey="url" />
             </Column>
 
-            <Column width={200}>
-              <HeaderCell>創建時間</HeaderCell>
-              <Cell dataKey="createTime" />
-            </Column>
             <Column width={120} fixed="right">
               <HeaderCell>動作</HeaderCell>
               <Cell>
                 {rowData => {
                   return (
                     <span>
-                      <LinkButton onClick={() => setOpenEditModal(true)}> 編輯 </LinkButton> |{" "}
-                      <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
+                      <LinkButton
+                        onClick={() => {
+                          setOpenEditModal(true)
+                          console.log("edit", rowData)
+                          setReviewSlide({
+                            id: rowData.id,
+                            title: rowData.title,
+                            sort: rowData.index,
+                            image: rowData.image,
+                            status: rowData.status === "開啟" ? true : false,
+                            advancedOption:
+                              rowData.url === "無跳轉" ? "clinic" : rowData.url.split("/")[2],
+                            clinicId: rowData.url.split("/")[1],
+                            targetId: rowData.url.split("/")[3],
+                          })
+                        }}>
+                        {" "}
+                        編輯{" "}
+                      </LinkButton>{" "}
+                      | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
                   )
                 }}
@@ -145,17 +172,26 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <CarouselModal type="add" open={openAddModal} onClose={() => setOpenAddModal(false)} />
+      <CarouselModal
+        key={Math.floor(Math.random() * 5)}
+        type="add"
+        open={openAddModal}
+        sortList={slides.map(slide => slide.index)}
+        onClose={() => setOpenAddModal(false)}
+        onSubmit={handleCreate}
+      />
 
       <CarouselModal
         type="edit"
         defaultCarousel={{
-          title: "",
-          clinicId: "12",
-          sort: 2,
-          advancedOption: "clinic",
-          image: "",
-          status: false,
+          title: reviewSlide?.title || "",
+          clinicId: reviewSlide?.clinicId || "",
+          sort: reviewSlide?.sort || 1,
+          advancedOption: reviewSlide?.advancedOption || "clinic",
+          image: reviewSlide?.image || "",
+          status: reviewSlide?.status || true,
+          redirect: reviewSlide?.advancedOption === "clinic" ? "no" : "yes",
+          targetId: reviewSlide?.targetId,
         }}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}

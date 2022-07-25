@@ -30,6 +30,8 @@ export type ImagesFragment = {
     title: string | null
     redirectType: string | null
     targetId: string | null
+    status: boolean
+    clinic: { __typename: "Clinic"; id: string | null; name: string | null } | null
   } | null> | null
 }
 
@@ -103,6 +105,8 @@ export type GetClinicDetailQuery = {
       title: string | null
       redirectType: string | null
       targetId: string | null
+      status: boolean
+      clinic: { __typename: "Clinic"; id: string | null; name: string | null } | null
     } | null> | null
   } | null
 }
@@ -261,6 +265,11 @@ export const ImagesFragmentDoc = gql`
       title
       redirectType
       targetId
+      status
+      clinic {
+        id
+        name
+      }
     }
   }
 `
