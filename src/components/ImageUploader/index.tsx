@@ -40,7 +40,6 @@ const ImageUploader = (props: ImageUploaderProps) => {
             err => console.log(err),
             () => {
               getDownloadURL(uploadTask.snapshot.ref).then(url => {
-                console.log(url)
                 const newUrlList = [...urlList, url]
                 setUrlList(newUrlList)
                 props.onChange && props.onChange(newUrlList)

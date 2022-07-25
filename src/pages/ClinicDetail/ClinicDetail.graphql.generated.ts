@@ -214,6 +214,7 @@ export type UpdateClinicImageMutationVariables = Types.Exact<{
   sort: Types.Scalars["Int"]
   status: Types.Scalars["Boolean"]
   title: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
   redirectType: Types.InputMaybe<Types.Scalars["String"]>
   targetId: Types.InputMaybe<Types.Scalars["String"]>
 }>
@@ -801,6 +802,7 @@ export const UpdateClinicImageDocument = gql`
     $sort: Int!
     $status: Boolean!
     $title: String
+    $image: String
     $redirectType: String
     $targetId: String
   ) {
@@ -811,6 +813,7 @@ export const UpdateClinicImageDocument = gql`
         sort: $sort
         status: $status
         title: $title
+        image: $image
         redirectType: $redirectType
         targetId: $targetId
       }
@@ -842,6 +845,7 @@ export type UpdateClinicImageMutationFn = Apollo.MutationFunction<
  *      sort: // value for 'sort'
  *      status: // value for 'status'
  *      title: // value for 'title'
+ *      image: // value for 'image'
  *      redirectType: // value for 'redirectType'
  *      targetId: // value for 'targetId'
  *   },

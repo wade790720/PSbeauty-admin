@@ -21,6 +21,7 @@ export type AddAdImageMutation = {
 export type UpdateAdImageMutationVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
   title: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
   sort: Types.Scalars["Int"]
   usageType: Types.InputMaybe<Types.Scalars["String"]>
   redirect: Types.InputMaybe<Types.Scalars["String"]>
@@ -116,6 +117,7 @@ export const UpdateAdImageDocument = gql`
   mutation UpdateAdImage(
     $id: String
     $title: String
+    $image: String
     $sort: Int!
     $usageType: String
     $redirect: String
@@ -127,6 +129,7 @@ export const UpdateAdImageDocument = gql`
       input: {
         id: $id
         title: $title
+        image: $image
         sort: $sort
         usageType: $usageType
         redirectType: $redirect
@@ -159,6 +162,7 @@ export type UpdateAdImageMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      title: // value for 'title'
+ *      image: // value for 'image'
  *      sort: // value for 'sort'
  *      usageType: // value for 'usageType'
  *      redirect: // value for 'redirect'

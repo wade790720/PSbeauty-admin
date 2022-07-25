@@ -146,62 +146,64 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Table>
         </Card.Body>
       </Card>
-      <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
-        <Modal.Header>
-          <Modal.Title>新增醫師</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
-          <FormProvider {...methods}>
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label>照片 (100 x 100px)</Form.Label>
-                <ImageUploader
-                  onChange={urlList => {
-                    methods.setValue("photo", urlList[0])
-                  }}
-                />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>姓名</Form.Label>
-                <Form.Input
-                  type="text"
-                  {...methods.register("name", {
-                    required: "此欄位為必填",
-                    validate: value => value.length !== 0 || "輸入框內不能為空值",
-                  })}
-                />
-                {methods.formState.errors?.name?.message && (
-                  <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
-                )}
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>職稱</Form.Label>
-                <Form.Input type="text" {...methods.register("title")} />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>專長</Form.Label>
-                <Form.Input type="text" {...methods.register("expertise")} />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>經歷</Form.Label>
-                <Editor name="resumes" />
-              </Form.Group>
-            </Form>
-          </FormProvider>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOpenAdd(false)}>
-            取消
-          </Button>
-          <Button
-            onClick={() => {
-              methods.handleSubmit(handleAdd)()
-              setOpenAdd(false)
-            }}>
-            建立
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {openAdd && (
+        <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
+          <Modal.Header>
+            <Modal.Title>新增醫師</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{ overflow: "auto", height: "500px" }}>
+            <FormProvider {...methods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label>照片 (100 x 100px)</Form.Label>
+                  <ImageUploader
+                    onChange={urlList => {
+                      methods.setValue("photo", urlList[0])
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>姓名</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...methods.register("name", {
+                      required: "此欄位為必填",
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                  {methods.formState.errors?.name?.message && (
+                    <Form.ErrorMessage>{methods.formState.errors?.name?.message}</Form.ErrorMessage>
+                  )}
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>職稱</Form.Label>
+                  <Form.Input type="text" {...methods.register("title")} />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>專長</Form.Label>
+                  <Form.Input type="text" {...methods.register("expertise")} />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>經歷</Form.Label>
+                  <Editor name="resumes" />
+                </Form.Group>
+              </Form>
+            </FormProvider>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpenAdd(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                methods.handleSubmit(handleAdd)()
+                setOpenAdd(false)
+              }}>
+              建立
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
 
       <Modal open={openReview} onClose={() => setOpenReview(false)} style={{ maxWidth: "450px" }}>
         <Modal.Header>

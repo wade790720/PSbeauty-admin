@@ -32,6 +32,7 @@ export const UpdateAdImage = gql`
   mutation UpdateAdImage(
     $id: String
     $title: String
+    $image: String
     $sort: Int!
     $usageType: String
     $redirect: String
@@ -43,6 +44,7 @@ export const UpdateAdImage = gql`
       input: {
         id: $id
         title: $title
+        image: $image
         sort: $sort
         usageType: $usageType
         redirectType: $redirect

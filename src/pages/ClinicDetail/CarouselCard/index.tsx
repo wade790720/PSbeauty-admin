@@ -98,7 +98,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   }
 
   const handleUpdate = (carousel: Carousel) => {
-    // console.log(carousel)
     updateClinicImageMutation({
       variables: {
         id: carousel.id || "",
@@ -106,6 +105,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         sort: carousel.sort,
         status: carousel.status,
         title: carousel.title,
+        image: carousel.image || "",
         redirectType: carousel.advancedOption,
         targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
       },
@@ -161,7 +161,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenEditModal(true)
-                          console.log("edit", rowData)
                           setReviewSlide({
                             id: rowData.id,
                             title: rowData.title,

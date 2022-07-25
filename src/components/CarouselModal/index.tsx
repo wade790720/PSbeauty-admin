@@ -89,7 +89,6 @@ const CarouselModal = (props: CarouselModalProps) => {
     props.onSubmit && props.onSubmit(getValues())
   }
 
-  console.log(getValues())
   return (
     <Modal open={props.open} closeOnDocumentClick={false} onClose={props.onClose}>
       <Modal.Header>
@@ -152,14 +151,7 @@ const CarouselModal = (props: CarouselModalProps) => {
                 name="clinicId"
                 control={control}
                 render={({ field: { value, onChange } }) => (
-                  <InputPicker
-                    data={allClinics}
-                    defaultValue={value}
-                    onChange={value => {
-                      console.log("clinicId onChange", value)
-                      onChange(value)
-                    }}
-                  />
+                  <InputPicker data={allClinics} defaultValue={value} onChange={onChange} />
                 )}
               />
             }

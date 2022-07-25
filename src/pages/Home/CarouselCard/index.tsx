@@ -63,6 +63,17 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
       .sort((a, b) => a.index - b.index)
   }, [data])
 
+  const defaultCarousel = useMemo(()=>({
+    id: reviewCarousel?.id,
+    title: reviewCarousel?.title || "",
+    clinicId: reviewCarousel?.clinicId || "",
+    targetId: reviewCarousel?.targetId || "",
+    sort: reviewCarousel?.sort || 0,
+    advancedOption: reviewCarousel?.advancedOption || "clinic",
+    image: reviewCarousel?.image,
+    status: reviewCarousel?.status || true,
+  }),[reviewCarousel])
+
   const [addAdImageMutation] = useAddAdImageMutation({ refetchQueries: ["GetAdImages"] })
   const [updateAdImageMutation] = useUpdateAdImageMutation({ refetchQueries: ["GetAdImages"] })
   const [deleteAdImageMutation] = useDeleteAdImageMutation({ refetchQueries: ["GetAdImages"] })
@@ -94,6 +105,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         title: carousel.title,
         redirect: carousel.advancedOption,
         sort: carousel.sort,
+        image: carousel.image || "",
         clinicId: carousel.clinicId,
         targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
         status: carousel.status,
@@ -150,7 +162,6 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenEditModal(true)
-                          console.log("review", rowData)
                           setReviewCarousel({
                             id: rowData.id,
                             title: rowData.title,
@@ -187,16 +198,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
 
       <CarouselModal
         type="edit"
-        defaultCarousel={{
-          id: reviewCarousel?.id,
-          title: reviewCarousel?.title || "",
-          clinicId: reviewCarousel?.clinicId || "",
-          targetId: reviewCarousel?.targetId || "",
-          sort: reviewCarousel?.sort || 0,
-          advancedOption: reviewCarousel?.advancedOption || "clinic",
-          image: reviewCarousel?.image,
-          status: reviewCarousel?.status || true,
-        }}
+        defaultCarousel={defaultCarousel}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
         onSubmit={handleUpdate}

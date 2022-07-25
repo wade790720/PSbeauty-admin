@@ -238,6 +238,7 @@ export const UpdateClinicImage = gql`
     $sort: Int!
     $status: Boolean!
     $title: String
+    $image: String
     $redirectType: String
     $targetId: String
   ) {
@@ -248,6 +249,7 @@ export const UpdateClinicImage = gql`
         sort: $sort
         status: $status
         title: $title
+        image: $image
         redirectType: $redirectType
         targetId: $targetId
       }
