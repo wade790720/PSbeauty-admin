@@ -105,8 +105,6 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
       })
   }
 
-  console.log(reviewSlide)
-
   return (
     <>
       <Card>
@@ -155,7 +153,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
                             status: rowData.status === "開啟" ? true : false,
                             advancedOption:
                               rowData.url === "無跳轉" ? "clinic" : rowData.url.split("/")[2],
-                            clinicId: rowData.url.split("/")[1],
+                            clinicId: rowData.clinic.id,
                             targetId: rowData.url.split("/")[3],
                           })
                         }}>
