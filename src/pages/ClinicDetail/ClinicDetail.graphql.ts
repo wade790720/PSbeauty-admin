@@ -233,21 +233,21 @@ export const AddClinicImage = gql`
 
 export const UpdateClinicImage = gql`
   mutation UpdateClinicImage(
+    $id: String
     $clinicId: String
     $sort: Int!
     $status: Boolean!
     $title: String
-    $image: String
     $redirectType: String
     $targetId: String
   ) {
     updateClinicImage(
       input: {
+        id: $id
         clinicId: $clinicId
         sort: $sort
         status: $status
         title: $title
-        image: $image
         redirectType: $redirectType
         targetId: $targetId
       }

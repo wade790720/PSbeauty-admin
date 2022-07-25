@@ -185,7 +185,6 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         />
       )}
 
-
       <CarouselModal
         type="edit"
         defaultCarousel={{

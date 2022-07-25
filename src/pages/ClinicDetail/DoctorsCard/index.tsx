@@ -156,8 +156,8 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
               <Form.Group layout="vertical">
                 <Form.Label>照片 (100 x 100px)</Form.Label>
                 <ImageUploader
-                  onChange={url => {
-                    // methods.setValue("photo", url)
+                  onChange={urlList => {
+                    methods.setValue("photo", urlList[0])
                   }}
                 />
               </Form.Group>
@@ -214,7 +214,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
               <img
                 src={reviewDoctor.current?.photo}
                 alt="preview"
-                style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
+                style={{ border: "1px solid #e4e6ef" }}
               />
             </Form.Group>
             <Form.Group layout="vertical">

@@ -34,34 +34,50 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
   const slides = useMemo(() => {
     if (!data) return []
 
-    return data.map(slide => {
-      let url
-      switch (slide?.redirectType) {
-        case "clinic": {
-          url = "無跳轉"
-          break
+    return data
+      .map(slide => {
+        let url
+        switch (slide?.redirectType) {
+          case "clinic": {
+            url = "無跳轉"
+            break
+          }
+          case "doctor": {
+            url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType
+            break
+          }
+          case "case": {
+            url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType + "/" + slide?.targetId
+            break
+          }
         }
-        case "doctor": {
-          url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType
-          break
-        }
-        case "case": {
-          url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType + "/" + slide?.targetId
-          break
-        }
-      }
 
-      return {
-        index: slide?.sort || 0,
-        id: slide?.id || "",
-        title: slide?.title || "",
-        url,
-        image: slide?.image || "",
-        status: slide?.status === true ? "開啟" : "關閉",
-        clinic: slide?.clinic,
-      }
-    })
+        return {
+          index: slide?.sort || 0,
+          id: slide?.id || "",
+          title: slide?.title || "",
+          url,
+          image: slide?.image || "",
+          status: slide?.status === true ? "開啟" : "關閉",
+          clinic: slide?.clinic,
+        }
+      })
+      .sort((a, b) => a.index - b.index)
   }, [data])
+
+  const defaultCarousel = useMemo(() => {
+    return {
+      id: reviewSlide?.id,
+      title: reviewSlide?.title || "",
+      clinicId: reviewSlide?.clinicId || "",
+      sort: reviewSlide?.sort || 1,
+      advancedOption: reviewSlide?.advancedOption || "clinic",
+      image: reviewSlide?.image || "",
+      status: reviewSlide?.status || true,
+      redirect: reviewSlide?.advancedOption === "clinic" ? "no" : "yes",
+      targetId: reviewSlide?.targetId,
+    }
+  }, [reviewSlide])
 
   const handleCreate = (carousel: Carousel) => {
     if (slides.length >= 5) {
@@ -81,16 +97,17 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
     })
   }
 
-  const handleUpdate = () => {
+  const handleUpdate = (carousel: Carousel) => {
+    // console.log(carousel)
     updateClinicImageMutation({
       variables: {
-        clinicId: "",
-        sort: 2,
-        status: false,
-        title: "",
-        image: "",
-        redirectType: "Clinic",
-        targetId: "clinic_id_xxx",
+        id: carousel.id || "",
+        clinicId: carousel.clinicId,
+        sort: carousel.sort,
+        status: carousel.status,
+        title: carousel.title,
+        redirectType: carousel.advancedOption,
+        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
       },
     })
   }
@@ -181,16 +198,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
 
       <CarouselModal
         type="edit"
-        defaultCarousel={{
-          title: reviewSlide?.title || "",
-          clinicId: reviewSlide?.clinicId || "",
-          sort: reviewSlide?.sort || 1,
-          advancedOption: reviewSlide?.advancedOption || "clinic",
-          image: reviewSlide?.image || "",
-          status: reviewSlide?.status || true,
-          redirect: reviewSlide?.advancedOption === "clinic" ? "no" : "yes",
-          targetId: reviewSlide?.targetId,
-        }}
+        defaultCarousel={defaultCarousel}
         open={openEditModal}
         onClose={() => setOpenEditModal(false)}
         onSubmit={handleUpdate}
