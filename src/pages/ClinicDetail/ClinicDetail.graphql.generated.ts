@@ -48,6 +48,17 @@ export type DoctorsFragment = {
   } | null> | null
 }
 
+export type ActivityFragment = {
+  __typename: "Clinic"
+  activities: Array<{
+    __typename: "ClinicActivity"
+    id: string | null
+    subject: string | null
+    content: string | null
+    image: string | null
+  } | null> | null
+}
+
 export type GetClinicDetailQueryVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
 }>
@@ -107,6 +118,13 @@ export type GetClinicDetailQuery = {
       targetId: string | null
       status: boolean
       clinic: { __typename: "Clinic"; id: string | null; name: string | null } | null
+    } | null> | null
+    activities: Array<{
+      __typename: "ClinicActivity"
+      id: string | null
+      subject: string | null
+      content: string | null
+      image: string | null
     } | null> | null
   } | null
 }
@@ -242,6 +260,25 @@ export type UpdateClinicContactMutation = {
   updateClinicContact: { __typename: "UpdateClinicContactPayload"; id: string | null } | null
 }
 
+export type AddActivityMutationVariables = Types.Exact<{
+  clinicId: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
+  subject: Types.InputMaybe<Types.Scalars["String"]>
+  content: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type AddActivityMutation = {
+  addActivity: { __typename: "AddActivityPayload"; id: string | null } | null
+}
+
+export type DeleteActivityMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type DeleteActivityMutation = {
+  deleteActivity: { __typename: "DeleteActivityPayload"; id: string | null } | null
+}
+
 export const CasesFragmentDoc = gql`
   fragment Cases on Clinic {
     cases {
@@ -286,6 +323,16 @@ export const DoctorsFragmentDoc = gql`
     }
   }
 `
+export const ActivityFragmentDoc = gql`
+  fragment Activity on Clinic {
+    activities {
+      id
+      subject
+      content
+      image
+    }
+  }
+`
 export const GetClinicDetailDocument = gql`
   query GetClinicDetail($id: String) {
     clinic(id: $id) {
@@ -311,11 +358,13 @@ export const GetClinicDetailDocument = gql`
       ...Cases
       ...Doctors
       ...Images
+      ...Activity
     }
   }
   ${CasesFragmentDoc}
   ${DoctorsFragmentDoc}
   ${ImagesFragmentDoc}
+  ${ActivityFragmentDoc}
 `
 
 /**
@@ -979,4 +1028,97 @@ export type UpdateClinicContactMutationResult = Apollo.MutationResult<UpdateClin
 export type UpdateClinicContactMutationOptions = Apollo.BaseMutationOptions<
   UpdateClinicContactMutation,
   UpdateClinicContactMutationVariables
+>
+export const AddActivityDocument = gql`
+  mutation AddActivity($clinicId: String, $image: String, $subject: String, $content: String) {
+    addActivity(
+      input: { clinicId: $clinicId, image: $image, subject: $subject, content: $content }
+    ) {
+      id
+    }
+  }
+`
+export type AddActivityMutationFn = Apollo.MutationFunction<
+  AddActivityMutation,
+  AddActivityMutationVariables
+>
+
+/**
+ * __useAddActivityMutation__
+ *
+ * To run a mutation, you first call `useAddActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addActivityMutation, { data, loading, error }] = useAddActivityMutation({
+ *   variables: {
+ *      clinicId: // value for 'clinicId'
+ *      image: // value for 'image'
+ *      subject: // value for 'subject'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useAddActivityMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddActivityMutation, AddActivityMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AddActivityMutation, AddActivityMutationVariables>(
+    AddActivityDocument,
+    options,
+  )
+}
+export type AddActivityMutationHookResult = ReturnType<typeof useAddActivityMutation>
+export type AddActivityMutationResult = Apollo.MutationResult<AddActivityMutation>
+export type AddActivityMutationOptions = Apollo.BaseMutationOptions<
+  AddActivityMutation,
+  AddActivityMutationVariables
+>
+export const DeleteActivityDocument = gql`
+  mutation DeleteActivity($id: String) {
+    deleteActivity(input: { id: $id }) {
+      id
+    }
+  }
+`
+export type DeleteActivityMutationFn = Apollo.MutationFunction<
+  DeleteActivityMutation,
+  DeleteActivityMutationVariables
+>
+
+/**
+ * __useDeleteActivityMutation__
+ *
+ * To run a mutation, you first call `useDeleteActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteActivityMutation, { data, loading, error }] = useDeleteActivityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteActivityMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteActivityMutation, DeleteActivityMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<DeleteActivityMutation, DeleteActivityMutationVariables>(
+    DeleteActivityDocument,
+    options,
+  )
+}
+export type DeleteActivityMutationHookResult = ReturnType<typeof useDeleteActivityMutation>
+export type DeleteActivityMutationResult = Apollo.MutationResult<DeleteActivityMutation>
+export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<
+  DeleteActivityMutation,
+  DeleteActivityMutationVariables
 >

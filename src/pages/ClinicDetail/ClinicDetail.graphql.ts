@@ -47,6 +47,17 @@ export const Doctors = gql`
   }
 `
 
+export const Activity = gql`
+  fragment Activity on Clinic {
+    activities {
+      id
+      subject
+      content
+      image
+    }
+  }
+`
+
 export const GetClinicDetail = gql`
   query GetClinicDetail($id: String) {
     clinic(id: $id) {
@@ -72,6 +83,7 @@ export const GetClinicDetail = gql`
       ...Cases
       ...Doctors
       ...Images
+      ...Activity
     }
   }
 `
@@ -282,6 +294,24 @@ export const UpdateClinicContact = gql`
         contactPhone: $contactPhone
       }
     ) {
+      id
+    }
+  }
+`
+
+export const AddActivity = gql`
+  mutation AddActivity($clinicId: String, $image: String, $subject: String, $content: String) {
+    addActivity(
+      input: { clinicId: $clinicId, image: $image, subject: $subject, content: $content }
+    ) {
+      id
+    }
+  }
+`
+
+export const DeleteActivity = gql`
+  mutation DeleteActivity($id: String) {
+    deleteActivity(input: { id: $id }) {
       id
     }
   }
