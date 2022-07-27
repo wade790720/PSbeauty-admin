@@ -3,6 +3,7 @@ import ContactCard from "./ContactCard"
 import CarouselCard from "./CarouselCard"
 import CaseCard from "./CaseCard"
 import DoctorsCard from "./DoctorsCard"
+import ActivityCard from "./ActivityCard"
 import Layout from "components/Layout"
 import QueryStatus from "components/QueryStatus"
 import { useMatch } from "react-router-dom"
@@ -30,6 +31,7 @@ const CosmeticClinicDetail = () => {
       <CarouselCard data={data?.clinic?.images || []} />
       <CaseCard data={data?.clinic?.cases || []} />
       <DoctorsCard data={data?.clinic?.doctors || []} />
+      <ActivityCard data={data?.clinic?.activities || []} />
     </>
   )
 }

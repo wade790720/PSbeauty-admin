@@ -211,7 +211,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
           <Modal.Body>
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (390 x 240px)</Form.Label>
+                <Form.Label>預覽圖 (390px x 240px)</Form.Label>
                 <img
                   src={reviewCard.current?.image}
                   alt="preview"

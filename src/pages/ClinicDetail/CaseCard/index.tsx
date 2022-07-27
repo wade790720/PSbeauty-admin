@@ -56,9 +56,9 @@ const CaseCard = ({ data }: CaseCardProps) => {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
 
-  const [addCaseMutation] = useAddCaseMutation({ refetchQueries: ["GetClinic"] })
-  const [updateCaseMutation] = useUpdateCaseMutation({ refetchQueries: ["GetClinic"] })
-  const [deleteCaseMutation] = useDeleteCaseMutation({ refetchQueries: ["GetClinic"] })
+  const [addCaseMutation] = useAddCaseMutation({ refetchQueries: ["GetClinicDetail"] })
+  const [updateCaseMutation] = useUpdateCaseMutation({ refetchQueries: ["GetClinicDetail"] })
+  const [deleteCaseMutation] = useDeleteCaseMutation({ refetchQueries: ["GetClinicDetail"] })
 
   const handleChangeLimit = (dataKey: number) => {
     setPage(1)
