@@ -98,7 +98,7 @@ const CarouselModal = (props: CarouselModalProps) => {
       <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
         <Form>
           <Form.Group layout="vertical">
-            <Form.Label>預覽圖 (350 x 135px)</Form.Label>
+            <Form.Label>預覽圖 (1280px x 470px)</Form.Label>
             {props.type === "add" ? (
               <ImageUploader
                 onChange={urlList => {

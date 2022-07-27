@@ -128,55 +128,57 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
       </Card>
 
       {/* 新增活動 */}
-      <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
-        <Modal.Header>
-          <Modal.Title>新增廣告卡</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
-          <FormProvider {...methods}>
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label required>預覽圖 (800px x 800px)</Form.Label>
-                <ImageUploader
-                  onChange={url => {
-                    methods.setValue("image", url[0])
-                  }}
-                />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>活動主題</Form.Label>
-                <Form.Input
-                  type="text"
-                  {...methods.register("subject", {
-                    validate: value => value.length !== 0 || "輸入框內不能為空值",
-                  })}
-                />
-                {methods.formState.errors?.subject?.message && (
-                  <Form.ErrorMessage>
-                    {methods.formState.errors?.subject?.message}
-                  </Form.ErrorMessage>
-                )}
-              </Form.Group>
-              <Form.Group layout="vertical" style={{ height: "200px" }}>
-                <Form.Label>內容</Form.Label>
-                <Editor name="content" />
-              </Form.Group>
-            </Form>
-          </FormProvider>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOpen(false)}>
-            取消
-          </Button>
-          <Button
-            onClick={() => {
-              handleCreate()
-              setOpen(false)
-            }}>
-            建立
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {open && (
+        <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
+          <Modal.Header>
+            <Modal.Title>新增廣告卡</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
+            <FormProvider {...methods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label required>預覽圖 (800px x 800px)</Form.Label>
+                  <ImageUploader
+                    onChange={url => {
+                      methods.setValue("image", url[0])
+                    }}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>活動主題</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...methods.register("subject", {
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                  {methods.formState.errors?.subject?.message && (
+                    <Form.ErrorMessage>
+                      {methods.formState.errors?.subject?.message}
+                    </Form.ErrorMessage>
+                  )}
+                </Form.Group>
+                <Form.Group layout="vertical" style={{ height: "200px" }}>
+                  <Form.Label>內容</Form.Label>
+                  <Editor name="content" />
+                </Form.Group>
+              </Form>
+            </FormProvider>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              取消
+            </Button>
+            <Button
+              onClick={() => {
+                handleCreate()
+                setOpen(false)
+              }}>
+              建立
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
 
       {/* 檢視廣告卡資訊 */}
       <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} style={{ maxWidth: "450px" }}>

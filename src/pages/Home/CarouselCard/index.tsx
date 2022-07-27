@@ -185,6 +185,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
           </Table>
         </Card.Body>
       </Card>
+      
       {openAddModal && (
         <CarouselModal
           key={Math.floor(Math.random() * 5)}

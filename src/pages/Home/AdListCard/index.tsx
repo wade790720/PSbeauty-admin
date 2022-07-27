@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from "react"
-import { Table, Pagination } from "rsuite"
+import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -37,8 +37,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
   const methods = useForm<Inputs>({ mode: "onTouched" })
   const [open, setOpen] = useState(false)
   const [reviewOpen, setReviewOpen] = useState(false)
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
+
   const reviewCard = useRef<Card>()
 
   const adCardsList = useMemo(() => {
@@ -55,11 +54,6 @@ const AdListCard = ({ data }: AdListCardProps) => {
 
   const [addAdCardMutation] = useAddAdCardMutation({ refetchQueries: ["GetHome"] })
   const [deleteAdCardMutation] = useDeleteAdCardMutation({ refetchQueries: ["GetHome"] })
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
-  }
 
   const handleCreate = async () => {
     const { image, title, content } = methods.getValues()
@@ -124,7 +118,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
                           image: rowData.image,
                         }
                       }}>
-                      預覽
+                      檢視
                     </LinkButton>{" "}
                     | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                   </span>
@@ -133,75 +127,59 @@ const AdListCard = ({ data }: AdListCardProps) => {
             </Cell>
           </Column>
         </Table>
-        <Pagination
-          className="p-5"
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={["-", "limit", "|", "pager", "skip"]}
-          total={adCardsList.length}
-          limitOptions={[10, 20]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
 
         {/* 新增廣告卡 */}
-        <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
-          <Modal.Header>
-            <Modal.Title>新增廣告卡</Modal.Title>
-          </Modal.Header>
-          <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
-            <FormProvider {...methods}>
-              <Form>
-                <Form.Group layout="vertical">
-                  <Form.Label required>預覽圖</Form.Label>
-                  <ImageUploader
-                    onChange={url => {
-                      methods.setValue("image", url[0])
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group layout="vertical">
-                  <Form.Label required>標題</Form.Label>
-                  <Form.Input
-                    type="text"
-                    {...methods.register("title", {
-                      validate: value => value.length !== 0 || "輸入框內不能為空值",
-                    })}
-                  />
-                  {methods.formState.errors?.title?.message && (
-                    <Form.ErrorMessage>
-                      {methods.formState.errors?.title?.message}
-                    </Form.ErrorMessage>
-                  )}
-                </Form.Group>
-                <Form.Group layout="vertical" style={{ height: "200px" }}>
-                  <Form.Label>內容</Form.Label>
-                  <Editor name="content" />
-                </Form.Group>
-              </Form>
-            </FormProvider>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setOpen(false)}>
-              取消
-            </Button>
-            <Button
-              onClick={() => {
-                methods.handleSubmit(handleCreate)()
-                setOpen(false)
-              }}>
-              建立
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        {open && (
+          <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
+            <Modal.Header>
+              <Modal.Title>新增廣告卡</Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
+              <FormProvider {...methods}>
+                <Form>
+                  <Form.Group layout="vertical">
+                    <Form.Label required>預覽圖 (800px x 800px)</Form.Label>
+                    <ImageUploader
+                      onChange={url => {
+                        methods.setValue("image", url[0])
+                      }}
+                    />
+                  </Form.Group>
+                  <Form.Group layout="vertical">
+                    <Form.Label required>標題</Form.Label>
+                    <Form.Input
+                      type="text"
+                      {...methods.register("title", {
+                        validate: value => value.length !== 0 || "輸入框內不能為空值",
+                      })}
+                    />
+                    {methods.formState.errors?.title?.message && (
+                      <Form.ErrorMessage>
+                        {methods.formState.errors?.title?.message}
+                      </Form.ErrorMessage>
+                    )}
+                  </Form.Group>
+                  <Form.Group layout="vertical" style={{ height: "200px" }}>
+                    <Form.Label>內容</Form.Label>
+                    <Editor name="content" />
+                  </Form.Group>
+                </Form>
+              </FormProvider>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setOpen(false)}>
+                取消
+              </Button>
+              <Button
+                onClick={() => {
+                  methods.handleSubmit(handleCreate)()
+                  setOpen(false)
+                }}>
+                建立
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
 
         {/* 檢視廣告卡資訊 */}
         <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} style={{ maxWidth: "450px" }}>
@@ -211,11 +189,11 @@ const AdListCard = ({ data }: AdListCardProps) => {
           <Modal.Body>
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (390px x 240px)</Form.Label>
+                <Form.Label>預覽圖 (800px x 800px)</Form.Label>
                 <img
                   src={reviewCard.current?.image}
                   alt="preview"
-                  style={{ width: "390px", height: "240px", border: "1px solid #e4e6ef" }}
+                  style={{ width: "390px", border: "1px solid #e4e6ef" }}
                 />
               </Form.Group>
               <Form.Group layout="vertical">

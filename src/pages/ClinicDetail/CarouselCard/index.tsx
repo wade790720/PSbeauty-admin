@@ -186,14 +186,15 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         </Card.Body>
       </Card>
 
-      <CarouselModal
-        key={Math.floor(Math.random() * 5)}
-        type="add"
-        open={openAddModal}
-        sortList={slides.map(slide => slide.index)}
-        onClose={() => setOpenAddModal(false)}
-        onSubmit={handleCreate}
-      />
+      {openAddModal && (
+        <CarouselModal
+          type="add"
+          open={openAddModal}
+          sortList={slides.map(slide => slide.index)}
+          onClose={() => setOpenAddModal(false)}
+          onSubmit={handleCreate}
+        />
+      )}
 
       <CarouselModal
         type="edit"

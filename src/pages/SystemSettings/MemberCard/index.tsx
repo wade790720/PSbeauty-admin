@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react"
-import { Table, Pagination } from "rsuite"
+import { useMemo } from "react"
+import { Table } from "rsuite"
 import Card from "components/Card"
 import { LinkButton } from "components/Button"
 import { GetSettingQuery, useDeleteMemberMutation } from "../SystemSettings.graphql.generated"
@@ -10,8 +10,6 @@ type MemberCardProps = {
 
 const MemberCard = ({ data }: MemberCardProps) => {
   const { Column, HeaderCell, Cell } = Table
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
 
   const members = useMemo(() => {
     if (!data?.edges) return []
@@ -32,11 +30,6 @@ const MemberCard = ({ data }: MemberCardProps) => {
         id,
       },
     })
-  }
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
   }
 
   return (
@@ -72,24 +65,6 @@ const MemberCard = ({ data }: MemberCardProps) => {
             </Cell>
           </Column>
         </Table>
-        <Pagination
-          className="p-5"
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          size="xs"
-          layout={["-", "limit", "|", "pager", "skip"]}
-          total={members.length}
-          limitOptions={[10, 20]}
-          limit={limit}
-          activePage={page}
-          onChangePage={setPage}
-          onChangeLimit={handleChangeLimit}
-        />
       </Card.Body>
     </Card>
   )

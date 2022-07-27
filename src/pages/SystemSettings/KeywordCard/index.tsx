@@ -3,7 +3,7 @@ import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
-import { Table, Pagination } from "rsuite"
+import { Table } from "rsuite"
 import { useForm } from "react-hook-form"
 import {
   GetSettingQuery,

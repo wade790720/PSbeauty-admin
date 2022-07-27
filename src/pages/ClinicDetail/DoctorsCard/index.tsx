@@ -146,6 +146,8 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
           </Table>
         </Card.Body>
       </Card>
+
+      {/* 新增醫生 */}
       {openAdd && (
         <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
           <Modal.Header>
@@ -155,7 +157,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
             <FormProvider {...methods}>
               <Form>
                 <Form.Group layout="vertical">
-                  <Form.Label>照片 (100px x 100px)</Form.Label>
+                  <Form.Label>照片 (700px x 700px)</Form.Label>
                   <ImageUploader
                     onChange={urlList => {
                       methods.setValue("photo", urlList[0])
@@ -205,6 +207,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         </Modal>
       )}
 
+      {/* 檢視醫師 */}
       <Modal open={openReview} onClose={() => setOpenReview(false)} style={{ maxWidth: "450px" }}>
         <Modal.Header>
           <Modal.Title>檢視醫師</Modal.Title>

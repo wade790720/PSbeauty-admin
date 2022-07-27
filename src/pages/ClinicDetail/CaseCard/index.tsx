@@ -5,7 +5,7 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
-import { Table, Pagination } from "rsuite"
+import { Table } from "rsuite"
 import { FileType } from "rsuite/Uploader"
 import {
   CasesFragment,
@@ -53,17 +53,9 @@ const CaseCard = ({ data }: CaseCardProps) => {
   const [openAdd, setOpenAdd] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
 
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
-
   const [addCaseMutation] = useAddCaseMutation({ refetchQueries: ["GetClinicDetail"] })
   const [updateCaseMutation] = useUpdateCaseMutation({ refetchQueries: ["GetClinicDetail"] })
   const [deleteCaseMutation] = useDeleteCaseMutation({ refetchQueries: ["GetClinicDetail"] })
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
-  }
 
   const cases = useMemo(() => {
     if (!data) return []
@@ -207,91 +199,78 @@ const CaseCard = ({ data }: CaseCardProps) => {
               </Cell>
             </Column>
           </Table>
-          <Pagination
-            className="p-5"
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size="xs"
-            layout={["-", "limit", "|", "pager", "skip"]}
-            total={cases.length}
-            limitOptions={[10, 20]}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
         </Card.Body>
       </Card>
-      <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
-        <Modal.Header>
-          <Modal.Title>新增案例</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ overflow: "auto", height: "500px" }}>
-          <FormProvider {...addMethods}>
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label>案例圖 (700 x 800px)</Form.Label>
-                <div className={cx("flex w-full")}>
-                  <div className="flex-1 mr-1">
-                    <ImageUploader
-                      listType="picture"
-                      onChange={urlList => {
-                        addMethods.setValue("beforeImage", urlList[0])
-                      }}
-                    />
-                    <Form.Input
-                      type="text"
-                      placeholder="術前描述"
-                      {...addMethods.register("beforeImageText")}
-                    />
+      {/* 新增案例卡 */}
+      {openAdd && (
+        <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
+          <Modal.Header>
+            <Modal.Title>新增案例</Modal.Title>
+          </Modal.Header>
+          <Modal.Body style={{ overflow: "auto", height: "500px" }}>
+            <FormProvider {...addMethods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label>案例圖 (800 x 800px)</Form.Label>
+                  <div className={cx("flex w-full")}>
+                    <div className="flex-1 mr-1">
+                      <ImageUploader
+                        listType="picture"
+                        onChange={urlList => {
+                          addMethods.setValue("beforeImage", urlList[0])
+                        }}
+                      />
+                      <Form.Input
+                        type="text"
+                        placeholder="術前描述"
+                        {...addMethods.register("beforeImageText")}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <ImageUploader
+                        listType="picture"
+                        onChange={urlList => {
+                          addMethods.setValue("afterImage", urlList[0])
+                        }}
+                      />
+                      <Form.Input
+                        type="text"
+                        placeholder="術後描述"
+                        {...addMethods.register("afterImageText")}
+                      />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <ImageUploader
-                      listType="picture"
-                      onChange={urlList => {
-                        addMethods.setValue("afterImage", urlList[0])
-                      }}
-                    />
-                    <Form.Input
-                      type="text"
-                      placeholder="術後描述"
-                      {...addMethods.register("afterImageText")}
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>標題</Form.Label>
-                <Form.Input
-                  type="text"
-                  {...addMethods.register("title", {
-                    validate: value => value.length !== 0 || "輸入框內不能為空值",
-                  })}
-                />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label required>分類</Form.Label>
-                <CosmeticMultiCascader name="categories" />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>內容</Form.Label>
-                <Editor name="description" />
-              </Form.Group>
-            </Form>
-          </FormProvider>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setOpenAdd(false)}>
-            取消
-          </Button>
-          <Button onClick={addMethods.handleSubmit(handleAdd)}>新增</Button>
-        </Modal.Footer>
-      </Modal>
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>標題</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...addMethods.register("title", {
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>分類</Form.Label>
+                  <CosmeticMultiCascader name="categories" />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>內容</Form.Label>
+                  <Editor name="description" />
+                </Form.Group>
+              </Form>
+            </FormProvider>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setOpenAdd(false)}>
+              取消
+            </Button>
+            <Button onClick={addMethods.handleSubmit(handleAdd)}>新增</Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+
+      {/* 編輯案例卡 */}
       <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
         <Modal.Header>
           <Modal.Title>編輯案例</Modal.Title>
