@@ -10,6 +10,7 @@ import {
   useUpdateClinicContactMutation,
   useUpdateClinicPaymentMutation,
 } from "../ClinicDetail.graphql.generated"
+import { toast } from "react-toastify"
 
 type ContactCardProps = {
   data: GetClinicDetailQuery["clinic"]
@@ -67,9 +68,27 @@ const ContactCard = ({ data }: ContactCardProps) => {
     })
 
     if (responseContact.data && responsePayment.data) {
-      alert("儲存成功！")
+      toast.success("儲存成功！", {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
     } else {
-      alert(`儲存失敗！ ${responseContact.errors}`)
+      toast.error(`儲存失敗：${responseContact.errors}`, {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
     }
   }
 

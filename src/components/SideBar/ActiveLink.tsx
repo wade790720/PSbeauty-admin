@@ -11,11 +11,7 @@ const ActiveLink = ({ children, to, ...props }: ActiveLinkProps) => {
   const match = useMatch({ path: resolved.pathname, end: false })
 
   return (
-    <Link
-      className={cx({ active: match })}
-      style={{ background: match ? "#253858" : "", color: match ? "#fff" : "" }}
-      to={to}
-      {...props}>
+    <Link className={cx({ active: match })} to={to} {...props}>
       {children}
     </Link>
   )

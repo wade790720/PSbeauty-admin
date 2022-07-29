@@ -1,6 +1,23 @@
 //@import-normalize;
 @import './assets/styles/font';
 
+:root {
+  --toastify-color-success: #3ec576;
+  --toastify-color-error: #c34747;
+  --toastify-icon-color-success: var(--toastify-color-success);
+  --toastify-icon-color-error: var(--toastify-color-error);
+  --toastify-color-progress-success: var(--toastify-color-success);
+  --toastify-color-progress-error: var(--toastify-color-error);
+  --rs-toggle-checked-bg: #696cff;
+  --rs-input-focus-border: #696cff;
+  --rs-listbox-option-hover-bg: #696cff29;
+  --rs-checkbox-checked-bg: #696cff;
+  --rs-picker-count-bg: #696cff;
+  --rs-picker-value: #696cff;
+  --rs-state-focus-shadow: 0;
+  --rs-listbox-option-hover-text: #696cff;
+}
+
 :global {
   html, body {
     height: 100%;
@@ -49,7 +66,6 @@
     }
 
     .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle-active {
-      border-color: #2d62c4;
       box-shadow: none;
     }
 
@@ -63,6 +79,10 @@
 
     .rs-uploader-trigger-disabled {
       display: none !important;
+    }
+
+    .rs-anim-fade.rs-anim-in {
+      margin-top: 5px;
     }
 
     .tox-tinymce {

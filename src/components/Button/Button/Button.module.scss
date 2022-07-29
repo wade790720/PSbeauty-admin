@@ -73,19 +73,20 @@
   }
 
   &.primary {
-    background: #0052cc;
+    background: #696cff;
     color: #fff;
-    @extend %disabled;
-    @extend %selected;
 
+@extend %disabled;
+
+@extend %selected;
     &:not([disabled]):not(.selected) {
       &:hover {
-        background: #0065ff;
+        background: #5f61e6;
         color: #fff;
       }
 
       &:active {
-        background: #0747a6;
+        background: #5f61e6;
         color: #fff;
       }
     }
@@ -94,9 +95,10 @@
   &.secondary {
     background: #ebecf0;
     color: #45536c;
-    @extend %disabled;
-    @extend %selected;
 
+@extend %disabled;
+
+@extend %selected;
     &:not([disabled]):not(.selected) {
       &:hover {
         background: #e1e2e6;
@@ -114,15 +116,16 @@
     background: transparent;
     color: #0052cc;
 
-    @include disabled {
+@include disabled {
       background: transparent;
       color: #8b919c;
     }
 
-    @include selected {
+@include selected {
       background: transparent;
       color: #253858;
     }
+
     &:not([disabled]) {
       &:hover {
         background: #f6f6f7;
@@ -140,9 +143,9 @@
     background: #de350b;
     color: #fff;
 
-    @extend %disabled;
+@extend %disabled;
 
-    @include selected {
+@include selected {
       background: #bf2600;
       color: #fff;
     }

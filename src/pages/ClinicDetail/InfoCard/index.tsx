@@ -6,6 +6,7 @@ import Editor from "components/Editor"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 import { GetClinicDetailQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
 import { useForm, FormProvider } from "react-hook-form"
+import { toast } from "react-toastify"
 
 type InfoCardProps = {
   data: GetClinicDetailQuery["clinic"]
@@ -53,9 +54,9 @@ const InfoCard = ({ data }: InfoCardProps) => {
 
   const [updateClinicMutation] = useUpdateClinicMutation({ refetchQueries: ["GetClinicDetail"] })
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const { name, county, town, address, web, phone, description, categories } = methods.getValues()
-    updateClinicMutation({
+    const response = await updateClinicMutation({
       variables: {
         id: data?.id || "",
         name,
@@ -68,6 +69,30 @@ const InfoCard = ({ data }: InfoCardProps) => {
         categories: categories || clinic.categories,
       },
     })
+
+    if (response.data) {
+      toast.success("儲存成功！", {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } else {
+      toast.error(`儲存失敗：${response.errors}`, {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
   }
 
   const handleClear = () => {

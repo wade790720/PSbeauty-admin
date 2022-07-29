@@ -1,64 +1,66 @@
 @import 'assets/styles/variables';
+
 @import 'assets/styles/mixins';
 
 .wrapper {
   display: flex;
 
   label.label {
-    align-items: center;
-    font-family: $font-family;
-    color: #091e42;
-    display: inline-flex;
     position: relative;
+    display: inline-flex;
+    align-items: center;
     box-sizing: border-box;
-    cursor: pointer;
+    color: #091e42;
+    font-family: $font-family;
     line-height: 1.33333;
+    cursor: pointer;
 
     input {
-      --local-background: #FAFBFC;
-      --local-background-hover: #EBECF0;
-      --local-background-active: #DEEBFF;
-      --local-background-checked: #0052CC;
-      --local-background-checked-hover: #0065FF;
-      --local-dot-checked: #FAFBFC;
-      --local-dot-disabled: #A5ADBA;
-      --local-dot-active: #0052CC;
-      --local-border: #DFE1E6;
-      --local-border-hover: #DFE1E6;
-      --local-border-focus: #4C9AFF;
-      --local-disabled: #F4F5F7;
-      --local-invalid: #FF5630;
+      position: relative;
+      display: flex;
+      -webkit-box-align: center;
+      align-items: center;
+      flex-shrink: 0;
+      -webkit-box-pack: center;
+      justify-content: center;
+      margin: 0;
+      width: 24px;
+      height: 24px;
+      outline: none;
+      border: calc(2px * 12 / 7) solid var(--radio-border-color);
+      border-radius: 50%;
+      background-color: var(--radio-background-color);
+      vertical-align: top;
+      transition: border-color 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0s;
+      transform: scale(0.583333);
+
+      --local-background: #fafbfc;
+      --local-background-hover: #ebecf0;
+      --local-background-active: #deebff;
+      --local-background-checked: #696cff;
+      --local-background-checked-hover: #696cff;
+      --local-dot-checked: #fafbfc;
+      --local-dot-disabled: #a5adba;
+      --local-dot-active: #696cff;
+      --local-border: #dfe1e6;
+      --local-border-hover: #dfe1e6;
+      --local-border-focus: #696cff;
+      --local-disabled: #f4f5f7;
+      --local-invalid: #ff5630;
       --radio-background-color: var(--local-background);
       --radio-border-color: var(--local-border);
       --radio-dot-color: var(--local-dot-checked);
       --radio-dot-opacity: 0;
       appearance: none;
-      height: 24px;
-      width: 24px;
-      flex-shrink: 0;
-      margin: 0px;
-      transform: scale(0.583333);
-      outline: none;
-      vertical-align: top;
-      position: relative;
-      border: calc(2px * 12 / 7) solid var(--radio-border-color);
-      background-color: var(--radio-background-color);
-      transition: border-color 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0s;
-      border-radius: 50%;
-      display: flex;
-      -webkit-box-align: center;
-      align-items: center;
-      -webkit-box-pack: center;
-      justify-content: center;
 
       &::after {
-        content: "";
-        border-radius: 50%;
-        height: calc(6.85714px);
-        width: calc(6.85714px);
-        background: var(--radio-dot-color);
-        opacity: var(--radio-dot-opacity);
         position: absolute;
+        width: calc(6.85714px);
+        height: calc(6.85714px);
+        border-radius: 50%;
+        background: var(--radio-dot-color);
+        content: '';
+        opacity: var(--radio-dot-opacity);
         transition: background-color 0.2s ease-in-out 0s, opacity 0.2s ease-in-out 0s;
       }
 
@@ -93,12 +95,13 @@
   }
 
   input {
-    appearance: none;
-    margin: 0px;
-    border: none;
-    width: 0px;
-    height: 0px;
+    margin: 0;
+    width: 0;
+    height: 0;
     outline: none;
+    border: none;
+
+    appearance: none;
   }
 
   &.inline {

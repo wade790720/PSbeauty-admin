@@ -6,7 +6,9 @@ import QueryStatus from "components/QueryStatus"
 
 import "./App.css"
 import "rsuite/dist/rsuite.min.css"
+import "react-toastify/dist/ReactToastify.css"
 import styled from "./App.module.scss"
+import { ToastContainer } from "react-toastify"
 
 const BasicLayout = () => (
   <Container fluid className={styled["container-basic"]}>
@@ -63,6 +65,7 @@ function App() {
           </Routes>
         </Suspense>
       </Router>
+      <ToastContainer />
     </>
   )
 }
