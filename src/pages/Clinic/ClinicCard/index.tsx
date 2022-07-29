@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { useGo } from "components/Router"
-import { Table, Pagination } from "rsuite"
+import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import {
   GetClinicQuery,
@@ -33,8 +33,6 @@ type Inputs = {
 const ClinicCard = ({ data }: ClinicCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const go = useGo()
-  const [page, setPage] = useState(1)
-  const [limit, setLimit] = useState(10)
   const [open, setOpen] = useState(false)
 
   const clinics = useMemo(() => {
@@ -59,11 +57,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const methods = useForm<Inputs>({ mode: "onTouched" })
   const [addClinicMutation] = useAddClinicMutation({ refetchQueries: ["GetClinic"] })
   const [deleteClinicMutation] = useDeleteClinicMutation({ refetchQueries: ["GetClinic"] })
-
-  const handleChangeLimit = (dataKey: number) => {
-    setPage(1)
-    setLimit(dataKey)
-  }
 
   const handleCreate = () => {
     const { name, county, town, address, web, phone, description, categories } = methods.getValues()
@@ -106,7 +99,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
               <Cell dataKey="index" />
             </Column>
 
-            <Column width={160} fixed>
+            <Column width={160} fixed minWidth={200}>
               <HeaderCell>診所名稱</HeaderCell>
               <Cell dataKey="name" />
             </Column>
@@ -142,24 +135,6 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
               </Cell>
             </Column>
           </Table>
-          <Pagination
-            className="p-5"
-            prev
-            next
-            first
-            last
-            ellipsis
-            boundaryLinks
-            maxButtons={5}
-            size="xs"
-            layout={["-", "limit", "|", "pager", "skip"]}
-            total={clinics.length}
-            limitOptions={[10, 20]}
-            limit={limit}
-            activePage={page}
-            onChangePage={setPage}
-            onChangeLimit={handleChangeLimit}
-          />
         </Card.Body>
       </Card>
       <Modal open={open} onClose={() => setOpen(false)}>

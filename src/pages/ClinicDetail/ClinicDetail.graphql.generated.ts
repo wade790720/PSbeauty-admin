@@ -11,6 +11,8 @@ export type CasesFragment = {
     title: string | null
     beforeImage: string | null
     afterImage: string | null
+    beforeImageText: string | null
+    afterImageText: string | null
     description: string | null
     categories: Array<{
       __typename: "Category"
@@ -92,6 +94,8 @@ export type GetClinicDetailQuery = {
       title: string | null
       beforeImage: string | null
       afterImage: string | null
+      beforeImageText: string | null
+      afterImageText: string | null
       description: string | null
       categories: Array<{
         __typename: "Category"
@@ -279,6 +283,15 @@ export type DeleteActivityMutation = {
   deleteActivity: { __typename: "DeleteActivityPayload"; id: string | null } | null
 }
 
+export type UpdateClinicPaymentMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+  paySets: Types.Scalars["Int"]
+}>
+
+export type UpdateClinicPaymentMutation = {
+  updateClinicPayment: { __typename: "UpdateClinicPaymentPayload"; id: string | null } | null
+}
+
 export const CasesFragmentDoc = gql`
   fragment Cases on Clinic {
     cases {
@@ -286,6 +299,8 @@ export const CasesFragmentDoc = gql`
       title
       beforeImage
       afterImage
+      beforeImageText
+      afterImageText
       description
       categories {
         id
@@ -567,7 +582,7 @@ export const UpdateCaseDocument = gql`
         beforeImage: $beforeImage
         beforeImageText: $beforeImageText
         afterImage: $afterImage
-        afterImageText: $afterImage
+        afterImageText: $afterImageText
         categories: $categories
         description: $description
         hot: $hot
@@ -1121,4 +1136,54 @@ export type DeleteActivityMutationResult = Apollo.MutationResult<DeleteActivityM
 export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<
   DeleteActivityMutation,
   DeleteActivityMutationVariables
+>
+export const UpdateClinicPaymentDocument = gql`
+  mutation UpdateClinicPayment($id: String, $paySets: Int!) {
+    updateClinicPayment(input: { id: $id, paySets: $paySets, paid: true, latestPayAt: 0 }) {
+      id
+    }
+  }
+`
+export type UpdateClinicPaymentMutationFn = Apollo.MutationFunction<
+  UpdateClinicPaymentMutation,
+  UpdateClinicPaymentMutationVariables
+>
+
+/**
+ * __useUpdateClinicPaymentMutation__
+ *
+ * To run a mutation, you first call `useUpdateClinicPaymentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClinicPaymentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClinicPaymentMutation, { data, loading, error }] = useUpdateClinicPaymentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      paySets: // value for 'paySets'
+ *   },
+ * });
+ */
+export function useUpdateClinicPaymentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateClinicPaymentMutation,
+    UpdateClinicPaymentMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateClinicPaymentMutation, UpdateClinicPaymentMutationVariables>(
+    UpdateClinicPaymentDocument,
+    options,
+  )
+}
+export type UpdateClinicPaymentMutationHookResult = ReturnType<
+  typeof useUpdateClinicPaymentMutation
+>
+export type UpdateClinicPaymentMutationResult = Apollo.MutationResult<UpdateClinicPaymentMutation>
+export type UpdateClinicPaymentMutationOptions = Apollo.BaseMutationOptions<
+  UpdateClinicPaymentMutation,
+  UpdateClinicPaymentMutationVariables
 >

@@ -1,13 +1,13 @@
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
-import DatePicker from "components/DatePicker"
 import styled from "./ContactCard.module.scss"
 import dayjs from "dayjs"
 import { useForm } from "react-hook-form"
 import {
   GetClinicDetailQuery,
   useUpdateClinicContactMutation,
+  useUpdateClinicPaymentMutation,
 } from "../ClinicDetail.graphql.generated"
 
 type ContactCardProps = {
@@ -18,6 +18,7 @@ type Inputs = {
   contactName: string
   contactPhone: string
   contactEmail: string
+  paySets: number
 }
 
 const ContactCard = ({ data }: ContactCardProps) => {
@@ -31,10 +32,11 @@ const ContactCard = ({ data }: ContactCardProps) => {
   })
 
   const [updateClinicContactMutation] = useUpdateClinicContactMutation()
+  const [updateClinicPaymentMutation] = useUpdateClinicPaymentMutation()
 
-  const handleSave = () => {
-    const { contactName, contactEmail, contactPhone } = getValues()
-    updateClinicContactMutation({
+  const handleSave = async () => {
+    const { contactName, contactEmail, contactPhone, paySets } = getValues()
+    const responseContact = await updateClinicContactMutation({
       variables: {
         id: data?.id || "",
         contactName,
@@ -42,6 +44,18 @@ const ContactCard = ({ data }: ContactCardProps) => {
         contactPhone,
       },
     })
+    // const responsePayment = await updateClinicPaymentMutation({
+    //   variables: {
+    //     id: data?.id || "",
+    //     paySets,
+    //   },
+    // })
+
+    if (responseContact.data) {
+      alert("儲存成功！")
+    } else {
+      alert(`儲存失敗！ ${responseContact.errors}`)
+    }
   }
 
   const handleClear = () => {
@@ -63,10 +77,10 @@ const ContactCard = ({ data }: ContactCardProps) => {
               {data?.cases?.length} / {data?.paySets}
             </div>
           </div>
-          <div className={styled.block}>
+          {/* <div className={styled.block}>
             <div className={styled.title}>付款狀態</div>
             <div className={styled.content}>{data?.paid === true ? "已付款" : "尚未付款"}</div>
-          </div>
+          </div> */}
           <div className={styled.block}>
             <div className={styled.title}>最後付款日期</div>
             <div className={styled.content}>
@@ -75,10 +89,6 @@ const ContactCard = ({ data }: ContactCardProps) => {
           </div>
         </div>
         <Form>
-          <Form.Group layout="vertical">
-            <Form.Label>付款日期</Form.Label>
-            {/* <DatePicker /> */}
-          </Form.Group>
           <Form.Group layout="vertical">
             <Form.Label>姓名</Form.Label>
             <Form.Input
@@ -124,6 +134,10 @@ const ContactCard = ({ data }: ContactCardProps) => {
                 {formState.errors?.contactEmail?.message}
               </Form.ErrorMessage>
             )}
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>付費組數</Form.Label>
+            <Form.Input type="number" {...register("paySets")} />
           </Form.Group>
           <div className="flex justify-end">
             <Button style={{ marginRight: "10px" }} onClick={handleSubmit(handleSave)}>

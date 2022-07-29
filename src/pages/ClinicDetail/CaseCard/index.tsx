@@ -67,6 +67,8 @@ const CaseCard = ({ data }: CaseCardProps) => {
       category: item?.categories?.reduce((acc, current) => acc + " / " + current?.name, ""),
       categories: item?.categories?.map(item => item?.id),
       description: item?.description,
+      beforeImageText: item?.beforeImageText,
+      afterImageText: item?.afterImageText,
       imageList: [
         {
           name: "before",
@@ -109,14 +111,24 @@ const CaseCard = ({ data }: CaseCardProps) => {
   }
 
   const handleUpdate = () => {
-    const { id, categories, description, title } = editMethods.getValues()
+    const {
+      id,
+      categories,
+      description,
+      title,
+      beforeImage,
+      beforeImageText,
+      afterImage,
+      afterImageText,
+    } = editMethods.getValues()
+
     updateCaseMutation({
       variables: {
         id,
-        beforeImage: "",
-        beforeImageText: "",
-        afterImage: "",
-        afterImageText: "",
+        beforeImage: beforeImage || editMethods.getValues().imageList?.[0].url || "",
+        beforeImageText,
+        afterImage: afterImage || editMethods.getValues().imageList?.[1].url || "",
+        afterImageText,
         categories,
         description,
         hot: false,
@@ -175,18 +187,9 @@ const CaseCard = ({ data }: CaseCardProps) => {
                             title: rowData.title,
                             categories: rowData.categories,
                             description: rowData.description,
-                            imageList: [
-                              {
-                                name: "before",
-                                fileKey: 1,
-                                url: rowData?.beforeImage,
-                              },
-                              {
-                                name: "after",
-                                fileKey: 2,
-                                url: rowData?.afterImage,
-                              },
-                            ],
+                            imageList: rowData.imageList,
+                            beforeImageText: rowData.beforeImageText,
+                            afterImageText: rowData.afterImageText,
                           })
                         }}>
                         {" "}
@@ -279,12 +282,12 @@ const CaseCard = ({ data }: CaseCardProps) => {
           <FormProvider {...editMethods}>
             <Form>
               <Form.Group layout="vertical">
-                <Form.Label>案例圖 (700 x 800px)</Form.Label>
+                <Form.Label>案例圖 (800 x 800px)</Form.Label>
                 <div className={cx("flex w-full")}>
                   <div className="flex-1 mr-1">
                     <ImageUploader
                       listType="picture"
-                      defaultFileList-={editMethods.getValues().imageList?.[0]}
+                      defaultFileList={[editMethods.getValues().imageList?.[0]]}
                       onChange={urlList => {
                         editMethods.setValue("beforeImage", urlList[0])
                       }}
@@ -298,6 +301,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
                   <div className="flex-1">
                     <ImageUploader
                       listType="picture"
+                      defaultFileList={[editMethods.getValues().imageList?.[1]]}
                       onChange={urlList => {
                         editMethods.setValue("afterImage", urlList[0])
                       }}

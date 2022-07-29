@@ -43,6 +43,7 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
   return (
     <MultiCascader
       {...field}
+      cascade={false}
       searchable={false}
       data={options || []}
       onChange={onChange}

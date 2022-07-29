@@ -7,6 +7,8 @@ export const Cases = gql`
       title
       beforeImage
       afterImage
+      beforeImageText
+      afterImageText
       description
       categories {
         id
@@ -165,7 +167,7 @@ export const UpdateCase = gql`
         beforeImage: $beforeImage
         beforeImageText: $beforeImageText
         afterImage: $afterImage
-        afterImageText: $afterImage
+        afterImageText: $afterImageText
         categories: $categories
         description: $description
         hot: $hot
@@ -312,6 +314,14 @@ export const AddActivity = gql`
 export const DeleteActivity = gql`
   mutation DeleteActivity($id: String) {
     deleteActivity(input: { id: $id }) {
+      id
+    }
+  }
+`
+
+export const UpdateClinicPayment = gql`
+  mutation UpdateClinicPayment($id: String, $paySets: Int!) {
+    updateClinicPayment(input: { id: $id, paySets: $paySets, paid: true, latestPayAt: 0 }) {
       id
     }
   }
