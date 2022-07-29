@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import Modal, { ModalProps } from "./Modal"
+import { ModalProps } from "./Modal"
 import ModalHeader from "./ModalHeader"
 import ModalTitle from "./ModalTitle"
 import ModalBody from "./ModalBody"

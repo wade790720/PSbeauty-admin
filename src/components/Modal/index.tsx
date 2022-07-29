@@ -1,4 +1,4 @@
-import ModalBase, { ModalProps } from "./Modal"
+import ModalBase from "./Modal"
 import CustomModal from "./CustomModal"
 import ModalDialog from "./ModalDialog"
 import ModalHeader from "./ModalHeader"

@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -22,17 +23,30 @@ type Inputs = {
 }
 
 const ContactCard = ({ data }: ContactCardProps) => {
-  const { register, getValues, formState, handleSubmit, reset } = useForm<Inputs>({
-    mode: "onTouched",
-    defaultValues: {
+  const clinic = useMemo(() => {
+    return {
+      id: data?.id || "",
       contactName: data?.contactName || "",
       contactPhone: data?.contactPhone || "",
       contactEmail: data?.contactEmail || "",
+      paySets: data?.paySets || 0,
+    }
+  }, [data])
+
+  const { register, getValues, formState, handleSubmit, reset } = useForm<Inputs>({
+    mode: "onTouched",
+    defaultValues: {
+      contactName: clinic.contactName,
+      contactPhone: clinic.contactPhone,
+      contactEmail: clinic.contactEmail,
+      paySets: clinic.paySets,
     },
   })
 
   const [updateClinicContactMutation] = useUpdateClinicContactMutation()
-  const [updateClinicPaymentMutation] = useUpdateClinicPaymentMutation()
+  const [updateClinicPaymentMutation] = useUpdateClinicPaymentMutation({
+    refetchQueries: ["GetClinicDetail"],
+  })
 
   const handleSave = async () => {
     const { contactName, contactEmail, contactPhone, paySets } = getValues()
@@ -44,14 +58,15 @@ const ContactCard = ({ data }: ContactCardProps) => {
         contactPhone,
       },
     })
-    // const responsePayment = await updateClinicPaymentMutation({
-    //   variables: {
-    //     id: data?.id || "",
-    //     paySets,
-    //   },
-    // })
 
-    if (responseContact.data) {
+    const responsePayment = await updateClinicPaymentMutation({
+      variables: {
+        id: data?.id || "",
+        paySets: +paySets,
+      },
+    })
+
+    if (responseContact.data && responsePayment.data) {
       alert("儲存成功！")
     } else {
       alert(`儲存失敗！ ${responseContact.errors}`)
