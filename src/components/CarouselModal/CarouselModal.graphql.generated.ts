@@ -16,15 +16,15 @@ export type GetClinicByIdQueryVariables = Types.Exact<{
 export type GetClinicByIdQuery = {
   clinic: {
     __typename: "Clinic"
-    doctors: Array<{
-      __typename: "ClinicDoctor"
-      id: string | null
-      name: string | null
-    } | null> | null
     cases: Array<{
       __typename: "ClinicCase"
       id: string | null
       title: string | null
+    } | null> | null
+    activities: Array<{
+      __typename: "ClinicActivity"
+      id: string | null
+      subject: string | null
     } | null> | null
   } | null
 }
@@ -80,13 +80,13 @@ export type GetAllClinicsQueryResult = Apollo.QueryResult<
 export const GetClinicByIdDocument = gql`
   query GetClinicById($id: String) {
     clinic(id: $id) {
-      doctors {
-        id
-        name
-      }
       cases {
         id
         title
+      }
+      activities {
+        id
+        subject
       }
     }
   }

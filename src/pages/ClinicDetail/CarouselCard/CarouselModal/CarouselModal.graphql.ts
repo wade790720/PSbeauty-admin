@@ -16,6 +16,10 @@ export const GetClinicById = gql`
         id
         title
       }
+      activities {
+        id
+        subject
+      }
     }
   }
 `

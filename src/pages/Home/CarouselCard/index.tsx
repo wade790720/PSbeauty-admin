@@ -49,6 +49,10 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
             url = "clinic/" + card.node?.clinicId + "/" + card.node?.redirectType + "/" + card.node?.targetId
             break;
           }
+          case "activity": {
+            url = "clinic/" + card.node?.clinicId + "/" + card.node?.redirectType + "/" + card.node?.targetId
+            break;
+          }
         }
 
         return {
@@ -90,7 +94,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         redirect: carousel.advancedOption,
         sort: carousel.sort,
         clinicId: carousel.clinicId,
-        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
+        targetId: (carousel.advancedOption === "case" || carousel.advancedOption === "activity" ? carousel.targetId : "") || "",
         image: carousel.image || "",
         status: carousel.status,
       },
@@ -107,7 +111,7 @@ const CarouselCard = ({ data, usageType }: CarouselCardProps) => {
         sort: carousel.sort,
         image: carousel.image || "",
         clinicId: carousel.clinicId,
-        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
+        targetId: (carousel.advancedOption === "case" || carousel.advancedOption === "activity" ? carousel.targetId : "") || "",
         status: carousel.status,
       },
     })

@@ -21,7 +21,7 @@ export type Clinic = {
   value: string
 }
 
-type AdvancedOption = "clinic" | "doctor" | "case"
+type AdvancedOption = "clinic" | "doctor" | "case" | "activity"
 
 export type Carousel = {
   id?: string
@@ -63,10 +63,10 @@ const CarouselModal = (props: CarouselModalProps) => {
   const [loadClinicByIdQuery, getClinicByIdQuery] = useGetClinicByIdLazyQuery()
   const selectedClinic = useMemo(() => {
     return {
-      doctors:
-        getClinicByIdQuery.data?.clinic?.doctors?.map(item => ({
+      activities:
+        getClinicByIdQuery.data?.clinic?.activities?.map(item => ({
           value: item?.id || "",
-          label: item?.name || "",
+          label: item?.subject || "",
         })) || [],
       cases:
         getClinicByIdQuery.data?.clinic?.cases?.map(item => ({
@@ -86,6 +86,7 @@ const CarouselModal = (props: CarouselModalProps) => {
   }, [props.defaultCarousel])
 
   const onSubmit = () => {
+    console.log(getValues())
     props.onSubmit && props.onSubmit(getValues())
   }
 
@@ -168,6 +169,9 @@ const CarouselModal = (props: CarouselModalProps) => {
               <Form.Radio {...register("advancedOption")} value="case">
                 案例
               </Form.Radio>
+              <Form.Radio {...register("advancedOption")} value="activity">
+                活動
+              </Form.Radio>
             </Form.Group>
           )}
           {watchAdvancedOption === "case" && (
@@ -184,6 +188,27 @@ const CarouselModal = (props: CarouselModalProps) => {
                       onChange={onChange}
                     />
                   )}
+                />
+              }
+            </Form.Group>
+          )}
+          {watchAdvancedOption === "activity" && (
+            <Form.Group>
+              <Form.Label>診所活動</Form.Label>
+              {
+                <Controller
+                  control={control}
+                  name="targetId"
+                  render={({ field: { value, onChange } }) => {
+                    console.log(value)
+                    return (
+                      <InputPicker
+                        data={selectedClinic.activities}
+                        defaultValue={value}
+                        onChange={onChange}
+                      />
+                    )
+                  }}
                 />
               }
             </Form.Group>

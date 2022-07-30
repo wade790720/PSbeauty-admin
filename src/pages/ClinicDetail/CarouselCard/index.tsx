@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { useState, useMemo } from "react"
 import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
@@ -50,6 +51,10 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
             url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType + "/" + slide?.targetId
             break
           }
+          case "activity": {
+            url = "clinic/" + slide.clinic?.id + "/" + slide?.redirectType + "/" + slide?.targetId
+            break
+          }
         }
 
         return {
@@ -92,7 +97,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         title: carousel.title,
         image: carousel.image || "",
         redirectType: carousel.advancedOption,
-        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
+        targetId: (carousel.advancedOption === "case" || carousel.advancedOption === "activity" ? carousel.targetId : "") || "",
       },
     })
   }
@@ -107,7 +112,7 @@ const CarouselCard = ({ data }: CarouselCardProps) => {
         title: carousel.title,
         image: carousel.image || "",
         redirectType: carousel.advancedOption,
-        targetId: (carousel.advancedOption === "case" ? carousel.targetId : "") || "",
+        targetId: (carousel.advancedOption === "case" || carousel.advancedOption === "activity" ? carousel.targetId : "") || "",
       },
     })
   }

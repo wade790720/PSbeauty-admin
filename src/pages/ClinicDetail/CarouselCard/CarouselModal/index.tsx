@@ -22,7 +22,7 @@ export type Clinic = {
   value: string
 }
 
-type AdvancedOption = "clinic" | "doctor" | "case"
+type AdvancedOption = "clinic" | "doctor" | "case" | "activity"
 
 export type Carousel = {
   id?: string
@@ -69,6 +69,11 @@ const CarouselModal = (props: CarouselModalProps) => {
   const [loadClinicByIdQuery, getClinicByIdQuery] = useGetClinicByIdLazyQuery()
   const selectedClinic = useMemo(() => {
     return {
+      activities:
+        getClinicByIdQuery.data?.clinic?.activities?.map(item => ({
+          value: item?.id || "",
+          label: item?.subject || "",
+        })) || [],
       cases:
         getClinicByIdQuery.data?.clinic?.cases?.map(item => ({
           value: item?.id || "",
@@ -183,6 +188,9 @@ const CarouselModal = (props: CarouselModalProps) => {
               <Form.Radio {...register("advancedOption")} value="case">
                 案例
               </Form.Radio>
+              <Form.Radio {...register("advancedOption")} value="activity">
+                活動
+              </Form.Radio>
             </Form.Group>
           )}
           {watchRedirect === "yes" && watchAdvancedOption === "case" && (
@@ -195,6 +203,24 @@ const CarouselModal = (props: CarouselModalProps) => {
                   render={({ field: { value, onChange } }) => (
                     <InputPicker
                       data={selectedClinic.cases}
+                      defaultValue={value}
+                      onChange={onChange}
+                    />
+                  )}
+                />
+              }
+            </Form.Group>
+          )}
+          {watchRedirect === "yes" && watchAdvancedOption === "activity" && (
+            <Form.Group layout="vertical">
+              <Form.Label>導向診所內的活動</Form.Label>
+              {
+                <Controller
+                  control={control}
+                  name="targetId"
+                  render={({ field: { value, onChange } }) => (
+                    <InputPicker
+                      data={selectedClinic.activities}
                       defaultValue={value}
                       onChange={onChange}
                     />

@@ -21,6 +21,11 @@ export type GetClinicByIdQuery = {
       id: string | null
       title: string | null
     } | null> | null
+    activities: Array<{
+      __typename: "ClinicActivity"
+      id: string | null
+      subject: string | null
+    } | null> | null
   } | null
 }
 
@@ -78,6 +83,10 @@ export const GetClinicByIdDocument = gql`
       cases {
         id
         title
+      }
+      activities {
+        id
+        subject
       }
     }
   }
