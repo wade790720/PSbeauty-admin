@@ -1,12 +1,14 @@
 import { useMemo } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
-import Form from "components/Form"
 import Editor from "components/Editor"
+import Form from "components/Form"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 import { GetClinicDetailQuery, useUpdateClinicMutation } from "../ClinicDetail.graphql.generated"
-import { useForm, FormProvider } from "react-hook-form"
+import { useForm, FormProvider, Controller } from "react-hook-form"
 import { toast } from "react-toastify"
+import { SelectPicker } from "rsuite"
+import districts from "./districts.json"
 
 type InfoCardProps = {
   data: GetClinicDetailQuery["clinic"]
@@ -51,6 +53,15 @@ const InfoCard = ({ data }: InfoCardProps) => {
       categories: clinic.categories,
     },
   })
+
+  const county = districts.map(item => ({ label: item.name, value: item.name }))
+  const district = useMemo(() => {
+    return (
+      districts
+        .find(item => item.name === methods.watch().county)
+        ?.districts.map(item => ({ label: item.name, value: item.name })) || []
+    )
+  }, [methods.watch().county])
 
   const [updateClinicMutation] = useUpdateClinicMutation({ refetchQueries: ["GetClinicDetail"] })
 
@@ -133,20 +144,35 @@ const InfoCard = ({ data }: InfoCardProps) => {
             </Form.Group>
             <Form.Group layout="vertical">
               <Form.Label>完整地址</Form.Label>
-              <div className="inline-flex w-full">
-                <Form.Input
-                  type="text"
-                  placeholder="縣市"
-                  className="mr-4"
-                  style={{ flex: "1 1 300px" }}
-                  {...methods.register("county")}
-                />
-                <Form.Input
-                  type="text"
+              <div className="inline-flex w-full gap-1">
+                {
+                  <Controller
+                    name="county"
+                    control={methods.control}
+                    render={({ field: { value, onChange } }) => {
+                      return (
+                        <SelectPicker
+                          data={county}
+                          searchable={false}
+                          style={{ width: 224 }}
+                          placeholder="縣市"
+                          onChange={onChange}
+                          defaultValue={value}
+                        />
+                      )
+                    }}
+                  />
+                }
+
+                <SelectPicker
+                  data={district}
+                  defaultValue={methods.getValues().town}
+                  searchable={false}
+                  style={{ width: 224 }}
                   placeholder="地區"
-                  className="mr-4"
-                  style={{ flex: "1 1 300px" }}
-                  {...methods.register("town")}
+                  onChange={value => {
+                    methods.setValue("town", value)
+                  }}
                 />
                 <Form.Input type="text" placeholder="地址" {...methods.register("address")} />
               </div>

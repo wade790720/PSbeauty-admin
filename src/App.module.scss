@@ -65,6 +65,10 @@
       z-index: 999;
     }
 
+    .rs-table-scrollbar-vertical .rs-table-scrollbar-handle {
+      width: 3px;
+    }
+
     .rs-picker-default:not(.rs-picker-disabled) .rs-picker-toggle-active {
       box-shadow: none;
     }
