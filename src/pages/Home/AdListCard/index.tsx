@@ -130,7 +130,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
 
         {/* 新增廣告卡 */}
         {open && (
-          <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
+          <Modal open={open} backdrop={false} onClose={() => setOpen(false)}>
             <Modal.Header>
               <Modal.Title>新增廣告卡</Modal.Title>
             </Modal.Header>

@@ -43,10 +43,10 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
   return (
     <MultiCascader
       {...field}
-      cascade={false}
       searchable={false}
       data={options || []}
-      onChange={onChange}
+      onChange={value => console.log(value)}
+      onSelect={value => console.log(value)}
       menuStyle={{ padding: "6px 0" }}
       placeholder="請選擇分類"
       style={{ width: 280 }}

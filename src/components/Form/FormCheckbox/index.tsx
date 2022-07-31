@@ -18,7 +18,7 @@ export type FormCheckboxProps = {
 
 const FormCheckbox = React.forwardRef(function FormCheckbox(
   { children, inline, ...props }: FormCheckboxProps,
-  ref: React.Ref<HTMLInputElement> = null,
+  ref?: React.Ref<HTMLInputElement>,
 ) {
   return (
     <div

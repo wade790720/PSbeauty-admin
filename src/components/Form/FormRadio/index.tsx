@@ -12,20 +12,20 @@ export type FormRadioProps = {
   Omit<JSX.IntrinsicElements["input"], "type">
 
 const FormRadio = React.forwardRef(function FormRadio(
-  { children, inline, ...props }: FormRadioProps,
-  ref: React.Ref<HTMLInputElement> = null,
+  props: FormRadioProps,
+  ref?: React.Ref<HTMLInputElement>,
 ) {
   return (
     <div
       className={cx(
         "component-radio",
         styled.wrapper,
-        { [styled.inline]: inline },
+        { [styled.inline]: props.inline },
         props.className,
       )}>
       <label className={styled.label}>
         <input ref={ref} type="radio" {...props} />
-        <span className={styled.content}>{children}</span>
+        <span className={styled.content}>{props.children}</span>
       </label>
     </div>
   )

@@ -15,7 +15,7 @@ export type FormInputProps = FormControlProps &
 
 const FormInput = React.forwardRef(function FormInput(
   { className, type = "text", ...props }: FormInputProps,
-  ref: React.Ref<HTMLInputElement> = null,
+  ref?: React.Ref<HTMLInputElement>,
 ) {
   const { attributes, setAttributes } = useContext(FormGroupContext)
   const [entered, setEntered] = useState(false)
@@ -45,7 +45,7 @@ const FormInput = React.forwardRef(function FormInput(
       style={props.style}>
       <input
         {...props}
-        ref={ref}
+        ref={ref && ref}
         type={type}
         id={attributes?.formId}
         className={styled.control}

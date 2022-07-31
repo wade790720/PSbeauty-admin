@@ -13,8 +13,8 @@ export type ModalPopupProps = {
 
 const ModalPopup = ({
   open = false,
-  backdrop = true,
-  lockScroll = true,
+  closeOnDocumentClick = true,
+  lockScroll = false,
   ...props
 }: ModalPopupProps) => {
   return (
@@ -23,8 +23,8 @@ const ModalPopup = ({
       nested
       lockScroll={lockScroll}
       open={open}
-      closeOnDocumentClick={backdrop}
-      closeOnEscape
+      closeOnDocumentClick={closeOnDocumentClick}
+      closeOnEscape={false}
       onClose={props.onClose}
       contentStyle={{
         background: "transparent",
