@@ -17,6 +17,7 @@ import ImageUploader from "components/ImageUploader"
 import { useMatch } from "react-router-dom"
 import { useForm, FormProvider } from "react-hook-form"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
+import { toast } from "react-toastify"
 
 type CaseCardProps = {
   data: CasesFragment["cases"]
@@ -84,7 +85,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
     }))
   }, [data])
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const {
       categories,
       description,
@@ -95,7 +96,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
       afterImageText,
     } = addMethods.getValues()
 
-    addCaseMutation({
+    const response = await addCaseMutation({
       variables: {
         clinicId: match?.params.id || "",
         beforeImage,
@@ -108,6 +109,39 @@ const CaseCard = ({ data }: CaseCardProps) => {
         title,
       },
     })
+
+    if (response.errors) {
+      toast.error(`新增失敗：${response.errors?.[0].message}`, {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } else {
+      toast.success("新增成功！", {
+        theme: "colored",
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      addMethods.reset({
+        categories: [],
+        description: "",
+        title: "",
+        beforeImageText: "",
+        afterImageText: "",
+      })
+    }
+
+    setOpenAdd(false)
   }
 
   const handleUpdate = () => {

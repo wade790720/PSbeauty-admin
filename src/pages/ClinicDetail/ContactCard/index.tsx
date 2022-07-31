@@ -9,6 +9,7 @@ import {
   GetClinicDetailQuery,
   useUpdateClinicContactMutation,
   useUpdateClinicPaymentMutation,
+  useUpdateClinicOwnerMutation,
 } from "../ClinicDetail.graphql.generated"
 import { toast } from "react-toastify"
 
@@ -45,6 +46,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
   })
 
   const [updateClinicContactMutation] = useUpdateClinicContactMutation()
+  const [updateClinicOwnerMutation] = useUpdateClinicOwnerMutation()
   const [updateClinicPaymentMutation] = useUpdateClinicPaymentMutation({
     refetchQueries: ["GetClinicDetail"],
   })
@@ -66,9 +68,15 @@ const ContactCard = ({ data }: ContactCardProps) => {
         paySets: +paySets,
       },
     })
+    const responseOwner = await updateClinicOwnerMutation({
+      variables: {
+        id: data?.id || "",
+        ownerEmail: contactEmail,
+      },
+    })
 
-    if (responseContact.data && responsePayment.data) {
-      toast.success("儲存成功！", {
+    if (responseContact.errors && responsePayment.errors && responseOwner.errors) {
+      toast.error(`儲存失敗：${responseContact.errors}`, {
         theme: "colored",
         position: "top-right",
         autoClose: 5000,
@@ -79,7 +87,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
         progress: undefined,
       })
     } else {
-      toast.error(`儲存失敗：${responseContact.errors}`, {
+      toast.success("儲存成功！", {
         theme: "colored",
         position: "top-right",
         autoClose: 5000,

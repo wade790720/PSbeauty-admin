@@ -264,6 +264,15 @@ export type UpdateClinicContactMutation = {
   updateClinicContact: { __typename: "UpdateClinicContactPayload"; id: string | null } | null
 }
 
+export type UpdateClinicOwnerMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+  ownerEmail: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type UpdateClinicOwnerMutation = {
+  updateClinicOwner: { __typename: "UpdateClinicOwnerPayload"; id: string | null } | null
+}
+
 export type AddActivityMutationVariables = Types.Exact<{
   clinicId: Types.InputMaybe<Types.Scalars["String"]>
   image: Types.InputMaybe<Types.Scalars["String"]>
@@ -1043,6 +1052,54 @@ export type UpdateClinicContactMutationResult = Apollo.MutationResult<UpdateClin
 export type UpdateClinicContactMutationOptions = Apollo.BaseMutationOptions<
   UpdateClinicContactMutation,
   UpdateClinicContactMutationVariables
+>
+export const UpdateClinicOwnerDocument = gql`
+  mutation UpdateClinicOwner($id: String, $ownerEmail: String) {
+    updateClinicOwner(input: { id: $id, ownerEmail: $ownerEmail }) {
+      id
+    }
+  }
+`
+export type UpdateClinicOwnerMutationFn = Apollo.MutationFunction<
+  UpdateClinicOwnerMutation,
+  UpdateClinicOwnerMutationVariables
+>
+
+/**
+ * __useUpdateClinicOwnerMutation__
+ *
+ * To run a mutation, you first call `useUpdateClinicOwnerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClinicOwnerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClinicOwnerMutation, { data, loading, error }] = useUpdateClinicOwnerMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      ownerEmail: // value for 'ownerEmail'
+ *   },
+ * });
+ */
+export function useUpdateClinicOwnerMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateClinicOwnerMutation,
+    UpdateClinicOwnerMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateClinicOwnerMutation, UpdateClinicOwnerMutationVariables>(
+    UpdateClinicOwnerDocument,
+    options,
+  )
+}
+export type UpdateClinicOwnerMutationHookResult = ReturnType<typeof useUpdateClinicOwnerMutation>
+export type UpdateClinicOwnerMutationResult = Apollo.MutationResult<UpdateClinicOwnerMutation>
+export type UpdateClinicOwnerMutationOptions = Apollo.BaseMutationOptions<
+  UpdateClinicOwnerMutation,
+  UpdateClinicOwnerMutationVariables
 >
 export const AddActivityDocument = gql`
   mutation AddActivity($clinicId: String, $image: String, $subject: String, $content: String) {

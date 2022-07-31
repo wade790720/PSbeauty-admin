@@ -301,6 +301,14 @@ export const UpdateClinicContact = gql`
   }
 `
 
+export const UpdateClinicOwner = gql`
+  mutation UpdateClinicOwner($id: String, $ownerEmail: String) {
+    updateClinicOwner(input: { id: $id, ownerEmail: $ownerEmail }) {
+      id
+    }
+  }
+`
+
 export const AddActivity = gql`
   mutation AddActivity($clinicId: String, $image: String, $subject: String, $content: String) {
     addActivity(
