@@ -40,13 +40,42 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
     }
   }, [data])
 
+  const mappingKey = (value: string) => {
+    const result: string[] = []
+
+    options?.forEach(option => {
+      if (option.value === value) {
+        option.children?.forEach(item => {
+          item.children?.forEach(i => result.push(i.value))
+        })
+      } else {
+        option.children?.forEach(item => {
+          if (item.value === value) {
+            item.children?.forEach(i => result.push(i.value))
+          }
+        })
+      }
+    })
+
+    return result
+  }
+
+  const handleChange = (values: ValueType) => {
+    const selectItem = [
+      ...values.map(value => {
+        return mappingKey(value.toString()).length === 0 ? value : mappingKey(value.toString())
+      }),
+    ].flat()
+
+    onChange(selectItem)
+  }
+
   return (
     <MultiCascader
       {...field}
       searchable={false}
       data={options || []}
-      onChange={value => console.log(value)}
-      onSelect={value => console.log(value)}
+      onChange={values => handleChange(values)}
       menuStyle={{ padding: "6px 0" }}
       placeholder="請選擇分類"
       style={{ width: 280 }}
