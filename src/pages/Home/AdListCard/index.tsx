@@ -182,7 +182,11 @@ const AdListCard = ({ data }: AdListCardProps) => {
         )}
 
         {/* 檢視廣告卡資訊 */}
-        <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} style={{ maxWidth: "450px" }}>
+        <Modal
+          open={reviewOpen}
+          backdrop={false}
+          onClose={() => setReviewOpen(false)}
+          style={{ maxWidth: "450px" }}>
           <Modal.Header>
             <Modal.Title>廣告卡資訊</Modal.Title>
           </Modal.Header>

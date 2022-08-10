@@ -129,7 +129,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
 
       {/* 新增活動 */}
       {open && (
-        <Modal open={open} closeOnDocumentClick={false} onClose={() => setOpen(false)}>
+        <Modal open={open} backdrop={false} onClose={() => setOpen(false)}>
           <Modal.Header>
             <Modal.Title>新增廣告卡</Modal.Title>
           </Modal.Header>
@@ -181,7 +181,11 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
       )}
 
       {/* 檢視廣告卡資訊 */}
-      <Modal open={reviewOpen} onClose={() => setReviewOpen(false)} style={{ maxWidth: "450px" }}>
+      <Modal
+        open={reviewOpen}
+        backdrop={false}
+        onClose={() => setReviewOpen(false)}
+        style={{ maxWidth: "450px" }}>
         <Modal.Header>
           <Modal.Title>活動資訊</Modal.Title>
         </Modal.Header>

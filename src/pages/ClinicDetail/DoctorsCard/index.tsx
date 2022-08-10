@@ -149,7 +149,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
 
       {/* 新增醫生 */}
       {openAdd && (
-        <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
+        <Modal open={openAdd} backdrop={false} onClose={() => setOpenAdd(false)}>
           <Modal.Header>
             <Modal.Title>新增醫師</Modal.Title>
           </Modal.Header>
@@ -208,7 +208,11 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
       )}
 
       {/* 檢視醫師 */}
-      <Modal open={openReview} onClose={() => setOpenReview(false)} style={{ maxWidth: "450px" }}>
+      <Modal
+        open={openReview}
+        backdrop={false}
+        onClose={() => setOpenReview(false)}
+        style={{ maxWidth: "450px" }}>
         <Modal.Header>
           <Modal.Title>檢視醫師</Modal.Title>
         </Modal.Header>

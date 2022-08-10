@@ -137,7 +137,7 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
           </Table>
         </Card.Body>
       </Card>
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} backdrop={false} onClose={() => setOpen(false)}>
         <Modal.Header>
           <Modal.Title>新增診所</Modal.Title>
         </Modal.Header>

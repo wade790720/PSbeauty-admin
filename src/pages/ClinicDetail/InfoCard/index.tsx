@@ -118,7 +118,6 @@ const InfoCard = ({ data }: InfoCardProps) => {
       categories: [],
     })
   }
-  // console.log(methods.getValues().categories)
 
   return (
     <Card>

@@ -93,7 +93,7 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
         </Card.Body>
       </Card>
 
-      <Modal open={keywordOpen} closeOnDocumentClick={false} onClose={() => setKeywordOpen(false)}>
+      <Modal open={keywordOpen} backdrop={false} onClose={() => setKeywordOpen(false)}>
         <Modal.Header>
           <Modal.Title>新增熱門關鍵字</Modal.Title>
         </Modal.Header>

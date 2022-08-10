@@ -240,7 +240,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
       </Card>
       {/* 新增案例卡 */}
       {openAdd && (
-        <Modal open={openAdd} onClose={() => setOpenAdd(false)}>
+        <Modal open={openAdd} backdrop={false} onClose={() => setOpenAdd(false)}>
           <Modal.Header>
             <Modal.Title>新增案例</Modal.Title>
           </Modal.Header>
@@ -308,7 +308,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
       )}
 
       {/* 編輯案例卡 */}
-      <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
+      <Modal open={openEdit} backdrop={false} onClose={() => setOpenEdit(false)}>
         <Modal.Header>
           <Modal.Title>編輯案例</Modal.Title>
         </Modal.Header>
