@@ -620,8 +620,6 @@ export type Category = {
   id: Maybe<Scalars["String"]>
   /** 小分類名稱 */
   name: Maybe<Scalars["String"]>
-  parentField: Maybe<Scalars["String"]>
-  parentId: Maybe<Scalars["String"]>
   /** 所屬中分類 */
   secondCategoryId: Maybe<Scalars["String"]>
   /** 大分類 */
@@ -1121,6 +1119,8 @@ export type CollectCaseInput = {
 /** 使用者蒐集案例回覆 */
 export type CollectCasePayload = {
   __typename: "CollectCasePayload"
+  /** 案例被收藏的次數 */
+  collectedCount: Scalars["Long"]
   /** 使用者識別碼 */
   userId: Maybe<Scalars["String"]>
 }
@@ -1188,6 +1188,7 @@ export type ConsultClinicInput = {
    * ///
    */
   categories: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
+  /** 診所識別碼 */
   clinicId: InputMaybe<Scalars["String"]>
   /** 諮詢內容 */
   content: InputMaybe<Scalars["String"]>
@@ -1507,7 +1508,13 @@ export type Mutation = {
   collectCase: Maybe<CollectCasePayload>
   /** [會員]一對一諮詢，由使用者直接諮詢診所 */
   consultClinic: Maybe<ConsultClinicPayload>
-  /** 以 Email+Password 建立 firebase 使用者 */
+  /**
+   * 以 Email+Password 建立 firebase 使用者.
+   * 錯誤碼 5001: email 已被註冊且已通過驗證。
+   * 錯誤碼 5002: email 已被註冊但未通過驗證。
+   * 錯誤碼 5003: 註冊帳號失敗。
+   * 錯誤碼 5004: 帳號建立成功，但驗證信發送失敗。
+   */
   createUserWithEmailAndPassword: Maybe<CreateUserWithEmailAndPasswordPayload>
   /** [廠商]刪除診所活動頁 */
   deleteActivity: Maybe<DeleteActivityPayload>
@@ -1935,6 +1942,8 @@ export type Query = {
   __typename: "Query"
   /** 查詢診所活動 */
   activities: Maybe<ActivitiesConnection>
+  /** 取得診所活動內容 */
+  activity: Maybe<ClinicActivity>
   /** 依廣告卡識別碼取得廣告卡 */
   adCard: Maybe<AdCard>
   /** 查詢廠商廣告卡 */
@@ -2015,6 +2024,10 @@ export type QueryActivitiesArgs = {
   last: InputMaybe<Scalars["Int"]>
   order: InputMaybe<Array<ClinicActivitySortInput>>
   where: InputMaybe<ClinicActivityFilterInput>
+}
+
+export type QueryActivityArgs = {
+  id: InputMaybe<Scalars["String"]>
 }
 
 export type QueryAdCardArgs = {
@@ -2260,6 +2273,8 @@ export type RemoveCollectedCaseInput = {
 /** 移除病例輸出資料 */
 export type RemoveCollectedCasePayload = {
   __typename: "RemoveCollectedCasePayload"
+  /** 案例被收藏的次數 */
+  collectedCount: Scalars["Long"]
   /** 使用者識別碼 */
   userId: Maybe<Scalars["String"]>
 }
@@ -2292,8 +2307,6 @@ export type SecondCategory = {
   id: Maybe<Scalars["String"]>
   /** 中分類名稱 */
   name: Maybe<Scalars["String"]>
-  parentField: Maybe<Scalars["String"]>
-  parentId: Maybe<Scalars["String"]>
   /** 所屬大分類識別碼 */
   topCategoryId: Maybe<Scalars["String"]>
 }
