@@ -190,7 +190,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
           <Modal.Header>
             <Modal.Title>廣告卡資訊</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (800px x 800px)</Form.Label>

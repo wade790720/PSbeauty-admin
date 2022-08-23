@@ -189,7 +189,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
         <Modal.Header>
           <Modal.Title>活動資訊</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
           <Form>
             <Form.Group layout="vertical">
               <Form.Label>預覽圖</Form.Label>
