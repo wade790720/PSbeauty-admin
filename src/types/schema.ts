@@ -264,14 +264,6 @@ export type AddAnswerPayload = {
 }
 
 export type AddCaseInput = {
-  /** 術後照 */
-  afterImage: InputMaybe<Scalars["String"]>
-  /** 術後照關鍵字 */
-  afterImageText: InputMaybe<Scalars["String"]>
-  /** 術前照 */
-  beforeImage: InputMaybe<Scalars["String"]>
-  /** 術前照關鍵字 */
-  beforeImageText: InputMaybe<Scalars["String"]>
   /** 案例分類 */
   categories: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   /** 所屬診所識別碼 */
@@ -280,6 +272,10 @@ export type AddCaseInput = {
   description: InputMaybe<Scalars["String"]>
   /** 是否被設為熱門案例 */
   hot: Scalars["Boolean"]
+  /** 案例照 */
+  image: InputMaybe<Scalars["String"]>
+  /** 案例照關鍵字 */
+  imageText: InputMaybe<Scalars["String"]>
   /** 病例標題 */
   title: InputMaybe<Scalars["String"]>
 }
@@ -382,8 +378,12 @@ export type AddConsultInput = {
   categories: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   /** 諮詢內容 */
   content: InputMaybe<Scalars["String"]>
+  /** 諮詢縣市範圍 */
+  county: InputMaybe<Scalars["String"]>
   /** 諮詢天數 */
   days: Scalars["Int"]
+  enable: InputMaybe<Scalars["Boolean"]>
+  expiresIn: InputMaybe<Scalars["Long"]>
   /** 諮詢圖片 */
   images: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   /** 諮詢標題 */
@@ -738,14 +738,6 @@ export type ClinicActivitySortInput = {
 /** 診所病例 */
 export type ClinicCase = {
   __typename: "ClinicCase"
-  /** 術後照 */
-  afterImage: Maybe<Scalars["String"]>
-  /** 術後照關鍵字 */
-  afterImageText: Maybe<Scalars["String"]>
-  /** 術前照 */
-  beforeImage: Maybe<Scalars["String"]>
-  /** 術前照關鍵字 */
-  beforeImageText: Maybe<Scalars["String"]>
   /** 相關小分類 */
   categories: Maybe<Array<Maybe<Category>>>
   /** 取得診所資訊 */
@@ -758,21 +750,17 @@ export type ClinicCase = {
   hot: Scalars["Boolean"]
   /** 物件識別碼 */
   id: Maybe<Scalars["String"]>
+  /** 案例照 */
+  image: Maybe<Scalars["String"]>
+  /** 案例照關鍵字 */
+  imageText: Maybe<Scalars["String"]>
   /** 病例標題 */
   title: Maybe<Scalars["String"]>
 }
 
 /** 診所病例 */
 export type ClinicCaseFilterInput = {
-  /** 術後照 */
-  afterImage: InputMaybe<StringOperationFilterInput>
-  /** 術後照關鍵字 */
-  afterImageText: InputMaybe<StringOperationFilterInput>
   and: InputMaybe<Array<ClinicCaseFilterInput>>
-  /** 術前照 */
-  beforeImage: InputMaybe<StringOperationFilterInput>
-  /** 術前照關鍵字 */
-  beforeImageText: InputMaybe<StringOperationFilterInput>
   /** 案例分類 */
   categories: InputMaybe<ListStringOperationFilterInput>
   /** 所屬診所識別碼 */
@@ -783,6 +771,10 @@ export type ClinicCaseFilterInput = {
   hot: InputMaybe<BooleanOperationFilterInput>
   /** 物件識別碼 */
   id: InputMaybe<StringOperationFilterInput>
+  /** 案例照 */
+  image: InputMaybe<StringOperationFilterInput>
+  /** 案例照關鍵字 */
+  imageText: InputMaybe<StringOperationFilterInput>
   or: InputMaybe<Array<ClinicCaseFilterInput>>
   parentField: InputMaybe<StringOperationFilterInput>
   parentId: InputMaybe<StringOperationFilterInput>
@@ -792,14 +784,6 @@ export type ClinicCaseFilterInput = {
 
 /** 診所病例 */
 export type ClinicCaseSortInput = {
-  /** 術後照 */
-  afterImage: InputMaybe<SortEnumType>
-  /** 術後照關鍵字 */
-  afterImageText: InputMaybe<SortEnumType>
-  /** 術前照 */
-  beforeImage: InputMaybe<SortEnumType>
-  /** 術前照關鍵字 */
-  beforeImageText: InputMaybe<SortEnumType>
   /** 所屬診所識別碼 */
   clinicId: InputMaybe<SortEnumType>
   /** 案例描述 */
@@ -808,6 +792,10 @@ export type ClinicCaseSortInput = {
   hot: InputMaybe<SortEnumType>
   /** 物件識別碼 */
   id: InputMaybe<SortEnumType>
+  /** 案例照 */
+  image: InputMaybe<SortEnumType>
+  /** 案例照關鍵字 */
+  imageText: InputMaybe<SortEnumType>
   parentField: InputMaybe<SortEnumType>
   parentId: InputMaybe<SortEnumType>
   /** 病例標題 */
@@ -984,14 +972,16 @@ export type ClinicInbox = {
   clinic: Maybe<Clinic>
   /** 物件識別碼 */
   id: Maybe<Scalars["String"]>
+  /** 會員最後發信時間 */
+  lastReplyAt: Scalars["Long"]
   /** 讀取時間 */
   readAt: Scalars["Long"]
-  /** 取得信箱中的回覆內容 */
-  reply: Maybe<ConsultTopicReply>
   /** 取得討論串資訊 */
   topic: Maybe<ClinicConsultTopic>
   /** 取得寄信人 */
   user: Maybe<User>
+  /** 寄件者識別碼 */
+  userId: Maybe<Scalars["String"]>
 }
 
 /** A connection to a list of items. */
@@ -1022,13 +1012,13 @@ export type ClinicInboxFilterInput = {
   clinicId: InputMaybe<StringOperationFilterInput>
   /** 物件識別碼 */
   id: InputMaybe<StringOperationFilterInput>
+  /** 會員最後發信時間 */
+  lastReplyAt: InputMaybe<ComparableInt64OperationFilterInput>
   or: InputMaybe<Array<ClinicInboxFilterInput>>
   parentField: InputMaybe<StringOperationFilterInput>
   parentId: InputMaybe<StringOperationFilterInput>
   /** 讀取時間 */
   readAt: InputMaybe<ComparableInt64OperationFilterInput>
-  /** 回覆識別碼 */
-  replyId: InputMaybe<StringOperationFilterInput>
   /** 診所諮詢討論串識別碼 */
   topicId: InputMaybe<StringOperationFilterInput>
   /** 寄件者識別碼 */
@@ -1041,12 +1031,12 @@ export type ClinicInboxSortInput = {
   clinicId: InputMaybe<SortEnumType>
   /** 物件識別碼 */
   id: InputMaybe<SortEnumType>
+  /** 會員最後發信時間 */
+  lastReplyAt: InputMaybe<SortEnumType>
   parentField: InputMaybe<SortEnumType>
   parentId: InputMaybe<SortEnumType>
   /** 讀取時間 */
   readAt: InputMaybe<SortEnumType>
-  /** 回覆識別碼 */
-  replyId: InputMaybe<SortEnumType>
   /** 診所諮詢討論串識別碼 */
   topicId: InputMaybe<SortEnumType>
   /** 寄件者識別碼 */
@@ -1164,6 +1154,8 @@ export type Consult = {
   consultAt: Scalars["Long"]
   /** 諮詢內容 */
   content: Maybe<Scalars["String"]>
+  /** 諮詢縣市範圍 */
+  county: Maybe<Scalars["String"]>
   /** 諮詢天數 */
   days: Scalars["Int"]
   /** 是否開啟 */
@@ -1174,6 +1166,8 @@ export type Consult = {
   id: Maybe<Scalars["String"]>
   /** 諮詢圖片 */
   images: Maybe<Array<Maybe<Scalars["String"]>>>
+  /** 是否為一對一諮詢 */
+  oneOnOne: Scalars["Boolean"]
   /** 取得發文者 */
   poster: Maybe<User>
   /** 諮詢標題 */
@@ -1192,8 +1186,12 @@ export type ConsultClinicInput = {
   clinicId: InputMaybe<Scalars["String"]>
   /** 諮詢內容 */
   content: InputMaybe<Scalars["String"]>
+  /** 諮詢縣市範圍 */
+  county: InputMaybe<Scalars["String"]>
   /** 諮詢天數 */
   days: Scalars["Int"]
+  enable: InputMaybe<Scalars["Boolean"]>
+  expiresIn: InputMaybe<Scalars["Long"]>
   /** 諮詢圖片 */
   images: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   /** 諮詢標題 */
@@ -2470,14 +2468,6 @@ export type UpdateAdImagePayload = {
 }
 
 export type UpdateCaseInput = {
-  /** 術後照 */
-  afterImage: InputMaybe<Scalars["String"]>
-  /** 術後照關鍵字 */
-  afterImageText: InputMaybe<Scalars["String"]>
-  /** 術前照 */
-  beforeImage: InputMaybe<Scalars["String"]>
-  /** 術前照關鍵字 */
-  beforeImageText: InputMaybe<Scalars["String"]>
   /** 案例分類 */
   categories: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   /** 案例描述 */
@@ -2485,6 +2475,10 @@ export type UpdateCaseInput = {
   /** 是否被設為熱門案例 */
   hot: Scalars["Boolean"]
   id: InputMaybe<Scalars["String"]>
+  /** 案例照 */
+  image: InputMaybe<Scalars["String"]>
+  /** 案例照關鍵字 */
+  imageText: InputMaybe<Scalars["String"]>
   /** 病例標題 */
   title: InputMaybe<Scalars["String"]>
 }

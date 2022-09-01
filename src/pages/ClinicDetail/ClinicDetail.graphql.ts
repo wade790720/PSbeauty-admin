@@ -5,10 +5,8 @@ export const Cases = gql`
     cases {
       id
       title
-      beforeImage
-      afterImage
-      beforeImageText
-      afterImageText
+      image
+      imageText
       description
       categories {
         id
@@ -122,10 +120,8 @@ export const UpdateClinic = gql`
 export const AddCase = gql`
   mutation AddCase(
     $clinicId: String
-    $beforeImage: String
-    $beforeImageText: String
-    $afterImage: String
-    $afterImageText: String
+    $image: String
+    $imageText: String
     $categories: [String]
     $description: String
     $hot: Boolean!
@@ -134,10 +130,8 @@ export const AddCase = gql`
     addCase(
       input: {
         clinicId: $clinicId
-        beforeImage: $beforeImage
-        beforeImageText: $beforeImageText
-        afterImage: $afterImage
-        afterImageText: $afterImageText
+        image: $image
+        imageText: $imageText
         categories: $categories
         description: $description
         hot: $hot
@@ -152,10 +146,8 @@ export const AddCase = gql`
 export const UpdateCase = gql`
   mutation UpdateCase(
     $id: String
-    $beforeImage: String
-    $beforeImageText: String
-    $afterImage: String
-    $afterImageText: String
+    $image: String
+    $imageText: String
     $categories: [String]
     $description: String
     $hot: Boolean!
@@ -164,10 +156,8 @@ export const UpdateCase = gql`
     updateCase(
       input: {
         id: $id
-        beforeImage: $beforeImage
-        beforeImageText: $beforeImageText
-        afterImage: $afterImage
-        afterImageText: $afterImageText
+        image: $image
+        imageText: $imageText
         categories: $categories
         description: $description
         hot: $hot

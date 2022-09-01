@@ -9,10 +9,8 @@ export type CasesFragment = {
     __typename: "ClinicCase"
     id: string | null
     title: string | null
-    beforeImage: string | null
-    afterImage: string | null
-    beforeImageText: string | null
-    afterImageText: string | null
+    image: string | null
+    imageText: string | null
     description: string | null
     categories: Array<{
       __typename: "Category"
@@ -92,10 +90,8 @@ export type GetClinicDetailQuery = {
       __typename: "ClinicCase"
       id: string | null
       title: string | null
-      beforeImage: string | null
-      afterImage: string | null
-      beforeImageText: string | null
-      afterImageText: string | null
+      image: string | null
+      imageText: string | null
       description: string | null
       categories: Array<{
         __typename: "Category"
@@ -153,10 +149,8 @@ export type UpdateClinicMutation = {
 
 export type AddCaseMutationVariables = Types.Exact<{
   clinicId: Types.InputMaybe<Types.Scalars["String"]>
-  beforeImage: Types.InputMaybe<Types.Scalars["String"]>
-  beforeImageText: Types.InputMaybe<Types.Scalars["String"]>
-  afterImage: Types.InputMaybe<Types.Scalars["String"]>
-  afterImageText: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
+  imageText: Types.InputMaybe<Types.Scalars["String"]>
   categories: Types.InputMaybe<
     Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
   >
@@ -171,10 +165,8 @@ export type AddCaseMutation = {
 
 export type UpdateCaseMutationVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
-  beforeImage: Types.InputMaybe<Types.Scalars["String"]>
-  beforeImageText: Types.InputMaybe<Types.Scalars["String"]>
-  afterImage: Types.InputMaybe<Types.Scalars["String"]>
-  afterImageText: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
+  imageText: Types.InputMaybe<Types.Scalars["String"]>
   categories: Types.InputMaybe<
     Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
   >
@@ -306,10 +298,8 @@ export const CasesFragmentDoc = gql`
     cases {
       id
       title
-      beforeImage
-      afterImage
-      beforeImageText
-      afterImageText
+      image
+      imageText
       description
       categories {
         id
@@ -508,10 +498,8 @@ export type UpdateClinicMutationOptions = Apollo.BaseMutationOptions<
 export const AddCaseDocument = gql`
   mutation AddCase(
     $clinicId: String
-    $beforeImage: String
-    $beforeImageText: String
-    $afterImage: String
-    $afterImageText: String
+    $image: String
+    $imageText: String
     $categories: [String]
     $description: String
     $hot: Boolean!
@@ -520,10 +508,8 @@ export const AddCaseDocument = gql`
     addCase(
       input: {
         clinicId: $clinicId
-        beforeImage: $beforeImage
-        beforeImageText: $beforeImageText
-        afterImage: $afterImage
-        afterImageText: $afterImageText
+        image: $image
+        imageText: $imageText
         categories: $categories
         description: $description
         hot: $hot
@@ -550,10 +536,8 @@ export type AddCaseMutationFn = Apollo.MutationFunction<AddCaseMutation, AddCase
  * const [addCaseMutation, { data, loading, error }] = useAddCaseMutation({
  *   variables: {
  *      clinicId: // value for 'clinicId'
- *      beforeImage: // value for 'beforeImage'
- *      beforeImageText: // value for 'beforeImageText'
- *      afterImage: // value for 'afterImage'
- *      afterImageText: // value for 'afterImageText'
+ *      image: // value for 'image'
+ *      imageText: // value for 'imageText'
  *      categories: // value for 'categories'
  *      description: // value for 'description'
  *      hot: // value for 'hot'
@@ -576,10 +560,8 @@ export type AddCaseMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateCaseDocument = gql`
   mutation UpdateCase(
     $id: String
-    $beforeImage: String
-    $beforeImageText: String
-    $afterImage: String
-    $afterImageText: String
+    $image: String
+    $imageText: String
     $categories: [String]
     $description: String
     $hot: Boolean!
@@ -588,10 +570,8 @@ export const UpdateCaseDocument = gql`
     updateCase(
       input: {
         id: $id
-        beforeImage: $beforeImage
-        beforeImageText: $beforeImageText
-        afterImage: $afterImage
-        afterImageText: $afterImageText
+        image: $image
+        imageText: $imageText
         categories: $categories
         description: $description
         hot: $hot
@@ -621,10 +601,8 @@ export type UpdateCaseMutationFn = Apollo.MutationFunction<
  * const [updateCaseMutation, { data, loading, error }] = useUpdateCaseMutation({
  *   variables: {
  *      id: // value for 'id'
- *      beforeImage: // value for 'beforeImage'
- *      beforeImageText: // value for 'beforeImageText'
- *      afterImage: // value for 'afterImage'
- *      afterImageText: // value for 'afterImageText'
+ *      image: // value for 'image'
+ *      imageText: // value for 'imageText'
  *      categories: // value for 'categories'
  *      description: // value for 'description'
  *      hot: // value for 'hot'

@@ -28,10 +28,8 @@ type AddInputs = {
   categories: string[]
   description: string
   imageList: FileType[]
-  beforeImage: string
-  beforeImageText: string
-  afterImage: string
-  afterImageText: string
+  image: string
+  imageText: string
 }
 
 type EditInputs = {
@@ -40,10 +38,8 @@ type EditInputs = {
   categories: string[]
   description: string
   imageList: FileType[]
-  beforeImage: string
-  beforeImageText: string
-  afterImage: string
-  afterImageText: string
+  image: string
+  imageText: string
 }
 
 const CaseCard = ({ data }: CaseCardProps) => {
@@ -68,41 +64,25 @@ const CaseCard = ({ data }: CaseCardProps) => {
       category: item?.categories?.reduce((acc, current) => acc + " / " + current?.name, ""),
       categories: item?.categories?.map(item => item?.id),
       description: item?.description,
-      beforeImageText: item?.beforeImageText,
-      afterImageText: item?.afterImageText,
+      imageText: item?.imageText,
       imageList: [
         {
-          name: "before",
+          name: "image",
           fileKey: 1,
-          url: item?.beforeImage,
-        },
-        {
-          name: "after",
-          fileKey: 2,
-          url: item?.afterImage,
+          url: item?.image,
         },
       ],
     }))
   }, [data])
 
   const handleAdd = async () => {
-    const {
-      categories,
-      description,
-      title,
-      beforeImage,
-      beforeImageText,
-      afterImage,
-      afterImageText,
-    } = addMethods.getValues()
+    const { categories, description, title, image, imageText } = addMethods.getValues()
 
     const response = await addCaseMutation({
       variables: {
         clinicId: match?.params.id || "",
-        beforeImage,
-        beforeImageText,
-        afterImage,
-        afterImageText,
+        image,
+        imageText,
         categories,
         description,
         hot: false,
@@ -136,8 +116,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
         categories: [],
         description: "",
         title: "",
-        beforeImageText: "",
-        afterImageText: "",
+        imageText: "",
       })
     }
 
@@ -145,24 +124,13 @@ const CaseCard = ({ data }: CaseCardProps) => {
   }
 
   const handleUpdate = () => {
-    const {
-      id,
-      categories,
-      description,
-      title,
-      beforeImage,
-      beforeImageText,
-      afterImage,
-      afterImageText,
-    } = editMethods.getValues()
+    const { id, categories, description, title, image, imageText } = editMethods.getValues()
 
     updateCaseMutation({
       variables: {
         id,
-        beforeImage: beforeImage || editMethods.getValues().imageList?.[0].url || "",
-        beforeImageText,
-        afterImage: afterImage || editMethods.getValues().imageList?.[1].url || "",
-        afterImageText,
+        image: image || editMethods.getValues().imageList?.[0].url || "",
+        imageText,
         categories,
         description,
         hot: false,
@@ -222,8 +190,7 @@ const CaseCard = ({ data }: CaseCardProps) => {
                             categories: rowData.categories,
                             description: rowData.description,
                             imageList: rowData.imageList,
-                            beforeImageText: rowData.beforeImageText,
-                            afterImageText: rowData.afterImageText,
+                            imageText: rowData.imageText,
                           })
                         }}>
                         {" "}
@@ -254,26 +221,13 @@ const CaseCard = ({ data }: CaseCardProps) => {
                       <ImageUploader
                         listType="picture"
                         onChange={urlList => {
-                          addMethods.setValue("beforeImage", urlList[0])
+                          addMethods.setValue("image", urlList[0])
                         }}
                       />
                       <Form.Input
                         type="text"
                         placeholder="術前描述"
-                        {...addMethods.register("beforeImageText")}
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <ImageUploader
-                        listType="picture"
-                        onChange={urlList => {
-                          addMethods.setValue("afterImage", urlList[0])
-                        }}
-                      />
-                      <Form.Input
-                        type="text"
-                        placeholder="術後描述"
-                        {...addMethods.register("afterImageText")}
+                        {...addMethods.register("imageText")}
                       />
                     </div>
                   </div>
@@ -323,27 +277,13 @@ const CaseCard = ({ data }: CaseCardProps) => {
                       listType="picture"
                       defaultFileList={[editMethods.getValues().imageList?.[0]]}
                       onChange={urlList => {
-                        editMethods.setValue("beforeImage", urlList[0])
+                        editMethods.setValue("image", urlList[0])
                       }}
                     />
                     <Form.Input
                       type="text"
                       placeholder="術前描述"
-                      {...editMethods.register("beforeImageText")}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <ImageUploader
-                      listType="picture"
-                      defaultFileList={[editMethods.getValues().imageList?.[1]]}
-                      onChange={urlList => {
-                        editMethods.setValue("afterImage", urlList[0])
-                      }}
-                    />
-                    <Form.Input
-                      type="text"
-                      placeholder="術後描述"
-                      {...editMethods.register("afterImageText")}
+                      {...editMethods.register("imageText")}
                     />
                   </div>
                 </div>
