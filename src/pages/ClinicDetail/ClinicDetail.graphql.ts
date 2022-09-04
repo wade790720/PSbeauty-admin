@@ -318,8 +318,8 @@ export const DeleteActivity = gql`
 `
 
 export const UpdateClinicPayment = gql`
-  mutation UpdateClinicPayment($id: String, $paySets: Int!) {
-    updateClinicPayment(input: { id: $id, paySets: $paySets }) {
+  mutation UpdateClinicPayment($id: String, $paySets: Int!, $paid: Boolean) {
+    updateClinicPayment(input: { id: $id, paySets: $paySets, paid: $paid }) {
       id
     }
   }

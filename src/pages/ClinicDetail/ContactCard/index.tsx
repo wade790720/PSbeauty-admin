@@ -22,6 +22,7 @@ type Inputs = {
   contactPhone: string
   contactEmail: string
   paySets: number
+  paid: string
 }
 
 const ContactCard = ({ data }: ContactCardProps) => {
@@ -32,6 +33,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
       contactPhone: data?.contactPhone || "",
       contactEmail: data?.contactEmail || "",
       paySets: data?.paySets || 0,
+      paid: data?.paid || false,
     }
   }, [data])
 
@@ -42,6 +44,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
       contactPhone: clinic.contactPhone,
       contactEmail: clinic.contactEmail,
       paySets: clinic.paySets,
+      paid: clinic.paid ? "true" : "false",
     },
   })
 
@@ -52,7 +55,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
   })
 
   const handleSave = async () => {
-    const { contactName, contactEmail, contactPhone, paySets } = getValues()
+    const { contactName, contactEmail, contactPhone, paySets, paid } = getValues()
     const responseContact = await updateClinicContactMutation({
       variables: {
         id: data?.id || "",
@@ -61,11 +64,13 @@ const ContactCard = ({ data }: ContactCardProps) => {
         contactPhone,
       },
     })
+    console.log(paySets)
 
     const responsePayment = await updateClinicPaymentMutation({
       variables: {
         id: data?.id || "",
-        paySets: +paySets,
+        paySets: +paySets || clinic.paySets,
+        paid: paid === "true" ? true : false,
       },
     })
     const responseOwner = await updateClinicOwnerMutation({
@@ -180,6 +185,15 @@ const ContactCard = ({ data }: ContactCardProps) => {
           <Form.Group layout="vertical">
             <Form.Label>付費組數</Form.Label>
             <Form.Input type="number" {...register("paySets")} />
+          </Form.Group>
+          <Form.Group layout="vertical">
+            <Form.Label>付款狀態</Form.Label>
+            <Form.Radio {...register("paid")} value={"true"} inline>
+              是
+            </Form.Radio>
+            <Form.Radio {...register("paid")} value={"false"} inline>
+              否
+            </Form.Radio>
           </Form.Group>
           <div className="flex justify-end">
             <Button style={{ marginRight: "10px" }} onClick={handleSubmit(handleSave)}>

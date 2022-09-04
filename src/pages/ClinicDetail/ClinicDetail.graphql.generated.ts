@@ -287,6 +287,7 @@ export type DeleteActivityMutation = {
 export type UpdateClinicPaymentMutationVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
   paySets: Types.Scalars["Int"]
+  paid: Types.InputMaybe<Types.Scalars["Boolean"]>
 }>
 
 export type UpdateClinicPaymentMutation = {
@@ -1173,8 +1174,8 @@ export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<
   DeleteActivityMutationVariables
 >
 export const UpdateClinicPaymentDocument = gql`
-  mutation UpdateClinicPayment($id: String, $paySets: Int!) {
-    updateClinicPayment(input: { id: $id, paySets: $paySets }) {
+  mutation UpdateClinicPayment($id: String, $paySets: Int!, $paid: Boolean) {
+    updateClinicPayment(input: { id: $id, paySets: $paySets, paid: $paid }) {
       id
     }
   }
@@ -1199,6 +1200,7 @@ export type UpdateClinicPaymentMutationFn = Apollo.MutationFunction<
  *   variables: {
  *      id: // value for 'id'
  *      paySets: // value for 'paySets'
+ *      paid: // value for 'paid'
  *   },
  * });
  */
