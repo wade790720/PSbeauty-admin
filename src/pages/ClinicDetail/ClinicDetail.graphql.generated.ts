@@ -258,7 +258,9 @@ export type UpdateClinicContactMutation = {
 
 export type UpdateClinicOwnerMutationVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
-  ownerEmail: Types.InputMaybe<Types.Scalars["String"]>
+  ownerEmail: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
 }>
 
 export type UpdateClinicOwnerMutation = {
@@ -1033,7 +1035,7 @@ export type UpdateClinicContactMutationOptions = Apollo.BaseMutationOptions<
   UpdateClinicContactMutationVariables
 >
 export const UpdateClinicOwnerDocument = gql`
-  mutation UpdateClinicOwner($id: String, $ownerEmail: String) {
+  mutation UpdateClinicOwner($id: String, $ownerEmail: [String]) {
     updateClinicOwner(input: { id: $id, ownerEmail: $ownerEmail }) {
       id
     }

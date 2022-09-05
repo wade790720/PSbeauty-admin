@@ -76,7 +76,7 @@ const ContactCard = ({ data }: ContactCardProps) => {
     const responseOwner = await updateClinicOwnerMutation({
       variables: {
         id: data?.id || "",
-        ownerEmail: contactEmail,
+        ownerEmail: [contactEmail],
       },
     })
 

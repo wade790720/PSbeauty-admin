@@ -292,7 +292,7 @@ export const UpdateClinicContact = gql`
 `
 
 export const UpdateClinicOwner = gql`
-  mutation UpdateClinicOwner($id: String, $ownerEmail: String) {
+  mutation UpdateClinicOwner($id: String, $ownerEmail: [String]) {
     updateClinicOwner(input: { id: $id, ownerEmail: $ownerEmail }) {
       id
     }
