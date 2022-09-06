@@ -45,9 +45,14 @@ export const refreshToken = async () => {
     const payload: { exp: number; iat: number } = jwt_decode(customToken)
     const expiredTime = new Date(payload.exp * 1000)
     const renewTime = new Date((payload.iat + ((payload.exp - payload.iat) * 5) / 10) * 1000)
-    if (expiredTime > new Date() && renewTime <= new Date()) {
+    if (new Date() >= expiredTime) {
+      // token expired (do nothing)
+    } else if (new Date() >= renewTime) {
       try {
-        const res = await apolloClient.query({ query: GetRefreshTokenDocument })
+        const res = await apolloClient.query({
+          query: GetRefreshTokenDocument,
+          fetchPolicy: "no-cache",
+        })
         const newCustomToken = res.data.refreshToken?.customToken
         if (newCustomToken) {
           setStorageValue("token", newCustomToken)
@@ -61,6 +66,6 @@ export const refreshToken = async () => {
 refreshToken()
 setInterval(() => {
   refreshToken()
-}, 60 * 1000) // every 60 seconds check again
+}, 10 * 1000) // every 10 seconds check again
 
 export default apolloClient
