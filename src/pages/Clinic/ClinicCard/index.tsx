@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
 import { useGo } from "components/Router"
-import { Table } from "rsuite"
+import { Table, SelectPicker } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import {
   GetClinicQuery,
@@ -12,7 +12,8 @@ import Modal from "components/Modal"
 import Form from "components/Form"
 import Editor from "components/Editor"
 import CosmeticMultiCascader from "components/CosmeticMultiCascader"
-import { useForm, FormProvider } from "react-hook-form"
+import { useForm, FormProvider, Controller } from "react-hook-form"
+import districts from "../../ClinicDetail/InfoCard/districts.json"
 
 type ClinicCardProps = {
   data: GetClinicQuery["clinics"]
@@ -57,6 +58,15 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
   const methods = useForm<Inputs>({ mode: "onTouched" })
   const [addClinicMutation] = useAddClinicMutation({ refetchQueries: ["GetClinic"] })
   const [deleteClinicMutation] = useDeleteClinicMutation({ refetchQueries: ["GetClinic"] })
+
+  const county = districts.map(item => ({ label: item.name, value: item.name }))
+  const district = useMemo(() => {
+    return (
+      districts
+        .find(item => item.name === methods.watch().county)
+        ?.districts.map(item => ({ label: item.name, value: item.name })) || []
+    )
+  }, [methods.watch().county])
 
   const handleCreate = () => {
     const { name, county, town, address, web, phone, description, categories } = methods.getValues()
@@ -167,20 +177,35 @@ const ClinicCard = ({ data }: ClinicCardProps) => {
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label>完整地址</Form.Label>
-                <div className="inline-flex w-full">
-                  <Form.Input
-                    type="text"
-                    placeholder="縣市"
-                    className="mr-4"
-                    style={{ flex: "1 1 300px" }}
-                    {...methods.register("county")}
-                  />
-                  <Form.Input
-                    type="text"
+                <div className="inline-flex w-full gap-1">
+                  {
+                    <Controller
+                      name="county"
+                      control={methods.control}
+                      render={({ field: { value, onChange } }) => {
+                        return (
+                          <SelectPicker
+                            data={county}
+                            searchable={false}
+                            style={{ width: 224 }}
+                            placeholder="縣市"
+                            onChange={onChange}
+                            defaultValue={value}
+                          />
+                        )
+                      }}
+                    />
+                  }
+
+                  <SelectPicker
+                    data={district}
+                    defaultValue={methods.getValues().town}
+                    searchable={false}
+                    style={{ width: 224 }}
                     placeholder="地區"
-                    className="mr-4"
-                    style={{ flex: "1 1 300px" }}
-                    {...methods.register("town")}
+                    onChange={value => {
+                      methods.setValue("town", value)
+                    }}
                   />
                   <Form.Input type="text" placeholder="地址" {...methods.register("address")} />
                 </div>
