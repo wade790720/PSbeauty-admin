@@ -48,17 +48,17 @@
   }
 
   &.primary {
-    color: #696cff;
+    color: #18a0cb;
 
 @extend %disabled;
 
     &:not([disabled]) {
       &:hover {
-        color: #787bff;
+        color: #4bc3e9;
       }
 
       &:active {
-        color: #787bff;
+        color: #4bc3e9;
       }
     }
   }

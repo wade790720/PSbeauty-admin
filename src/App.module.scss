@@ -8,15 +8,15 @@
   --toastify-icon-color-error: var(--toastify-color-error);
   --toastify-color-progress-success: var(--toastify-color-success);
   --toastify-color-progress-error: var(--toastify-color-error);
-  --rs-toggle-checked-bg: #696cff;
-  --rs-input-focus-border: #696cff;
-  --rs-listbox-option-hover-bg: #696cff29;
-  --rs-checkbox-checked-bg: #696cff;
-  --rs-picker-count-bg: #696cff;
-  --rs-picker-value: #696cff;
+  --rs-toggle-checked-bg: #18a0cb;
+  --rs-input-focus-border: #18a0cb;
+  --rs-listbox-option-hover-bg: #91d7ec29;
+  --rs-checkbox-checked-bg: #18a0cb;
+  --rs-picker-count-bg: #18a0cb;
+  --rs-picker-value: #18a0cb;
   --rs-state-focus-shadow: 0;
-  --rs-listbox-option-hover-text: #696cff;
-  --rs-state-hover-bg: #d4d5ff29;
+  --rs-listbox-option-hover-text: #18a0cb;
+  --rs-state-hover-bg: #91d7ec29;
 }
 
 :global {
@@ -75,7 +75,7 @@
     }
 
     .rs-picker-default:not(.rs-picker-disabled) .rs-btn:hover {
-      border-color: #2d62c4;
+      border-color: #18a0cb;
     }
 
     .rs-uploader-file-item-size {

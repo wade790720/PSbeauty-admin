@@ -30,6 +30,14 @@ export const AddAdCard = gql`
   }
 `
 
+export const UpdateAdCard = gql`
+  mutation UpdateAdCard($id: String, $image: String, $title: String, $content: String) {
+    updateAdCard(input: { id: $id, image: $image, title: $title, content: $content }) {
+      id
+    }
+  }
+`
+
 export const DeleteAdCard = gql`
   mutation DeleteAdCard($id: String) {
     deleteAdCard(input: { id: $id }) {
