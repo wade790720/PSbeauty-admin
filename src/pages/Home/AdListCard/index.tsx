@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react"
+import { useState, useMemo } from "react"
 import { Table } from "rsuite"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
@@ -9,6 +9,7 @@ import ImageUploader from "components/ImageUploader"
 import {
   GetHomeQuery,
   useAddAdCardMutation,
+  useUpdateAdCardMutation,
   useDeleteAdCardMutation,
 } from "../Home.graphql.generated"
 import { useForm, FormProvider } from "react-hook-form"
@@ -25,7 +26,14 @@ type Card = {
   content: string
 }
 
-type Inputs = {
+type AddInputs = {
+  title: string
+  image: string
+  content: string
+}
+
+type EditInputs = {
+  id: string
   title: string
   image: string
   content: string
@@ -34,11 +42,10 @@ type Inputs = {
 const AdListCard = ({ data }: AdListCardProps) => {
   const { Column, HeaderCell, Cell } = Table
 
-  const methods = useForm<Inputs>({ mode: "onTouched" })
+  const methods = useForm<AddInputs>({ mode: "onTouched" })
+  const editMethods = useForm<EditInputs>({ mode: "onTouched" })
   const [open, setOpen] = useState(false)
   const [reviewOpen, setReviewOpen] = useState(false)
-
-  const reviewCard = useRef<Card>()
 
   const adCardsList = useMemo(() => {
     if (!data?.edges) return []
@@ -53,6 +60,7 @@ const AdListCard = ({ data }: AdListCardProps) => {
   }, [data])
 
   const [addAdCardMutation] = useAddAdCardMutation({ refetchQueries: ["GetHome"] })
+  const [updateAdCardMutation] = useUpdateAdCardMutation({ refetchQueries: ["GetHome"] })
   const [deleteAdCardMutation] = useDeleteAdCardMutation({ refetchQueries: ["GetHome"] })
 
   const handleCreate = async () => {
@@ -65,6 +73,20 @@ const AdListCard = ({ data }: AdListCardProps) => {
       },
     })
     methods.reset({ title: "", content: "" })
+  }
+
+  const handleUpdate = () => {
+    const { id, title, content, image } = editMethods.getValues()
+
+    updateAdCardMutation({
+      variables: {
+        id,
+        image,
+        content,
+        title,
+      },
+    })
+    setReviewOpen(false)
   }
 
   const handleDelete = (id: string) => {
@@ -110,15 +132,14 @@ const AdListCard = ({ data }: AdListCardProps) => {
                     <LinkButton
                       onClick={() => {
                         setReviewOpen(true)
-                        reviewCard.current = {
-                          index: rowData.index,
+                        editMethods.reset({
                           id: rowData.id,
                           title: rowData.title,
                           content: rowData.content,
                           image: rowData.image,
-                        }
+                        })
                       }}>
-                      檢視
+                      編輯
                     </LinkButton>{" "}
                     | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                   </span>
@@ -191,30 +212,38 @@ const AdListCard = ({ data }: AdListCardProps) => {
             <Modal.Title>廣告卡資訊</Modal.Title>
           </Modal.Header>
           <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
-            <Form>
-              <Form.Group layout="vertical">
-                <Form.Label>預覽圖 (800px x 800px)</Form.Label>
-                <img
-                  src={reviewCard.current?.image}
-                  alt="preview"
-                  style={{ width: "390px", border: "1px solid #e4e6ef" }}
-                />
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>標題</Form.Label>
-                <p>{reviewCard.current?.title}</p>
-              </Form.Group>
-              <Form.Group layout="vertical">
-                <Form.Label>內容</Form.Label>
-                <div dangerouslySetInnerHTML={{ __html: reviewCard.current?.content || "" }} />
-              </Form.Group>
-            </Form>
+            <FormProvider {...editMethods}>
+              <Form>
+                <Form.Group layout="vertical">
+                  <Form.Label>預覽圖 (800px x 800px)</Form.Label>
+                  <img
+                    src={editMethods.getValues().image}
+                    alt="preview"
+                    style={{ width: "390px", border: "1px solid #e4e6ef" }}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>標題</Form.Label>
+                  <Form.Input
+                    placeholder="請輸入輪播標題"
+                    {...editMethods.register("title", {
+                      required: "此欄位為必填",
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label>內容</Form.Label>
+                  <Editor name="content" height={400} />
+                </Form.Group>
+              </Form>
+            </FormProvider>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setReviewOpen(false)}>
               取消
             </Button>
-            <Button onClick={() => setReviewOpen(false)}>確定</Button>
+            <Button onClick={handleUpdate}>儲存</Button>
           </Modal.Footer>
         </Modal>
       </Card.Body>

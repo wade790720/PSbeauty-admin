@@ -42,6 +42,17 @@ export type AddAdCardMutation = {
   addAdCard: { __typename: "AddAdCardPayload"; id: string | null } | null
 }
 
+export type UpdateAdCardMutationVariables = Types.Exact<{
+  id: Types.InputMaybe<Types.Scalars["String"]>
+  image: Types.InputMaybe<Types.Scalars["String"]>
+  title: Types.InputMaybe<Types.Scalars["String"]>
+  content: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type UpdateAdCardMutation = {
+  updateAdCard: { __typename: "UpdateAdCardPayload"; id: string | null } | null
+}
+
 export type DeleteAdCardMutationVariables = Types.Exact<{
   id: Types.InputMaybe<Types.Scalars["String"]>
 }>
@@ -149,6 +160,53 @@ export type AddAdCardMutationResult = Apollo.MutationResult<AddAdCardMutation>
 export type AddAdCardMutationOptions = Apollo.BaseMutationOptions<
   AddAdCardMutation,
   AddAdCardMutationVariables
+>
+export const UpdateAdCardDocument = gql`
+  mutation UpdateAdCard($id: String, $image: String, $title: String, $content: String) {
+    updateAdCard(input: { id: $id, image: $image, title: $title, content: $content }) {
+      id
+    }
+  }
+`
+export type UpdateAdCardMutationFn = Apollo.MutationFunction<
+  UpdateAdCardMutation,
+  UpdateAdCardMutationVariables
+>
+
+/**
+ * __useUpdateAdCardMutation__
+ *
+ * To run a mutation, you first call `useUpdateAdCardMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAdCardMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAdCardMutation, { data, loading, error }] = useUpdateAdCardMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      image: // value for 'image'
+ *      title: // value for 'title'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useUpdateAdCardMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAdCardMutation, UpdateAdCardMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateAdCardMutation, UpdateAdCardMutationVariables>(
+    UpdateAdCardDocument,
+    options,
+  )
+}
+export type UpdateAdCardMutationHookResult = ReturnType<typeof useUpdateAdCardMutation>
+export type UpdateAdCardMutationResult = Apollo.MutationResult<UpdateAdCardMutation>
+export type UpdateAdCardMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAdCardMutation,
+  UpdateAdCardMutationVariables
 >
 export const DeleteAdCardDocument = gql`
   mutation DeleteAdCard($id: String) {
