@@ -1,5 +1,4 @@
 import styled from "./Login.module.scss"
-import { ReactComponent as Logo } from "./images/logo.svg"
 import Form, { InputGroup, Append } from "components/Form"
 import Button from "components/Button"
 import { auth } from "../../firebase"
@@ -12,6 +11,7 @@ import { gql } from "@apollo/client"
 import { print } from "graphql"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
+import logo from "./images/logo.png"
 
 const CUSTOM_TOKEN = gql`
   query {
@@ -67,14 +67,13 @@ export default function Login() {
         <div className={styled.card}>
           <div className={styled.inner}>
             <div className={styled.header}>
-              <Logo />
-              <span>PSbeauty</span>
+              <img src={logo} alt="logo" width={100} height={100} />
             </div>
-            <div className={styled.hello}>歡迎來到後臺管理系統! 👋</div>
-            <div className={styled.tip}>請登錄您的帳戶並開始冒險</div>
+            <div className={styled.hello}>歡迎來到 P/S.MAKER 後臺登入頁</div>
+            <div className={styled.tip}>請登錄您的帳戶</div>
             <Form>
               <div className={styled.account}>
-                <div className={styled.label}>信箱</div>
+                <div className={styled.label}>註冊的郵箱</div>
                 <InputGroup className={styled["enter-input"]}>
                   <Form.Input
                     placeholder="請輸入你的信箱"

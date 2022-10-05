@@ -1,17 +1,14 @@
 import styled from "./SideBar.module.scss"
 import ActiveLink from "./ActiveLink"
 import { auth } from "../../firebase"
-import { ReactComponent as Logo } from "./logo.svg"
+import logo from "./logo.png"
 import { LayoutDashboard, BuildingHospital, Settings, Logout } from "tabler-icons-react"
 
 export default function SideBar() {
   return (
     <div className={styled.wrapper}>
       <div className={styled.brand}>
-        <span>
-          <Logo />
-        </span>
-        <span>admin</span>
+        <img src={logo} alt="logo" width={60} height={60} />
       </div>
       <div className={styled.menu}>
         <ul className={styled.outer}>

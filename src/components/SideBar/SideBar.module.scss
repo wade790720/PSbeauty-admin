@@ -13,7 +13,7 @@
   .brand {
     display: flex;
     align-items: center;
-    margin-top: 12px;
+    margin: 2rem 0;
     padding-right: 2rem;
     padding-left: 2rem;
     width: 100%;
@@ -41,9 +41,6 @@
 
       .item {
         position: relative;
-
-        // margin-top: 0.0625rem;
-        // list-style: none;
 
         a {
           position: relative;

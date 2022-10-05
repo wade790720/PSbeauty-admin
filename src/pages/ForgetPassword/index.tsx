@@ -1,5 +1,5 @@
 import styled from "./ForgetPassword.module.scss"
-import { ReactComponent as Logo } from "./images/logo.svg"
+import logo from "./images/logo.png"
 import Form, { InputGroup } from "components/Form"
 import Button from "components/Button"
 import { auth } from "../../firebase"
@@ -29,8 +29,7 @@ export default function ForgetPassword() {
         <div className={styled.card}>
           <div className={styled.inner}>
             <div className={styled.header}>
-              <Logo />
-              <span>PSbeauty</span>
+              <img src={logo} alt="logo" width={100} height={100} />
             </div>
             <div className={styled.hello}>尋找您的電子郵件</div>
             <div className={styled.tip}>輸入您的電子郵件地址</div>
