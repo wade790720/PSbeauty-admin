@@ -29,14 +29,17 @@ export type GetCategoriesQuery = {
     __typename: "TopCategory"
     id: string | null
     name: string | null
+    sort: number
     secondCategories: Array<{
       __typename: "SecondCategory"
       id: string | null
       name: string | null
+      sort: number
       categories: Array<{
         __typename: "Category"
         id: string | null
         name: string | null
+        sort: number
       } | null> | null
     } | null> | null
   } | null> | null
@@ -117,6 +120,62 @@ export type DeleteCategoryMutation = {
   deleteCategory: { __typename: "DeleteCategoryPayload"; id: string | null } | null
 }
 
+export type SetTopCategoryOrderMutationVariables = Types.Exact<{
+  sorted: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+}>
+
+export type SetTopCategoryOrderMutation = {
+  setTopCategoryOrder: {
+    __typename: "SetTopCategoryOrderPayload"
+    topCategories: Array<{
+      __typename: "TopCategory"
+      id: string | null
+      name: string | null
+      sort: number
+    } | null> | null
+  } | null
+}
+
+export type SetSecondCategoryOrderMutationVariables = Types.Exact<{
+  sorted: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+  topCategoryId: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type SetSecondCategoryOrderMutation = {
+  setSecondCategoryOrder: {
+    __typename: "SetSecondCategoryOrderPayload"
+    secondCategories: Array<{
+      __typename: "SecondCategory"
+      id: string | null
+      name: string | null
+      sort: number
+    } | null> | null
+  } | null
+}
+
+export type SetCategoryOrderMutationVariables = Types.Exact<{
+  sorted: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+  secondCategoryId: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type SetCategoryOrderMutation = {
+  setCategoryOrder: {
+    __typename: "SetCategoryOrderPayload"
+    categories: Array<{
+      __typename: "Category"
+      id: string | null
+      name: string | null
+      sort: number
+    } | null> | null
+  } | null
+}
+
 export const GetSettingDocument = gql`
   query GetSetting {
     popularKeywords {
@@ -170,12 +229,15 @@ export const GetCategoriesDocument = gql`
     topCategories {
       id
       name
+      sort
       secondCategories {
         id
         name
+        sort
         categories {
           id
           name
+          sort
         }
       }
     }
@@ -632,4 +694,164 @@ export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryM
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<
   DeleteCategoryMutation,
   DeleteCategoryMutationVariables
+>
+export const SetTopCategoryOrderDocument = gql`
+  mutation SetTopCategoryOrder($sorted: [String]) {
+    setTopCategoryOrder(input: { sorted: $sorted }) {
+      topCategories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+export type SetTopCategoryOrderMutationFn = Apollo.MutationFunction<
+  SetTopCategoryOrderMutation,
+  SetTopCategoryOrderMutationVariables
+>
+
+/**
+ * __useSetTopCategoryOrderMutation__
+ *
+ * To run a mutation, you first call `useSetTopCategoryOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetTopCategoryOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setTopCategoryOrderMutation, { data, loading, error }] = useSetTopCategoryOrderMutation({
+ *   variables: {
+ *      sorted: // value for 'sorted'
+ *   },
+ * });
+ */
+export function useSetTopCategoryOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetTopCategoryOrderMutation,
+    SetTopCategoryOrderMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<SetTopCategoryOrderMutation, SetTopCategoryOrderMutationVariables>(
+    SetTopCategoryOrderDocument,
+    options,
+  )
+}
+export type SetTopCategoryOrderMutationHookResult = ReturnType<
+  typeof useSetTopCategoryOrderMutation
+>
+export type SetTopCategoryOrderMutationResult = Apollo.MutationResult<SetTopCategoryOrderMutation>
+export type SetTopCategoryOrderMutationOptions = Apollo.BaseMutationOptions<
+  SetTopCategoryOrderMutation,
+  SetTopCategoryOrderMutationVariables
+>
+export const SetSecondCategoryOrderDocument = gql`
+  mutation SetSecondCategoryOrder($sorted: [String], $topCategoryId: String) {
+    setSecondCategoryOrder(input: { sorted: $sorted, topCategoryId: $topCategoryId }) {
+      secondCategories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+export type SetSecondCategoryOrderMutationFn = Apollo.MutationFunction<
+  SetSecondCategoryOrderMutation,
+  SetSecondCategoryOrderMutationVariables
+>
+
+/**
+ * __useSetSecondCategoryOrderMutation__
+ *
+ * To run a mutation, you first call `useSetSecondCategoryOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetSecondCategoryOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setSecondCategoryOrderMutation, { data, loading, error }] = useSetSecondCategoryOrderMutation({
+ *   variables: {
+ *      sorted: // value for 'sorted'
+ *      topCategoryId: // value for 'topCategoryId'
+ *   },
+ * });
+ */
+export function useSetSecondCategoryOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetSecondCategoryOrderMutation,
+    SetSecondCategoryOrderMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    SetSecondCategoryOrderMutation,
+    SetSecondCategoryOrderMutationVariables
+  >(SetSecondCategoryOrderDocument, options)
+}
+export type SetSecondCategoryOrderMutationHookResult = ReturnType<
+  typeof useSetSecondCategoryOrderMutation
+>
+export type SetSecondCategoryOrderMutationResult =
+  Apollo.MutationResult<SetSecondCategoryOrderMutation>
+export type SetSecondCategoryOrderMutationOptions = Apollo.BaseMutationOptions<
+  SetSecondCategoryOrderMutation,
+  SetSecondCategoryOrderMutationVariables
+>
+export const SetCategoryOrderDocument = gql`
+  mutation SetCategoryOrder($sorted: [String], $secondCategoryId: String) {
+    setCategoryOrder(input: { sorted: $sorted, secondCategoryId: $secondCategoryId }) {
+      categories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+export type SetCategoryOrderMutationFn = Apollo.MutationFunction<
+  SetCategoryOrderMutation,
+  SetCategoryOrderMutationVariables
+>
+
+/**
+ * __useSetCategoryOrderMutation__
+ *
+ * To run a mutation, you first call `useSetCategoryOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCategoryOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCategoryOrderMutation, { data, loading, error }] = useSetCategoryOrderMutation({
+ *   variables: {
+ *      sorted: // value for 'sorted'
+ *      secondCategoryId: // value for 'secondCategoryId'
+ *   },
+ * });
+ */
+export function useSetCategoryOrderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetCategoryOrderMutation,
+    SetCategoryOrderMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<SetCategoryOrderMutation, SetCategoryOrderMutationVariables>(
+    SetCategoryOrderDocument,
+    options,
+  )
+}
+export type SetCategoryOrderMutationHookResult = ReturnType<typeof useSetCategoryOrderMutation>
+export type SetCategoryOrderMutationResult = Apollo.MutationResult<SetCategoryOrderMutation>
+export type SetCategoryOrderMutationOptions = Apollo.BaseMutationOptions<
+  SetCategoryOrderMutation,
+  SetCategoryOrderMutationVariables
 >
