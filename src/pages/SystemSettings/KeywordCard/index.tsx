@@ -1,15 +1,17 @@
-import { useMemo, useState } from "react"
-import Button, { LinkButton } from "components/Button"
+import { useState, useEffect } from "react"
+import Button from "components/Button"
 import Card from "components/Card"
 import Modal from "components/Modal"
 import Form from "components/Form"
-import { Table } from "rsuite"
 import { useForm } from "react-hook-form"
 import {
   GetSettingQuery,
   useAddKeywordMutation,
   useDeleteKeywordMutation,
+  useSetPopularKeywordsMutation,
 } from "../SystemSettings.graphql.generated"
+import List from "../components/List"
+import { ReactSortable } from "react-sortablejs"
 
 type KeywordCardProps = {
   data: GetSettingQuery["popularKeywords"]
@@ -19,24 +21,22 @@ type Inputs = {
   keyword: string
 }
 
+type Keyword = {
+  id: number
+  name: string | null
+}
+
 const KeywordCard = ({ data }: KeywordCardProps) => {
   const { register, getValues, formState, handleSubmit, reset } = useForm<Inputs>({
     mode: "onTouched",
   })
+
   const [keywordOpen, setKeywordOpen] = useState(false)
-  const { Column, HeaderCell, Cell } = Table
-
-  const keywords = useMemo(() => {
-    if (!data?.keywords) return []
-
-    return data?.keywords?.map((word, index) => ({
-      id: index + 1,
-      name: word,
-    }))
-  }, [data])
+  const [keywordList, setKeywordList] = useState<Keyword[]>([])
 
   const [addKeywordMutation] = useAddKeywordMutation({ refetchQueries: ["GetSetting"] })
   const [deleteKeywordMutation] = useDeleteKeywordMutation({ refetchQueries: ["GetSetting"] })
+  const [setPopularKeywordsMutation] = useSetPopularKeywordsMutation()
 
   const handleAdd = async () => {
     await addKeywordMutation({
@@ -57,6 +57,27 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
       })
   }
 
+  const handleKeywordSort = (newState: Keyword[]) => {
+    if (JSON.stringify(newState) !== JSON.stringify(keywordList)) {
+      setPopularKeywordsMutation({
+        variables: {
+          keywords: newState.map(state => state.name),
+        },
+      })
+      setKeywordList(newState)
+    }
+  }
+
+  useEffect(() => {
+    const words =
+      data?.keywords?.map((word, index) => ({
+        id: index + 1,
+        name: word,
+      })) || []
+
+    setKeywordList(words)
+  }, [data])
+
   return (
     <>
       <Card>
@@ -66,30 +87,24 @@ const KeywordCard = ({ data }: KeywordCardProps) => {
           </Button>
         </Card.Header>
         <Card.Body>
-          <Table height={400} data={keywords}>
-            <Column width={70} align="center" fixed>
-              <HeaderCell>序號</HeaderCell>
-              <Cell dataKey="id" />
-            </Column>
-
-            <Column width={200} flexGrow={1}>
-              <HeaderCell>關鍵詞</HeaderCell>
-              <Cell dataKey="name" />
-            </Column>
-
-            <Column width={120} fixed="right">
-              <HeaderCell>動作</HeaderCell>
-              <Cell>
-                {rowData => {
-                  return (
-                    <>
-                      <LinkButton onClick={() => handleDelete(rowData.name)}> 刪除 </LinkButton>
-                    </>
-                  )
-                }}
-              </Cell>
-            </Column>
-          </Table>
+          <List>
+            <ReactSortable
+              list={keywordList}
+              setList={newState => handleKeywordSort(newState)}
+              animation={200}
+              delay={2}>
+              {keywordList.map(keyword => (
+                <List.Item
+                  key={keyword.id}
+                  value={keyword.name + ""}
+                  onRemove={() => {
+                    handleDelete(keyword.name + "")
+                  }}>
+                  {keyword.name}
+                </List.Item>
+              ))}
+            </ReactSortable>
+          </List>
         </Card.Body>
       </Card>
 

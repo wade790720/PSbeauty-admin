@@ -3,7 +3,7 @@ import { useState, useMemo, useReducer } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
-import List from "./List"
+import List from "../components/List"
 import {
   GetCategoriesQuery,
   useAddTopCategoryMutation,

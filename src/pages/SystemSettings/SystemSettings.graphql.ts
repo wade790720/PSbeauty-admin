@@ -147,3 +147,11 @@ export const SetCategoryOrder = gql`
     }
   }
 `
+
+export const SetPopularKeywords = gql`
+  mutation SetPopularKeywords($keywords: [String]) {
+    setPopularKeywords(input: { keywords: $keywords }) {
+      keywords
+    }
+  }
+`

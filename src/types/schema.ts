@@ -593,6 +593,27 @@ export type BooleanOperationFilterInput = {
 }
 
 /** A connection to a list of items. */
+export type CasesByCategoryConnection = {
+  __typename: "CasesByCategoryConnection"
+  /** A list of edges. */
+  edges: Maybe<Array<CasesByCategoryEdge>>
+  /** A flattened list of the nodes. */
+  nodes: Maybe<Array<Maybe<ClinicCase>>>
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo
+  totalCount: Scalars["Int"]
+}
+
+/** An edge in a connection. */
+export type CasesByCategoryEdge = {
+  __typename: "CasesByCategoryEdge"
+  /** A cursor for use in pagination. */
+  cursor: Scalars["String"]
+  /** The item at the end of the edge. */
+  node: Maybe<ClinicCase>
+}
+
+/** A connection to a list of items. */
 export type CasesConnection = {
   __typename: "CasesConnection"
   /** A list of edges. */
@@ -1308,6 +1329,8 @@ export type CustomTokenPayload = {
   __typename: "CustomTokenPayload"
   /** 客製完成 token 字串 */
   customToken: Maybe<Scalars["String"]>
+  /** RefreshToken */
+  refreshToken: Maybe<Scalars["String"]>
   /** Firebase uid */
   uid: Maybe<Scalars["String"]>
 }
@@ -2040,6 +2063,8 @@ export type Query = {
   caseByClinicId: Maybe<Array<Maybe<ClinicCase>>>
   /** 取得所有病例 */
   cases: Maybe<CasesConnection>
+  /** 依分類取得案例 */
+  casesByCategory: Maybe<CasesByCategoryConnection>
   /** 取得小分類 */
   categories: Maybe<Array<Maybe<Category>>>
   /** 依識別碼取得診所 */
@@ -2163,6 +2188,15 @@ export type QueryCasesArgs = {
   last: InputMaybe<Scalars["Int"]>
   order: InputMaybe<Array<ClinicCaseSortInput>>
   where: InputMaybe<ClinicCaseFilterInput>
+}
+
+export type QueryCasesByCategoryArgs = {
+  after: InputMaybe<Scalars["String"]>
+  before: InputMaybe<Scalars["String"]>
+  categoryId: InputMaybe<Scalars["String"]>
+  first: InputMaybe<Scalars["Int"]>
+  last: InputMaybe<Scalars["Int"]>
+  order: InputMaybe<Array<ClinicCaseSortInput>>
 }
 
 export type QueryClinicArgs = {
@@ -2483,6 +2517,8 @@ export type SignInWithEmailAndPasswordPayload = {
   customToken: Maybe<Scalars["String"]>
   /** Firebase Auth 憑證 */
   firebaseToken: Maybe<Scalars["String"]>
+  /** 更新用憑證 */
+  refreshToken: Maybe<Scalars["String"]>
 }
 
 export enum SortEnumType {

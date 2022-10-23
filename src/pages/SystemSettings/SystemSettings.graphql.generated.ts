@@ -176,6 +176,19 @@ export type SetCategoryOrderMutation = {
   } | null
 }
 
+export type SetPopularKeywordsMutationVariables = Types.Exact<{
+  keywords: Types.InputMaybe<
+    Array<Types.InputMaybe<Types.Scalars["String"]>> | Types.InputMaybe<Types.Scalars["String"]>
+  >
+}>
+
+export type SetPopularKeywordsMutation = {
+  setPopularKeywords: {
+    __typename: "SetPopularKeywordsPayload"
+    keywords: Array<string | null> | null
+  } | null
+}
+
 export const GetSettingDocument = gql`
   query GetSetting {
     popularKeywords {
@@ -854,4 +867,51 @@ export type SetCategoryOrderMutationResult = Apollo.MutationResult<SetCategoryOr
 export type SetCategoryOrderMutationOptions = Apollo.BaseMutationOptions<
   SetCategoryOrderMutation,
   SetCategoryOrderMutationVariables
+>
+export const SetPopularKeywordsDocument = gql`
+  mutation SetPopularKeywords($keywords: [String]) {
+    setPopularKeywords(input: { keywords: $keywords }) {
+      keywords
+    }
+  }
+`
+export type SetPopularKeywordsMutationFn = Apollo.MutationFunction<
+  SetPopularKeywordsMutation,
+  SetPopularKeywordsMutationVariables
+>
+
+/**
+ * __useSetPopularKeywordsMutation__
+ *
+ * To run a mutation, you first call `useSetPopularKeywordsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetPopularKeywordsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setPopularKeywordsMutation, { data, loading, error }] = useSetPopularKeywordsMutation({
+ *   variables: {
+ *      keywords: // value for 'keywords'
+ *   },
+ * });
+ */
+export function useSetPopularKeywordsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SetPopularKeywordsMutation,
+    SetPopularKeywordsMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<SetPopularKeywordsMutation, SetPopularKeywordsMutationVariables>(
+    SetPopularKeywordsDocument,
+    options,
+  )
+}
+export type SetPopularKeywordsMutationHookResult = ReturnType<typeof useSetPopularKeywordsMutation>
+export type SetPopularKeywordsMutationResult = Apollo.MutationResult<SetPopularKeywordsMutation>
+export type SetPopularKeywordsMutationOptions = Apollo.BaseMutationOptions<
+  SetPopularKeywordsMutation,
+  SetPopularKeywordsMutationVariables
 >
