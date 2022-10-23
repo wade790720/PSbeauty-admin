@@ -13,8 +13,8 @@ const authLink = setContext((_, { headers }) => {
   const token = getStorageValue("token", "")
   return {
     headers: {
-      ...headers,
       authorization: token ? `Bearer ${token}` : "",
+      ...headers,
     },
   }
 })

@@ -12,6 +12,7 @@ import { print } from "graphql"
 import { useForm } from "react-hook-form"
 import { useState } from "react"
 import logo from "./images/logo.png"
+import jwt, { JwtPayload } from "jwt-decode"
 
 const CUSTOM_TOKEN = gql`
   query {
@@ -25,6 +26,16 @@ const CUSTOM_TOKEN = gql`
 type Inputs = {
   email: string
   password: string
+}
+
+type User = JwtPayload & {
+  claims: {
+    admin: boolean
+    clinic: string
+    id: string
+    name: string
+    phone: string
+  }
 }
 
 export default function Login() {
@@ -54,10 +65,13 @@ export default function Login() {
     const requestHeaders = { headers: headers(idToken) }
     const query = { query: print(CUSTOM_TOKEN) }
     const customToken = await axios.post(endpoint, query, requestHeaders)
+    const user: User = await jwt(customToken.data.data.customToken.customToken)
 
-    if (customToken) {
+    if (user?.claims.admin) {
       setStorageValue("token", customToken.data.data.customToken.customToken)
       go.toHome()
+    } else {
+      alert("此帳號不是管理者，請洽詢管理者")
     }
   }
 
