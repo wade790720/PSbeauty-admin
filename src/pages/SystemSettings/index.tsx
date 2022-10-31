@@ -6,7 +6,7 @@ import KeywordCard from "./KeywordCard"
 import { useGetSettingQuery, useGetCategoriesQuery } from "./SystemSettings.graphql.generated"
 
 const SystemSettings = () => {
-  const categories = useGetCategoriesQuery()
+  const categories = useGetCategoriesQuery({ fetchPolicy: "no-cache" })
   const { data, loading, error } = useGetSettingQuery()
 
   if (loading && categories.loading) return <QueryStatus.Loading />

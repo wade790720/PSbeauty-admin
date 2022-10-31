@@ -23,12 +23,15 @@ export const GetCategories = gql`
     topCategories {
       id
       name
+      sort
       secondCategories {
         id
         name
+        sort
         categories {
           id
           name
+          sort
         }
       }
     }
@@ -105,6 +108,50 @@ export const DeleteCategory = gql`
   mutation DeleteCategory($id: String) {
     deleteCategory(input: { id: $id }) {
       id
+    }
+  }
+`
+
+export const SetTopCategoryOrder = gql`
+  mutation SetTopCategoryOrder($sorted: [String]) {
+    setTopCategoryOrder(input: { sorted: $sorted }) {
+      topCategories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+
+export const SetSecondCategoryOrder = gql`
+  mutation SetSecondCategoryOrder($sorted: [String], $topCategoryId: String) {
+    setSecondCategoryOrder(input: { sorted: $sorted, topCategoryId: $topCategoryId }) {
+      secondCategories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+
+export const SetCategoryOrder = gql`
+  mutation SetCategoryOrder($sorted: [String], $secondCategoryId: String) {
+    setCategoryOrder(input: { sorted: $sorted, secondCategoryId: $secondCategoryId }) {
+      categories {
+        id
+        name
+        sort
+      }
+    }
+  }
+`
+
+export const SetPopularKeywords = gql`
+  mutation SetPopularKeywords($keywords: [String]) {
+    setPopularKeywords(input: { keywords: $keywords }) {
+      keywords
     }
   }
 `
