@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { useState, useMemo, useReducer } from "react"
+import { useState, useMemo, useReducer, useEffect } from "react"
 import Button from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -76,8 +76,6 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
     }))
   }, [data])
 
-
-
   const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id)
   const [secondCategoryId, setSecondCategoryId] = useState(categories?.[0]?.secondCategories?.[0]?.id || "")
 
@@ -100,6 +98,11 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
 
     return third
   }, [categories, topCategoryId, secondCategoryId])
+
+  useEffect(() => {
+    setTopCategorySort(categories)
+    setTopCategoryId(categories?.[0]?.id)
+  }, [categories])
 
   const { register, getValues, reset } = useForm<Inputs>({ mode: "onTouched" })
   const [addTopCategoryMutation] = useAddTopCategoryMutation({ refetchQueries: ["GetCategories"] })
@@ -177,24 +180,32 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
 
   const handleTopCategorySort = (newState: Category[]) => {
     if (JSON.stringify(newState) !== JSON.stringify(topCategorySort)) {
-      setTopCategoryOrderMutation({
-        variables: {
-          sorted: newState.map(state => state.id)
-        }
-      })
+      try {
+        setTopCategoryOrderMutation({
+          variables: {
+            sorted: newState.map(state => state.id)
+          }
+        })
+      } catch (error) {
+        console.log(error, newState)
+      }
+
       setTopCategorySort(newState)
     }
   }
 
   const handleSecondCategorySort = (newState: SecondCategory[]) => {
     if (JSON.stringify(newState) !== JSON.stringify(secondCategorySort)) {
-      console.log(newState)
-      setSecondCategoryOrderMutation({
-        variables: {
-          topCategoryId,
-          sorted: newState.map(state => state.id)
-        }
-      })
+      try {
+        setSecondCategoryOrderMutation({
+          variables: {
+            topCategoryId,
+            sorted: newState.map(state => state.id)
+          }
+        })
+      } catch (error) {
+        console.log(error, newState)
+      }
       setSecondCategorySort(newState)
     }
   }
@@ -224,7 +235,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
                 setList={(newState) => handleTopCategorySort(newState)}
                 animation={200}
                 delay={2}>
-                {categories?.map((item, index) => (
+                {topCategorySort?.map((item, index) => (
                   <List.Item
                     key={item.id + "-" + index}
                     value={item.name}
@@ -257,7 +268,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
                 setList={(newState) => handleSecondCategorySort(newState)}
                 animation={200}
                 delay={2}>
-                {secondCategories?.map((item, index) => (
+                {secondCategorySort?.map((item, index) => (
                   <List.Item
                     key={item.id + "-" + index}
                     value={item.name}
@@ -286,7 +297,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
                 setList={(newState) => handleThirdCategorySort(newState)}
                 animation={200}
                 delay={2}>
-                {thirdCategories?.map((item, index) => (
+                {thirdCategorySort?.map((item, index) => (
                   <List.Item
                     key={item.id + "-" + index}
                     value={item.name || ""}

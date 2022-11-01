@@ -17,14 +17,21 @@
   padding-left: 20px;
   border-bottom: 1px solid #e5e5ea;
 
+  user-select: none;
+
   svg {
     width: 18px;
     height: 18px;
     cursor: pointer;
   }
 
+  &:global(.sortable-ghost) {
+    cursor: grabbing !important;
+  }
+
   &:hover {
     background-color: rgba(24, 160, 203, 0.16);
+    cursor: grab;
   }
 
   &.active {
