@@ -112,9 +112,9 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
   const [deleteSecondCategoryMutation] = useDeleteSecondCategoryMutation({ refetchQueries: ["GetCategories"] })
   const [deleteCategoryMutation] = useDeleteCategoryMutation({ refetchQueries: ["GetCategories"] })
 
-  const [setTopCategoryOrderMutation] = useSetTopCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
-  const [setSecondCategoryOrderMutation] = useSetSecondCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
-  const [setCategoryOrderMutation] = useSetCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
+  const [setTopCategoryOrderMutation] = useSetTopCategoryOrderMutation()
+  const [setSecondCategoryOrderMutation] = useSetSecondCategoryOrderMutation()
+  const [setCategoryOrderMutation] = useSetCategoryOrderMutation()
 
   const handleAddTopCategory = async () => {
     await addTopCategoryMutation({
