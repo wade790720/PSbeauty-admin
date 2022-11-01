@@ -1,0 +1,69 @@
+import { useState } from "react"
+import { getStorageValue, removeStorageValue } from "hooks/useLocalStorage"
+import { AuthContextProps, DEFAULT_USER } from "./AuthContext"
+import jwt_decode from "jwt-decode"
+import { auth } from "../../firebase"
+
+const useProvideAuth = () => {
+  const [user, setUser] = useState<AuthContextProps["user"]>(() => {
+    const savedToken = getStorageValue("customToken", "")
+    const email = getStorageValue("email", "")
+    if (savedToken) {
+      try {
+        const payload: {
+          claims: AuthContextProps["user"]
+          exp: number
+        } = jwt_decode(savedToken)
+        if (new Date(payload.exp * 1000) > new Date()) {
+          return {
+            id: payload?.claims?.id,
+            phone: payload?.claims?.phone,
+            name: payload?.claims?.name,
+            clinic: payload?.claims?.clinic,
+            admin: payload?.claims?.admin,
+            email: email,
+          }
+        }
+      } catch {
+        return {
+          id: null,
+          phone: null,
+          name: null,
+          clinic: null,
+          admin: null,
+          email: null,
+        }
+      }
+    }
+    return DEFAULT_USER
+  })
+
+  const signIn = (token: string, email: string) => {
+    const payload: { claims: AuthContextProps["user"] } = jwt_decode(token)
+
+    setUser({
+      id: payload?.claims?.id,
+      phone: payload?.claims?.phone,
+      name: payload?.claims?.name,
+      clinic: payload?.claims?.clinic,
+      admin: payload?.claims?.admin,
+      email,
+    })
+  }
+
+  const signOut = () => {
+    removeStorageValue("customToken")
+    removeStorageValue("refreshToken")
+    removeStorageValue("email")
+    setUser(DEFAULT_USER)
+    auth.signOut()
+  }
+
+  return {
+    user,
+    signIn,
+    signOut,
+  }
+}
+
+export default useProvideAuth

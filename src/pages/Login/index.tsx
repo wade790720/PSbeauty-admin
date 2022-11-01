@@ -1,27 +1,12 @@
 import styled from "./Login.module.scss"
 import Form, { InputGroup, Append } from "components/Form"
 import Button from "components/Button"
-import { auth } from "../../firebase"
-import { signInWithEmailAndPassword } from "firebase/auth"
 import { setStorageValue } from "hooks/useLocalStorage"
 import { useGo } from "components/Router"
-import { endpoint, headers } from "utils/apiConfig"
-import axios from "axios"
-import { gql } from "@apollo/client"
-import { print } from "graphql"
 import { useForm } from "react-hook-form"
-import { useState } from "react"
 import logo from "./images/logo.png"
-import jwt, { JwtPayload } from "jwt-decode"
-
-const CUSTOM_TOKEN = gql`
-  query {
-    customToken {
-      customToken
-      uid
-    }
-  }
-`
+import jwt_decode, { JwtPayload } from "jwt-decode"
+import { useSignInWithEmailAndPasswordMutation } from "./Login.graphql.generated"
 
 type Inputs = {
   email: string
@@ -40,38 +25,31 @@ type User = JwtPayload & {
 
 export default function Login() {
   const go = useGo()
-  const [errorMessage, setErrorMessage] = useState("")
   const { register, getValues, formState, handleSubmit } = useForm<Inputs>({ mode: "onTouched" })
+  const [signInMutation] = useSignInWithEmailAndPasswordMutation()
 
   const login = async () => {
-    // Get firebase token
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      getValues().email,
-      getValues().password,
-    ).then(
-      response => {
-        setErrorMessage("")
-        return response.user.getIdToken(true)
-      },
-      error => {
-        setErrorMessage(error.message)
-        return ""
-      },
-    )
-    const idToken = await userCredential
+    try {
+      const userCredential = await signInMutation({
+        variables: {
+          email: getValues().email,
+          password: getValues().password,
+        },
+      })
+      const customToken = userCredential?.data?.signInWithEmailAndPassword?.customToken || ""
+      const refreshToken = userCredential?.data?.signInWithEmailAndPassword?.refreshToken || ""
+      const user: User = await jwt_decode(customToken)
 
-    // Get customToken for graphql
-    const requestHeaders = { headers: headers(idToken) }
-    const query = { query: print(CUSTOM_TOKEN) }
-    const customToken = await axios.post(endpoint, query, requestHeaders)
-    const user: User = await jwt(customToken.data.data.customToken.customToken)
-
-    if (user?.claims.admin) {
-      setStorageValue("token", customToken.data.data.customToken.customToken)
-      go.toHome()
-    } else {
-      alert("此帳號不是管理者，請洽詢管理者")
+      if (user?.claims.admin) {
+        setStorageValue("email", getValues().email)
+        setStorageValue("customToken", customToken)
+        setStorageValue("refreshToken", refreshToken)
+        go.toHome()
+      } else {
+        alert("此帳號不是管理者，請洽詢管理者")
+      }
+    } catch {
+      alert("帳號密碼錯誤，請重新輸入")
     }
   }
 
@@ -139,13 +117,6 @@ export default function Login() {
                 登入
               </Button>
             </Form>
-            {errorMessage && (
-              <div className={styled["error-message"]}>
-                {errorMessage === "Firebase: Error (auth/user-not-found)."
-                  ? "使用者不存在"
-                  : errorMessage}
-              </div>
-            )}
           </div>
         </div>
       </div>

@@ -46,7 +46,7 @@ export default function Register() {
     const requestHeaders = { headers: headers(idToken) }
     const query = { query: print(CUSTOM_TOKEN) }
     const customToken = await axios.post(endpoint, query, requestHeaders)
-    setStorageValue("token", customToken.data.data.customToken.customToken)
+    setStorageValue("customToken", customToken.data.data.customToken.customToken)
 
     if (customToken) go.toHome()
   }

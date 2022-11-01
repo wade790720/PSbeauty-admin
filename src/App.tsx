@@ -3,6 +3,7 @@ import { Container, Row } from "react-grid-system"
 import { HashRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom"
 import SideBar from "components/SideBar"
 import QueryStatus from "components/QueryStatus"
+import { useAuth, refresh } from "hooks/useAuth"
 
 import "./App.css"
 import "rsuite/dist/rsuite.min.css"
@@ -29,7 +30,10 @@ const CmsLayout = () => (
   </Container>
 )
 
+let internal: ReturnType<typeof setInterval>
+
 function App() {
+  const auth = useAuth()
   const NotFound = lazy(() => import("pages/NotFound"))
   const Login = lazy(() => import("pages/Login"))
   const Register = lazy(() => import("pages/Register"))
@@ -38,6 +42,12 @@ function App() {
   const Clinic = lazy(() => import("pages/Clinic"))
   const ClinicDetail = lazy(() => import("pages/ClinicDetail"))
   const SystemSettings = lazy(() => import("pages/SystemSettings"))
+
+  refresh(auth)
+  clearInterval(internal)
+  internal = setInterval(() => {
+    refresh(auth)
+  }, 10 * 60 * 1000) // every 10 minutes check again
 
   return (
     <>

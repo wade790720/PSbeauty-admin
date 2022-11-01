@@ -4,8 +4,10 @@ export type LocalStorageKey =
   | "currency"
   | "language"
   | "account"
+  | "email"
   | "password"
-  | "token"
+  | "customToken"
+  | "refreshToken"
   | "isRememberMe"
 export type LocalStorageValue = string | number | boolean
 
