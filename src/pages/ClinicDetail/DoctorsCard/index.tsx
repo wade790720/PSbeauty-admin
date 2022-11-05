@@ -225,7 +225,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         </Modal>
       )}
 
-      {/* 檢視醫師 */}
+      {/* 編輯醫師 */}
       <Modal
         open={openReview}
         backdrop={false}

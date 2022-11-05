@@ -11,6 +11,7 @@ import { Table } from "rsuite"
 import {
   ActivityFragment,
   useAddActivityMutation,
+  useUpdateActivityMutation,
   useDeleteActivityMutation,
 } from "../ClinicDetail.graphql.generated"
 
@@ -18,14 +19,14 @@ type ActivityCardProps = {
   data: ActivityFragment["activities"]
 }
 
-type Activity = {
-  id?: string
+type Inputs = {
   subject: string
   content: string
   image: string
 }
 
-type Inputs = {
+type EditInputs = {
+  id: string
   subject: string
   content: string
   image: string
@@ -35,6 +36,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
   const match = useMatch("/cms/cosmetic-clinic/:id")
   const { Column, HeaderCell, Cell } = Table
   const methods = useForm<Inputs>({ mode: "onTouched" })
+  const editMethods = useForm<EditInputs>({ mode: "onTouched" })
 
   const activities = useMemo(() => {
     return data?.map((activity, index) => ({
@@ -46,17 +48,18 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
     }))
   }, [data])
 
-  const [reviewActivity, setReviewActivity] = useState<Activity>()
   const [open, setOpen] = useState(false)
   const [reviewOpen, setReviewOpen] = useState(false)
   const [addActivityMutation] = useAddActivityMutation({ refetchQueries: ["GetClinicDetail"] })
+  const [updateActivityMutation] = useUpdateActivityMutation({
+    refetchQueries: ["GetClinicDetail"],
+  })
   const [deleteActivityMutation] = useDeleteActivityMutation({
     refetchQueries: ["GetClinicDetail"],
   })
 
   const handleCreate = () => {
     const { image, subject, content } = methods.getValues()
-
     addActivityMutation({
       variables: {
         clinicId: match?.params.id || "",
@@ -65,6 +68,20 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
         image,
       },
     })
+  }
+
+  const handleUpdate = () => {
+    const { id, image, subject, content } = editMethods.getValues()
+    updateActivityMutation({
+      variables: {
+        id,
+        clinicId: match?.params.id || "",
+        subject,
+        content,
+        image,
+      },
+    })
+    setReviewOpen(false)
   }
 
   const handleDelete = (id: string) => {
@@ -107,7 +124,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setReviewOpen(true)
-                          setReviewActivity({
+                          editMethods.reset({
                             id: rowData.id,
                             subject: rowData.subject,
                             content: rowData.content,
@@ -115,7 +132,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
                           })
                         }}>
                         {" "}
-                        檢視{" "}
+                        編輯{" "}
                       </LinkButton>{" "}
                       | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
@@ -180,7 +197,7 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
         </Modal>
       )}
 
-      {/* 檢視廣告卡資訊 */}
+      {/* 編輯廣告卡資訊 */}
       <Modal
         open={reviewOpen}
         backdrop={false}
@@ -190,30 +207,37 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
           <Modal.Title>活動資訊</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ overflow: "auto", maxHeight: "600px" }}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖</Form.Label>
-              <img
-                src={reviewActivity?.image}
-                alt="preview"
-                style={{ border: "1px solid #e4e6ef" }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>活動主題</Form.Label>
-              <p>{reviewActivity?.subject}</p>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>內容</Form.Label>
-              <div dangerouslySetInnerHTML={{ __html: reviewActivity?.content || "" }} />
-            </Form.Group>
-          </Form>
+          <FormProvider {...editMethods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖</Form.Label>
+                <img
+                  src={editMethods.getValues()?.image}
+                  alt="preview"
+                  style={{ border: "1px solid #e4e6ef" }}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>活動主題</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...editMethods.register("subject", {
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>內容</Form.Label>
+                <Editor name="content" />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setReviewOpen(false)}>
             取消
           </Button>
-          <Button onClick={() => setReviewOpen(false)}>確定</Button>
+          <Button onClick={handleUpdate}>確定</Button>
         </Modal.Footer>
       </Modal>
     </>
