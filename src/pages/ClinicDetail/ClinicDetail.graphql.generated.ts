@@ -775,6 +775,7 @@ export const UpdateDoctorDocument = gql`
   ) {
     updateDoctor(
       input: {
+        id: $id
         clinicId: $clinicId
         name: $name
         expertise: $expertise

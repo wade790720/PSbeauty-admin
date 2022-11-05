@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import Button, { LinkButton } from "components/Button"
 import Card from "components/Card"
 import Form from "components/Form"
@@ -10,22 +10,13 @@ import { useMatch } from "react-router-dom"
 import {
   DoctorsFragment,
   useAddDoctorMutation,
+  useUpdateDoctorMutation,
   useDeleteDoctorMutation,
 } from "../ClinicDetail.graphql.generated"
 import { useForm, FormProvider } from "react-hook-form"
 
 type DoctorsCardProps = {
   data: DoctorsFragment["doctors"]
-}
-
-type Doctor = {
-  id?: string
-  index?: number
-  title: string
-  name: string
-  expertise: string
-  resumes: string
-  photo: string
 }
 
 type Inputs = {
@@ -36,13 +27,22 @@ type Inputs = {
   title: string
 }
 
+type EditInputs = {
+  id: string
+  title: string
+  name: string
+  expertise: string
+  resumes: string
+  photo: string
+}
+
 const DoctorsCard = ({ data }: DoctorsCardProps) => {
   const { Column, HeaderCell, Cell } = Table
   const match = useMatch("/cms/cosmetic-clinic/:id")
   const methods = useForm<Inputs>({ mode: "onTouched" })
+  const editedMethods = useForm<EditInputs>({ mode: "onTouched" })
   const [openAdd, setOpenAdd] = useState(false)
   const [openReview, setOpenReview] = useState(false)
-  const reviewDoctor = useRef<Doctor>()
 
   const doctors = useMemo(() => {
     if (!data) return []
@@ -59,6 +59,7 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
   }, [data])
 
   const [addDoctorMutation] = useAddDoctorMutation({ refetchQueries: ["GetClinicDetail"] })
+  const [updateDoctorMutation] = useUpdateDoctorMutation({ refetchQueries: ["GetClinicDetail"] })
   const [deleteDoctorMutation] = useDeleteDoctorMutation({ refetchQueries: ["GetClinicDetail"] })
 
   const handleAdd = () => {
@@ -73,6 +74,23 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         expertise,
       },
     })
+  }
+
+  const handleUpdate = () => {
+    const { id, name, title, photo, expertise, resumes } = editedMethods.getValues()
+
+    updateDoctorMutation({
+      variables: {
+        id,
+        clinicId: match?.params.id || "",
+        name,
+        title,
+        photo,
+        resumes,
+        expertise,
+      },
+    })
+    setOpenReview(false)
   }
 
   const handleDelete = (id: string) => {
@@ -124,18 +142,18 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
                       <LinkButton
                         onClick={() => {
                           setOpenReview(true)
-                          reviewDoctor.current = {
+                          console.log(rowData.id)
+                          editedMethods.reset({
                             id: rowData.id,
-                            index: rowData.index,
                             name: rowData.name,
                             title: rowData.title,
                             expertise: rowData.expertise,
                             photo: rowData.photo,
                             resumes: rowData.resumes,
-                          }
+                          })
                         }}>
                         {" "}
-                        檢視{" "}
+                        編輯{" "}
                       </LinkButton>{" "}
                       | <LinkButton onClick={() => handleDelete(rowData.id)}> 刪除 </LinkButton>
                     </span>
@@ -214,41 +232,49 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
         onClose={() => setOpenReview(false)}
         style={{ maxWidth: "450px" }}>
         <Modal.Header>
-          <Modal.Title>檢視醫師</Modal.Title>
+          <Modal.Title>編輯醫師</Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ overflow: "auto", height: "500px" }}>
-          <Form>
-            <Form.Group layout="vertical">
-              <Form.Label>預覽圖 (100 x 100px)</Form.Label>
-              <img
-                src={reviewDoctor.current?.photo}
-                alt="preview"
-                style={{ border: "1px solid #e4e6ef" }}
-              />
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>姓名</Form.Label>
-              <p>{reviewDoctor.current?.name}</p>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>職稱</Form.Label>
-              <p>{reviewDoctor.current?.title}</p>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>專長</Form.Label>
-              <p>{reviewDoctor.current?.expertise}</p>
-            </Form.Group>
-            <Form.Group layout="vertical">
-              <Form.Label>經歷</Form.Label>
-              <div dangerouslySetInnerHTML={{ __html: reviewDoctor.current?.resumes || "" }} />
-            </Form.Group>
-          </Form>
+          <FormProvider {...editedMethods}>
+            <Form>
+              <Form.Group layout="vertical">
+                <Form.Label>預覽圖 (100 x 100px)</Form.Label>
+                <img
+                  src={editedMethods.getValues().photo}
+                  alt="preview"
+                  style={{ border: "1px solid #e4e6ef" }}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>姓名</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...editedMethods.register("name", {
+                    required: "此欄位為必填",
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>職稱</Form.Label>
+                <Form.Input type="text" {...editedMethods.register("title")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>專長</Form.Label>
+                <Form.Input type="text" {...editedMethods.register("expertise")} />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>經歷</Form.Label>
+                <Editor name="resumes" />
+              </Form.Group>
+            </Form>
+          </FormProvider>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setOpenReview(false)}>
             取消
           </Button>
-          <Button onClick={() => setOpenReview(false)}>確定</Button>
+          <Button onClick={handleUpdate}>確定</Button>
         </Modal.Footer>
       </Modal>
     </>
