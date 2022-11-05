@@ -201,6 +201,31 @@ export const AddDoctor = gql`
   }
 `
 
+export const UpdateDoctor = gql`
+  mutation UpdateDoctor(
+    $id: String
+    $clinicId: String
+    $name: String
+    $expertise: String
+    $photo: String
+    $resumes: String
+    $title: String
+  ) {
+    updateDoctor(
+      input: {
+        clinicId: $clinicId
+        name: $name
+        expertise: $expertise
+        photo: $photo
+        resumes: $resumes
+        title: $title
+      }
+    ) {
+      id
+    }
+  }
+`
+
 export const DeleteDoctor = gql`
   mutation DeleteDoctor($id: String) {
     deleteDoctor(input: { id: $id }) {
@@ -303,6 +328,22 @@ export const AddActivity = gql`
   mutation AddActivity($clinicId: String, $image: String, $subject: String, $content: String) {
     addActivity(
       input: { clinicId: $clinicId, image: $image, subject: $subject, content: $content }
+    ) {
+      id
+    }
+  }
+`
+
+export const UpdateActivity = gql`
+  mutation UpdateActivity(
+    $id: String
+    $clinicId: String
+    $image: String
+    $subject: String
+    $content: String
+  ) {
+    updateActivity(
+      input: { id: $id, clinicId: $clinicId, image: $image, subject: $subject, content: $content }
     ) {
       id
     }
