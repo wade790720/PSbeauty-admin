@@ -57,8 +57,6 @@ type ThirdCategory = {
 }
 
 const CategoryCard = ({ data }: CategoryCardProps) => {
-  const [, forceRerender] = useReducer(x => x + 1, 0)
-
   const categories = useMemo(() => {
     if (!data) return []
 
@@ -76,33 +74,27 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
     }))
   }, [data])
 
-  const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id)
+  console.log(categories)
+
+  const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id || "")
   const [secondCategoryId, setSecondCategoryId] = useState(categories?.[0]?.secondCategories?.[0]?.id || "")
 
   const [topCategorySort, setTopCategorySort] = useState(categories);
   const [secondCategorySort, setSecondCategorySort] = useState(categories.find(category => category.id === topCategoryId)?.secondCategories || []);
   const [thirdCategorySort, setThirdCategorySort] = useState(categories.find(category => category.id === topCategoryId)?.secondCategories.find(item => item.id === secondCategoryId)?.categories || []);
 
-  const secondCategories = useMemo(() => {
-    const second = categories.find(category => category.id === topCategoryId)?.secondCategories || []
-    setSecondCategorySort(second)
-
-    return second
-  }, [categories, topCategoryId])
-
-  const thirdCategories = useMemo(() => {
-    const third = categories
-      .find(category => category.id === topCategoryId)
-      ?.secondCategories?.find(item => item.id === secondCategoryId)?.categories || []
-    setThirdCategorySort(third)
-
-    return third
-  }, [categories, topCategoryId, secondCategoryId])
 
   useEffect(() => {
+    if(!topCategoryId && !secondCategoryId){
+      setTopCategoryId(categories?.[0]?.id)
+      setSecondCategoryId(categories?.[0]?.secondCategories?.[0]?.id)
+    }
     setTopCategorySort(categories)
-    setTopCategoryId(categories?.[0]?.id)
-  }, [categories])
+    setSecondCategorySort(categories.find(category => category.id === topCategoryId)?.secondCategories || [])
+    setThirdCategorySort(categories
+      .find(category => category.id === topCategoryId)
+      ?.secondCategories?.find(item => item.id === secondCategoryId)?.categories || [])
+  }, [categories, topCategoryId, secondCategoryId])
 
   const { register, getValues, reset } = useForm<Inputs>({ mode: "onTouched" })
   const [addTopCategoryMutation] = useAddTopCategoryMutation({ refetchQueries: ["GetCategories"] })
@@ -112,69 +104,95 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
   const [deleteSecondCategoryMutation] = useDeleteSecondCategoryMutation({ refetchQueries: ["GetCategories"] })
   const [deleteCategoryMutation] = useDeleteCategoryMutation({ refetchQueries: ["GetCategories"] })
 
-  const [setTopCategoryOrderMutation] = useSetTopCategoryOrderMutation()
-  const [setSecondCategoryOrderMutation] = useSetSecondCategoryOrderMutation()
-  const [setCategoryOrderMutation] = useSetCategoryOrderMutation()
+  const [setTopCategoryOrderMutation] = useSetTopCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
+  const [setSecondCategoryOrderMutation] = useSetSecondCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
+  const [setCategoryOrderMutation] = useSetCategoryOrderMutation({ refetchQueries: ["GetCategories"] })
 
   const handleAddTopCategory = async () => {
-    await addTopCategoryMutation({
-      variables: {
-        name: getValues().topCategory,
-      },
-    })
-    reset({ topCategory: "" })
+    try {
+      await addTopCategoryMutation({
+        variables: {
+          name: getValues().topCategory,
+        },
+      })
+      reset({ topCategory: "" })
+    } catch (error) {
+      alert("新增失敗：" + error)
+    }
   }
 
   const handleAddSecondCategory = async () => {
-    await addSecondCategoryMutation({
-      variables: {
-        name: getValues().secondCategory,
-        topCategoryId,
-      },
-    })
-    reset({ secondCategory: "" })
-    forceRerender()
+    try {
+      await addSecondCategoryMutation({
+        variables: {
+          name: getValues().secondCategory,
+          topCategoryId,
+        },
+      })
+      reset({ secondCategory: "" })
+    } catch (error) {
+      alert("新增失敗：" + error)
+    }
   }
 
   const handleAddCategory = async () => {
-    await addCategoryMutation({
-      variables: {
-        name: getValues().category,
-        topCategoryId,
-        secondCategoryId,
-      },
-    })
-    reset({ category: "" })
+    try {
+      await addCategoryMutation({
+        variables: {
+          name: getValues().category,
+          topCategoryId,
+          secondCategoryId,
+        },
+      })
+      reset({ category: "" })
+    } catch (error) {
+      alert("新增失敗：" + error)
+    }
   }
 
   const handleDeleteTopCategory = (id: string) => {
     const ask = confirm("確定要刪除嗎?")
-    if (ask)
-      deleteTopCategoryMutation({
-        variables: {
-          id,
-        },
-      })
+    if (ask) {
+      try {
+        deleteTopCategoryMutation({
+          variables: {
+            id,
+          },
+        })
+      } catch (error) {
+        alert("刪除失敗：" + error)
+      }
+    }
   }
 
   const handleDeleteSecondCategory = (id: string) => {
     const ask = confirm("確定要刪除嗎?")
-    if (ask)
-      deleteSecondCategoryMutation({
-        variables: {
-          id,
-        },
-      })
+    if (ask) {
+      try {
+        deleteSecondCategoryMutation({
+          variables: {
+            id,
+          },
+        })
+      } catch (error) {
+        alert("刪除失敗：" + error)
+      }
+    }
   }
 
   const handleDeleteCategory = (id: string) => {
     const ask = confirm("確定要刪除嗎?")
-    if (ask)
-      deleteCategoryMutation({
-        variables: {
-          id,
-        },
-      })
+    if (ask) {
+      try {
+        deleteCategoryMutation({
+          variables: {
+            id,
+          },
+        })
+      } catch (error) {
+        alert("刪除失敗：" + error)
+      }
+    }
   }
 
 
@@ -187,6 +205,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
           }
         })
       } catch (error) {
+        alert("移動失敗：" + error)
         console.log(error, newState)
       }
 
@@ -204,6 +223,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
           }
         })
       } catch (error) {
+        alert("移動失敗：" + error)
         console.log(error, newState)
       }
       setSecondCategorySort(newState)
@@ -212,12 +232,17 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
 
   const handleThirdCategorySort = (newState: ThirdCategory[]) => {
     if (JSON.stringify(newState) !== JSON.stringify(thirdCategorySort)) {
-      setCategoryOrderMutation({
-        variables: {
-          secondCategoryId,
-          sorted: newState.map(state => state.id)
-        }
-      })
+      try {
+        setCategoryOrderMutation({
+          variables: {
+            secondCategoryId,
+            sorted: newState.map(state => state.id)
+          }
+        })
+      } catch (error) {
+        alert("移動失敗：" + error)
+        console.log(error, newState)
+      }
       setThirdCategorySort(newState)
     }
   }
@@ -229,7 +254,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
         <div className="inline-flex w-full">
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第一層分類</div>
-            <List default={categories?.[0]?.name}>
+            <List>
               <ReactSortable
                 list={topCategorySort}
                 setList={(newState) => handleTopCategorySort(newState)}
@@ -239,6 +264,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
                   <List.Item
                     key={item.id + "-" + index}
                     value={item.name}
+                    active={item.id === topCategoryId}
                     onClick={() => {
                       setTopCategoryId(item.id)
 
@@ -262,7 +288,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
 
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第二層分類</div>
-            <List key={secondCategories?.[0]?.id} default={secondCategories?.[0]?.name}>
+            <List>
               <ReactSortable
                 list={secondCategorySort}
                 setList={(newState) => handleSecondCategorySort(newState)}
@@ -272,6 +298,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
                   <List.Item
                     key={item.id + "-" + index}
                     value={item.name}
+                    active={item.id === secondCategoryId}
                     onClick={() => {
                       setSecondCategoryId(item.id)
                     }}
@@ -291,7 +318,7 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
 
           <div className="flex-auto p-4 w-2/6">
             <div className="text-lg pb-4">第三層分類</div>
-            <List key={thirdCategories?.[0]?.id}>
+            <List>
               <ReactSortable
                 list={thirdCategorySort}
                 setList={(newState) => handleThirdCategorySort(newState)}
