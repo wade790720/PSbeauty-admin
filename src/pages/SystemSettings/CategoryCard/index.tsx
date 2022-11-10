@@ -74,8 +74,6 @@ const CategoryCard = ({ data }: CategoryCardProps) => {
     }))
   }, [data])
 
-  console.log(categories)
-
   const [topCategoryId, setTopCategoryId] = useState(categories?.[0]?.id || "")
   const [secondCategoryId, setSecondCategoryId] = useState(categories?.[0]?.secondCategories?.[0]?.id || "")
 
