@@ -71,6 +71,14 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
       .flat() || []
 
   const disabledItemValues = disable.flatMap(f => (f ? [f] : []))
+  const uncheckOptions: string[] = []
+
+  options?.forEach(option => {
+    uncheckOptions.push(option.value)
+    option.children?.forEach(o => {
+      uncheckOptions.push(o.value)
+    })
+  })
 
   const handleChange = (values: ValueType) => {
     const selectItem = [
@@ -88,6 +96,7 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
       searchable={false}
       data={options || []}
       disabledItemValues={disabledItemValues}
+      uncheckableItemValues={uncheckOptions}
       onChange={values => handleChange(values)}
       menuStyle={{ padding: "6px 0" }}
       placeholder="請選擇分類"
