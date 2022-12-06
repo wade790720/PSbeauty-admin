@@ -60,6 +60,18 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
     return result
   }
 
+  const disable =
+    options
+      ?.map(option => {
+        return option.children?.map(o => {
+          if (o.children && o.children?.length > 0) return
+          return o.value
+        })
+      })
+      .flat() || []
+
+  const disabledItemValues = disable.flatMap(f => (f ? [f] : []))
+
   const handleChange = (values: ValueType) => {
     const selectItem = [
       ...values.map(value => {
@@ -75,6 +87,7 @@ const CosmeticMultiCascader = ({ name }: CosmeticMultiCascaderProps) => {
       {...field}
       searchable={false}
       data={options || []}
+      disabledItemValues={disabledItemValues}
       onChange={values => handleChange(values)}
       menuStyle={{ padding: "6px 0" }}
       placeholder="請選擇分類"
