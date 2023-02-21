@@ -3,12 +3,36 @@ import * as Types from "../../types/schema"
 import { gql } from "@apollo/client"
 import * as Apollo from "@apollo/client"
 const defaultOptions = {} as const
-export type GetSettingQueryVariables = Types.Exact<{ [key: string]: never }>
+export type GetSettingQueryVariables = Types.Exact<{
+  after: Types.InputMaybe<Types.Scalars["String"]>
+}>
 
 export type GetSettingQuery = {
   popularKeywords: { __typename: "PopularKeywords"; keywords: Array<string | null> | null } | null
   users: {
     __typename: "UsersConnection"
+    totalCount: number
+    edges: Array<{
+      __typename: "UsersEdge"
+      cursor: string
+      node: {
+        __typename: "User"
+        id: string | null
+        name: string | null
+        email: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type GetMemberQueryVariables = Types.Exact<{
+  after: Types.InputMaybe<Types.Scalars["String"]>
+}>
+
+export type GetMemberQuery = {
+  users: {
+    __typename: "UsersConnection"
+    totalCount: number
     edges: Array<{
       __typename: "UsersEdge"
       cursor: string
@@ -190,11 +214,12 @@ export type SetPopularKeywordsMutation = {
 }
 
 export const GetSettingDocument = gql`
-  query GetSetting {
+  query GetSetting($after: String) {
     popularKeywords {
       keywords
     }
-    users {
+    users(first: 10, after: $after) {
+      totalCount
       edges {
         cursor
         node {
@@ -219,6 +244,7 @@ export const GetSettingDocument = gql`
  * @example
  * const { data, loading, error } = useGetSettingQuery({
  *   variables: {
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -237,6 +263,53 @@ export function useGetSettingLazyQuery(
 export type GetSettingQueryHookResult = ReturnType<typeof useGetSettingQuery>
 export type GetSettingLazyQueryHookResult = ReturnType<typeof useGetSettingLazyQuery>
 export type GetSettingQueryResult = Apollo.QueryResult<GetSettingQuery, GetSettingQueryVariables>
+export const GetMemberDocument = gql`
+  query GetMember($after: String) {
+    users(first: 10, after: $after) {
+      totalCount
+      edges {
+        cursor
+        node {
+          id
+          name
+          email
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useGetMemberQuery__
+ *
+ * To run a query within a React component, call `useGetMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMemberQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetMemberQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMemberQuery, GetMemberQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMemberQuery, GetMemberQueryVariables>(GetMemberDocument, options)
+}
+export function useGetMemberLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMemberQuery, GetMemberQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMemberQuery, GetMemberQueryVariables>(GetMemberDocument, options)
+}
+export type GetMemberQueryHookResult = ReturnType<typeof useGetMemberQuery>
+export type GetMemberLazyQueryHookResult = ReturnType<typeof useGetMemberLazyQuery>
+export type GetMemberQueryResult = Apollo.QueryResult<GetMemberQuery, GetMemberQueryVariables>
 export const GetCategoriesDocument = gql`
   query GetCategories {
     topCategories {

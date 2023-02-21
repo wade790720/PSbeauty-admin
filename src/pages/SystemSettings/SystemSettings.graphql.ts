@@ -1,11 +1,28 @@
 import { gql } from "@apollo/client"
 
 export const GetSetting = gql`
-  query GetSetting {
+  query GetSetting($after: String) {
     popularKeywords {
       keywords
     }
-    users {
+    users(first: 10, after: $after) {
+      totalCount
+      edges {
+        cursor
+        node {
+          id
+          name
+          email
+        }
+      }
+    }
+  }
+`
+
+export const GetMember = gql`
+  query GetMember($after: String) {
+    users(first: 10, after: $after) {
+      totalCount
       edges {
         cursor
         node {
