@@ -216,10 +216,17 @@ const AdListCard = ({ data }: AdListCardProps) => {
               <Form>
                 <Form.Group layout="vertical">
                   <Form.Label>預覽圖 (800px x 800px)</Form.Label>
-                  <img
-                    src={editMethods.getValues().image}
-                    alt="preview"
-                    style={{ width: "390px", border: "1px solid #e4e6ef" }}
+                  <ImageUploader
+                    disabled={!!editMethods.watch("image")}
+                    defaultFileList={[
+                      {
+                        fileKey: editMethods?.getValues().id,
+                        url: editMethods.getValues().image,
+                      },
+                    ]}
+                    onChange={urlList => {
+                      editMethods.setValue("image", urlList[0])
+                    }}
                   />
                 </Form.Group>
                 <Form.Group layout="vertical">

@@ -3,6 +3,7 @@ import Card from "components/Card"
 import Form from "components/Form"
 import Modal from "components/Modal"
 import Editor from "components/Editor"
+import CosmeticMultiCascader from "components/CosmeticMultiCascader"
 import ImageUploader from "components/ImageUploader"
 import { useMemo, useState } from "react"
 import { useMatch } from "react-router-dom"
@@ -23,6 +24,8 @@ type Inputs = {
   subject: string
   content: string
   image: string
+  introduction: string
+  categories: string[]
 }
 
 type EditInputs = {
@@ -30,6 +33,8 @@ type EditInputs = {
   subject: string
   content: string
   image: string
+  introduction: string
+  categories: string[]
 }
 
 const ActivityCard = ({ data }: ActivityCardProps) => {
@@ -59,19 +64,20 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
   })
 
   const handleCreate = () => {
-    const { image, subject, content } = methods.getValues()
+    const { image, subject, content, introduction, categories } = methods.getValues()
     addActivityMutation({
       variables: {
         clinicId: match?.params.id || "",
         subject,
         content,
         image,
+        // introduction,
       },
     })
   }
 
   const handleUpdate = () => {
-    const { id, image, subject, content } = editMethods.getValues()
+    const { id, image, subject, content, introduction } = editMethods.getValues()
     updateActivityMutation({
       variables: {
         id,
@@ -175,6 +181,24 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
                     </Form.ErrorMessage>
                   )}
                 </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>活動簡介</Form.Label>
+                  <Form.Input
+                    type="text"
+                    {...methods.register("introduction", {
+                      validate: value => value.length !== 0 || "輸入框內不能為空值",
+                    })}
+                  />
+                  {methods.formState.errors?.introduction?.message && (
+                    <Form.ErrorMessage>
+                      {methods.formState.errors?.introduction?.message}
+                    </Form.ErrorMessage>
+                  )}
+                </Form.Group>
+                <Form.Group layout="vertical">
+                  <Form.Label required>分類</Form.Label>
+                  <CosmeticMultiCascader name="categories" />
+                </Form.Group>
                 <Form.Group layout="vertical" style={{ height: "200px" }}>
                   <Form.Label>內容</Form.Label>
                   <Editor name="content" />
@@ -211,10 +235,17 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖</Form.Label>
-                <img
-                  src={editMethods.getValues()?.image}
-                  alt="preview"
-                  style={{ border: "1px solid #e4e6ef" }}
+                <ImageUploader
+                  disabled={!!editMethods.watch("image")}
+                  defaultFileList={[
+                    {
+                      fileKey: editMethods?.getValues().id,
+                      url: editMethods.getValues().image,
+                    },
+                  ]}
+                  onChange={urlList => {
+                    editMethods.setValue("image", urlList[0])
+                  }}
                 />
               </Form.Group>
               <Form.Group layout="vertical">
@@ -225,6 +256,19 @@ const ActivityCard = ({ data }: ActivityCardProps) => {
                     validate: value => value.length !== 0 || "輸入框內不能為空值",
                   })}
                 />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>活動簡介</Form.Label>
+                <Form.Input
+                  type="text"
+                  {...editMethods.register("introduction", {
+                    validate: value => value.length !== 0 || "輸入框內不能為空值",
+                  })}
+                />
+              </Form.Group>
+              <Form.Group layout="vertical">
+                <Form.Label>分類</Form.Label>
+                <CosmeticMultiCascader name="categories" />
               </Form.Group>
               <Form.Group layout="vertical">
                 <Form.Label>內容</Form.Label>

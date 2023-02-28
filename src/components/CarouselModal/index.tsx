@@ -86,7 +86,6 @@ const CarouselModal = (props: CarouselModalProps) => {
   }, [props.defaultCarousel])
 
   const onSubmit = () => {
-    console.log(getValues())
     props.onSubmit && props.onSubmit(getValues())
   }
 
@@ -107,10 +106,17 @@ const CarouselModal = (props: CarouselModalProps) => {
               />
             ) : (
               props?.defaultCarousel?.image && (
-                <img
-                  src={props?.defaultCarousel?.image}
-                  alt="preview"
-                  style={{ width: "350px", border: "1px solid #e4e6ef" }}
+                <ImageUploader
+                  disabled={!!watch("image")}
+                  defaultFileList={[
+                    {
+                      fileKey: props?.defaultCarousel?.id,
+                      url: props?.defaultCarousel?.image,
+                    },
+                  ]}
+                  onChange={urlList => {
+                    setValue("image", urlList[0])
+                  }}
                 />
               )
             )}

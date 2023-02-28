@@ -239,10 +239,17 @@ const DoctorsCard = ({ data }: DoctorsCardProps) => {
             <Form>
               <Form.Group layout="vertical">
                 <Form.Label>預覽圖 (100 x 100px)</Form.Label>
-                <img
-                  src={editedMethods.getValues().photo}
-                  alt="preview"
-                  style={{ border: "1px solid #e4e6ef" }}
+                <ImageUploader
+                  disabled={!!editedMethods.watch("photo")}
+                  defaultFileList={[
+                    {
+                      fileKey: editedMethods?.getValues().id,
+                      url: editedMethods.getValues().photo,
+                    },
+                  ]}
+                  onChange={urlList => {
+                    editedMethods.setValue("photo", urlList[0])
+                  }}
                 />
               </Form.Group>
               <Form.Group layout="vertical">
